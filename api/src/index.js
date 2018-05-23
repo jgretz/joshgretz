@@ -7,7 +7,7 @@ import {configureCompression} from './util';
 
 nodeBits([
   nodeBitsExpress({
-    port: 4005,
+    port: 4006,
     configurations: [
       cors({methods: [GET, POST, PUT, DELETE, OPTIONS]}), bodyParser(),
       configureCompression(),

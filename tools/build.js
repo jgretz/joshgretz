@@ -20,7 +20,6 @@ exec('yarn', () => {
     
     mv('../api/lib/*', './');
     rm('-rf', '../api/lib');
-    rm('constants/private.js');
   
     // build site
     echo('Building Site ...');
