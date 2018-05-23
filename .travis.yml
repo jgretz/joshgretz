@@ -9,6 +9,8 @@ before_deploy:
 deploy:
   provider: heroku
   skip_cleanup: true
+  api_key:
+    secure: JXa+syxBOHGcGhpd/4aDDcLUn/UM7Vv+ZurxPx7I40kKUoOivMgGmZ0Xj6vcOEeS94RHGoTluM2UmOYkst0X1k7XulIhVAx8yGVwscjhGA4iXBeVBy45N81XfSJMD/F8lAPb8QEUEMiBIR4whGORdoL3S5GX19THlnQR1+7JA0s6UwhPCOdWSfnVjf8HJuey3/l62teNHlIJf+phCUcMDodO4gFNfWbcKEnF4I2JjcxGPwPl+ozqO1ws7/v02rI2KZ1WuTZ1STfpY5LZOGAPE1PbxEW7C1mk8FwaY1+dFVM3YPyIE+qPLxWM/Ttzvn6CBGaxRhEaNMgvpyhLbfh8ExbDSSYLxUfM5wAhRIAH5X83CEkvgXkNTpyFm/aDRpSEtJChQfBWL4H08ekaKr2box50fG1dgl/QDMzcRn0UHRVRMME7eIGhMbvWfckQiI75f5LRCYIQmc9q/ojZ53HE/QKL0v52xGIi0j/LVqx7XAH6zmQJj3Va2hoI74t+xQZ29I1a5Mr6ccymOTDbl+atP2epE/3jXFulmWF2n4l04fjTCiYOTvpoKi2K9z0tBJAYCHlR4dKi5xnjsaY+SJtrwb2ZfICQa3ZtEosIrVEH2VLBPXmC6YNoQQ7lX8QSgqF6j+JISKYc9+hu5eMro7qZsjCRENx8VmJcOWN3VPIlPXs=
   app: joshgretzio
   on:
     repo: jgretz/joshgretzio
