@@ -1,0 +1,17 @@
+.page-footer {
+  flex-shrink: 0;
+
+  height: 35px;
+  width: 100%;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  background-color: $background;
+  color: $accent;
+
+  div {
+    margin: 5px 10px 5px 0;
+  }
+}
