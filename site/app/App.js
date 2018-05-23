@@ -1,16 +1,16 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {withRouter} from 'react-router';
 
-import {Bar} from './features/bar/components';
+import {Header} from './features/header/components';
 import {Routes} from './features/shared/components';
-import {Footer} from './features/footer/components';
 
 const App = () => (
-  <div className="wrapper">
-    <Bar />
-    <Routes />
-    <Footer />
-  </div>
+  <Fragment>
+    <Header />
+    <div className="content">
+      <Routes />
+    </div>
+  </Fragment>
 );
 
 export default withRouter(App);
