@@ -17,11 +17,16 @@
   img {
     height: 125px;
     border-radius: 12px;
+    margin: 0 25px;
+
+    @media screen and (max-width: 768px) {
+      margin: 0 10px;
+    }
   }
 
   a {
     div {
-      padding: 23px 25px 0 25px;
+      padding: 23px 0;
 
       font-size: 16px;
       color: $accent;
