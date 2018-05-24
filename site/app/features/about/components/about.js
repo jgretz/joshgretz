@@ -1,7 +1,19 @@
 import React from 'react';
+import {Icon} from 'semantic-ui-react';
 
 export default () => (
   <div className="about">
+    <div className="social">
+      <a href="https://twitter.com/joshgretz" target="_blank">
+        <Icon name="twitter" fitted />
+      </a>
+      <a href="http://github.com/jgretz" target="_blank">
+        <Icon name="github" fitted />
+      </a>
+      <a href="https://www.linkedin.com/in/joshgretz/" target="_blank">
+        <Icon name="linkedin" fitted />
+      </a>
+    </div>
     <div className="block">
       I&#39;m Josh Gretz - a maker living in Pittsbugh. I love learning,
       exploring, and creating. You can normally find me in shorts (even in
