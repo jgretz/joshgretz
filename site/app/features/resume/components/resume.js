@@ -257,6 +257,10 @@ export default () => (
             <div>Go</div>
             <Progress value="4" total="10" progress="ratio" color="blue" />
           </li>
+          <li>
+            <div>git</div>
+            <Progress value="8" total="10" progress="ratio" color="blue" />
+          </li>
         </ul>
       </div>
     </div>
