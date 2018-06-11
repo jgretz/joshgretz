@@ -30,11 +30,11 @@ export default () => (
       I&#39;m the CTO of Truefit, an awesome software company in downtown
       Pittsburgh. I spend my days helping our talented team explore new areas,
       expand their skills, and imagine creative approaches to creating software
-      people love. I am privileged to work with an amazing group of people that
-      understand the challenges our customers face and are gifted at overcoming
-      those challenges with innovative solutions. I count myself blessed that
-      this same cadre of creators also are kind enough to put up with my
-      eccentricities on a daily basis.
+      products people love. I am privileged to work with an amazing group of
+      people that understand the challenges our customers face and are gifted at
+      overcoming those challenges with innovative solutions. I count myself
+      blessed that this same cadre of creators also are kind enough to put up
+      with my eccentricities on a daily basis.
     </div>
 
     <h3>By Night</h3>
@@ -55,11 +55,11 @@ export default () => (
       the years, I&#39;ve been blessed to be able to be part of a journey that
       has taken us from a small company that no one knew anything about in
       Cranberry Twp to an increasingly well known and respected boutique
-      innovation firm in downtown Pittsburgh.Before Truefit, I attended Grove
+      innovation firm in downtown Pittsburgh. Before Truefit, I attended Grove
       City College. I graduated in 2004 with a B.S. in Computer Information
       Systems and a minor in Business. Over the years since graduation, I&#39;ve
       enjoyed many opportunites to remain involved with the CS department, even
-      serving as an adjunct professor for a while
+      serving as an adjunct professor for a while.
       <br />
       <br />
       I grew up in Columbus, OH. It&#39;s a wonderful city and home to my

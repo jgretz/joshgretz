@@ -5,7 +5,7 @@ import logo from '../../../images/logo.png';
 import {ROUTES} from '../../shared/constants';
 
 export default () => (
-  <div className="bar">
+  <div className="header">
     <Link to={ROUTES.about.route}>
       <div>About</div>
     </Link>
