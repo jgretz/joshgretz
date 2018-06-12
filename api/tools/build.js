@@ -8,3 +8,4 @@ rm('-rf', 'lib');
 
 // convert
 exec('babel -d lib/ src');
+cp('-R', 'src/blog/', 'lib');
