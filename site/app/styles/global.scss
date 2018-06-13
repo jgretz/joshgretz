@@ -37,6 +37,10 @@ body {
 
   min-height: 400px;
 
+  @media screen and (max-width: 768px) {
+    width: 95%;
+  }
+
   @media screen and (max-width: 640px) {
     margin: -200px auto 0 auto;
   }

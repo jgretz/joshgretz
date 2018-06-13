@@ -15,9 +15,9 @@ import {
 } from '../../selectors';
 
 class ActiveArticle extends Component {
-  componentDidUpdate(prevProps) {
-    const {articleId, info, loadArticleContent} = this.props;
-    if (articleId !== prevProps.articleId) {
+  componentDidUpdate() {
+    const {articleId, info, content, loadArticleContent} = this.props;
+    if (articleId && info && !content) {
       loadArticleContent(articleId, info.content);
     }
   }

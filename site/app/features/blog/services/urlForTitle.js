@@ -1,3 +1,7 @@
 const SITE = 'https://www.joshgretz.io';
 
-export default title => `${SITE}/${encodeURIComponent(title)}`;
+export default (title, relative) => {
+  const safeTitle = encodeURIComponent(title.replace(' ', '-'));
+
+  return relative ? `/${safeTitle}` : `${SITE}/${safeTitle}`;
+};

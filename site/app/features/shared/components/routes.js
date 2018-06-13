@@ -10,9 +10,10 @@ import {ROUTES} from '../constants';
 
 export default () => (
   <Switch>
-    <Route exact path={ROUTES.home.route} component={Blog} />
     <Route path={ROUTES.about.route} component={About} />
     <Route path={ROUTES.resume.route} component={Resume} />
+    <Route path={ROUTES.home.route} component={Blog} />
+
     <Route component={NotFound} />
   </Switch>
 );
