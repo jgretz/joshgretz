@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {RingLoader} from 'react-spinners';
 
-import {ArticleHeader, ActiveArticle} from './controls';
+import {ArticleHeader, ActiveArticle, ArticleMetaTags} from './controls';
 import {loadMap, setActiveArticleId} from '../actions';
 import {setActiveArticle} from '../services';
 import {
@@ -42,6 +42,7 @@ class Blog extends Component {
 
     return (
       <div className="blog">
+        <ArticleMetaTags />
         <ArticleHeader />
         <ActiveArticle />
       </div>

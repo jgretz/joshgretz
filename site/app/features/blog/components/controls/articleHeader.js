@@ -6,8 +6,7 @@ import {withRouter} from 'react-router';
 import {If} from '../../../shared/components';
 import {rotateArticle} from '../../actions';
 import {activeArticleInfoSelector, articleMapSelector} from '../../selectors';
-
-const BASE_URL = process.env.API_BASE_URL;
+import {imageUrlForArticle} from '../../services';
 
 const rotate = (rotateArticle, info, map, offset, history) => () => {
   rotateArticle(info, map, offset, history);
@@ -19,7 +18,7 @@ const ArticleHeader = ({info, map, rotateArticle, history}) => {
   }
 
   const style = {
-    backgroundImage: `url(${BASE_URL}blog/images?name=${info.image})`,
+    backgroundImage: `url(${imageUrlForArticle(info)})`,
   };
 
   const showLeft = map.indexOf(info) < map.length - 1;
