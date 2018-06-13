@@ -5,4 +5,4 @@ const DEFAULT_CONFIG = {
 };
 
 // The inner function is where you add the logic to pass up credentials
-export const configureHttp = () => httpConfigure(DEFAULT_CONFIG);
+export const configureHttp = () => httpConfigure(() => DEFAULT_CONFIG);

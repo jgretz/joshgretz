@@ -1,10 +1,11 @@
 [
   {
-    "title": "Launch of JoshGretz.io",
-    "description": "After a couple of false starts, I'm going to finally commit to a blog ...",
+    "id": 0,
+    "sort": 0,
+    "title": "Launch",
+    "description": "Here we go, it's time to write ...",
     "content": "joshgretzio",
     "image": "balloon-balloons-bright-796606.jpg",
-    "published": "06-11-2018",
-    "order": 0
+    "published": "06-11-2018"
   }
 ]
