@@ -1,3 +1,2 @@
 # joshgretzio
-
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+The source of https://www.joshgretz.io
