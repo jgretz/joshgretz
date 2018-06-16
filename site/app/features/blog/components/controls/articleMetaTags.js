@@ -13,7 +13,7 @@ const metaTags = ({info}) => {
 
   const isRoot = location.pathname === '/';
 
-  const overrideTitle = `JoshGretz.io | ${
+  const overrideTitle = `Josh Gretz | ${
     isRoot ? 'Musings of a Maker' : info.title
   }`;
 
