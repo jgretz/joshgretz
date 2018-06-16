@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import React from 'react';
 import {connect} from 'react-redux';
 import MetaTags from 'react-meta-tags';
@@ -10,12 +11,20 @@ const metaTags = ({info}) => {
     return null;
   }
 
-  const titleDescription =
-    location.pathname === '/' ? 'Musings of a Maker' : info.title;
+  const isRoot = location.pathname === '/';
+
+  const overrideTitle = `JoshGretz.io | ${
+    isRoot ? 'Musings of a Maker' : info.title
+  }`;
+
+  if (!isRoot) {
+    $('#seo-h1').html(overrideTitle);
+    $('#seo-h2').html(info.description);
+  }
 
   return (
     <MetaTags>
-      <title>JoshGretz.io | {titleDescription}</title>
+      <title>{overrideTitle}</title>
       <meta name="description" content={info.description} />
       <meta property="og:title" content={info.title} />
       <meta property="og:image" content={imageUrlForArticle(info)} />
