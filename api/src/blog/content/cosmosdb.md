@@ -6,13 +6,13 @@ While the mongodb and graph offerings seem to be on par with other offerings out
 This article will be a combination tutorial & review of Cosmos DB SQL based on my experiences building that project.
 
 ### The Project - [Schwankie.com](https://www.schwankie.com)
-I drink nearly continuously from the information firehouse that is the internet. Through Twitter, HackerNews, Reddit, and a myriad of email aggregating newsletters, I head down fourty to fifty rabbit trails a day. For years, I've used bookmarks to keep record of the sites I thought might be useful someday. The problem was that as quickly as my collection of bookmarks grew, my ability to find anything decreased just as rapidly. After living this way for too long, I set out to build my own indexible, searchable collection. I'm pleased with the end result - which one of my friends designated my own "personal tech pinterest".
+I drink nearly continuously from the information firehouse that is the internet. Through Twitter, HackerNews, Reddit, and a myriad of email aggregating newsletters, I head down forty to fifty rabbit trails a day. For years, I've used bookmarks to keep record of the sites I thought might be useful someday. The problem was that as quickly as my collection of bookmarks grew, my ability to find anything decreased just as rapidly. After living this way for too long, I set out to build my own indexible, searchable collection. I'm pleased with the end result - which one of my friends designated my own "personal tech Pinterest".
 
 ### The Build
 #### Background
 I decided to use react for the site, and node for the backend (which is my normal setup these days). I use express as my server framework (wrapped in another of my personal projects - [node-bits](https://github.com/jgretz/node-bits)).
 
-The object map is pretty simply, consisting of single object - Link. It has the basic properties that you would expect (url, title, description, image). It also has a property "tag", which is an array of strings - which is the most interesting piece of the object. It's modeled as you would expect in a document - which coming from a background using RDBMSs feels werid.
+The object map is pretty simply, consisting of single object - Link. It has the basic properties that you would expect (url, title, description, image). It also has a property "tag", which is an array of strings - which is the most interesting piece of the object. It's modeled as you would expect in a document - which coming from a background using RDBMSs feels weird
 
 I wanted to be able to categorize my links, something I had always tried to do unsuccessfully with folders, and tags provide me with the flexibility I want. Storing tags is always a fun discussion in a relational database - do you favor normalization, denormalize for performance, or take some other approach? A document database essentially make this decision for you, but querying is typically a bit of a pain syntactically and performance is always a concern. Smoothly handling this situation is where Cosmos DB really impressed me.
 
