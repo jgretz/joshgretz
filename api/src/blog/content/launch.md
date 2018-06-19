@@ -24,6 +24,6 @@ This site is currently a NodeJS backend with React front end. You can find the s
 I find writing in markdown to be clean and easy, and so all of my content is actually written as md files and converted into React by
 a nifty little package [react-markdown](https://rexxars.github.io/react-markdown/).
 
-#### Attribution
+### Attribution
 * [Photo by Ylanite Koppens from Pexels](https://www.pexels.com/photo/yellow-pink-and-blue-party-balloons-796606/)
 * [Markdown Cheatsheat](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
