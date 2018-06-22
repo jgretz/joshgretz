@@ -25,9 +25,15 @@ const metaTags = ({info}) => {
   return (
     <MetaTags>
       <title>{overrideTitle}</title>
+
+      <meta name="author" content="Josh Gretz" />
       <meta name="description" content={info.description} />
       <meta property="og:title" content={info.title} />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content={window.location.href} />
+      <meta property="og:description" content={info.description} />
       <meta property="og:image" content={imageUrlForArticle(info)} />
+      <meta property="og:site_name" content="Josh Gretz" />
     </MetaTags>
   );
 };
