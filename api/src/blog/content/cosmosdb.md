@@ -45,7 +45,7 @@ Initially, I was concerned that given that basically all of search is string com
 One drawback I did run into though was around ordering. I'm guessing it's due to the indexing (which is a fair tradeoff imo), but all fields in the ORDER BY clause have to actually exist on the document. This might initially sound ok, but it prevents you from using calculated values (such as SUM, MAX, etc). It's minor and you can get around it after retrieving the data, but it would make a nice addition.
 
 ### Retrospective
-As is probably clear from the above writing, I found Azure Cosmos DB SQL to be easy to stand up, query, and extremely responsive. In situations that call for a document database, I'd definitely be inclined to use it again. Obviously, there are a lot of cases out there that preclude it's use, but as document databases, it's very solid.
+As is probably clear from the above writing, I found Azure Cosmos DB SQL to be easy to stand up, query, and extremely responsive. In situations that call for a document database, I'd definitely be inclined to use it again. Obviously, there are a lot of cases out there that preclude it's use, but as a document databases, it's very solid.
 
 Perhaps its best use, though, is as a scratch pad. Often when I'm at the start of a project, I am doing proof of concept work, and the time it can take to standup a "real" database probably isn't worth the value I get from it. I've started using Cosmos DB SQL in these situations, and it has let me focus on the concept I am trying to prove rather than the plumbing.
 
