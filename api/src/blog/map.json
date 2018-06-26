@@ -1,5 +1,13 @@
 [
   {
+    "id": 2,
+    "title": "Fast Image Loading for React",
+    "description": "Using Service Workers to Optimize Image Loading",
+    "content": "imageserviceworkers",
+    "image": "automobile-boost-car-8775.jpg",
+    "published": "06-26-2018"
+  },
+  {
     "id": 1,
     "title": "Azure Cosmos DB SQL",
     "description": "A Quick and Powerful Prototyping Tool",

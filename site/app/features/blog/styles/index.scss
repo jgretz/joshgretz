@@ -105,6 +105,13 @@
     h4 {
       margin-top: 0;
     }
+
+    pre {
+      padding: 10px;
+
+      background-color: $background;
+      color: $foreground;
+    }
   }
 
   .social {
