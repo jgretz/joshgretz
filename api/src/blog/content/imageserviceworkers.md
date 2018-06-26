@@ -51,7 +51,7 @@ Now that we have the structure of how to create a service worker, we need to enc
 <WorkerImage src="https://url.of.image" />
 ```
 
-To provide this interface, we do something like the following code block. And yes, this is a fully working component 😃😃😃😃😃
+To provide this functionality, we do something like the following:
 
 ```
 import React, {Component} from 'react';
@@ -100,10 +100,6 @@ export default class WorkerImage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.mounted) {
-      return;
-    }
-
     if (this.props.src !== prevProps.src) {
       this.loadImage();
     }
@@ -126,6 +122,10 @@ export default class WorkerImage extends Component {
   }
 
   loadImage() {
+    if (!this.mounted) {
+      return;
+    }
+
     this.worker.postMessage(this.props.src);
   }
 
@@ -143,14 +143,22 @@ export default class WorkerImage extends Component {
   }
 }
 ```
-Although a little naive, this allows us to easily spin through a list of image src's, creating tags for each, and let them quickly load across multiple threads in the background, while the main thread finishes the render of the page. FWIW, I do have a more complete implementation with a placeholder and error handling in my [Schwankie.com](https://www.schwankie.com) source linked below.
+Although this code is a little naive, it does allow us to easily spin through a list of image src's, creating tags for each, and let them quickly load across multiple threads in the background, while the main thread finishes the render of the page.
+
+FWIW, I published a more complete implementation as an npm package - [react-sw-img](https://www.npmjs.com/package/react-sw-img). It has the following additions to the code above:
+* Supports placeholders
+* Supports passing class names and styles
+* Supports rendering a img tag (default) or a div with the image as the background
+* Handles errors and failover to the main thread
 
 ### Caveats
-There is one other attempt at this approach that I know of which is [react-worker-image](https://github.com/nitish24p/react-worker-image), but the resultant html isn't quite to my personal preferences. That said, neither "library" attempts to address concerns like lazy loading, connection speed based scaling, or resolution based scaling. All of these are are important considerations as well. As with most choices in programming, your mileage may vary, and you should choose the right approach for your problem. There is no one package to rule them all.
+There is one other attempt at this approach that I know of which is [react-worker-image](https://github.com/nitish24p/react-worker-image), but the resultant html wasn't quite what I had in mind - it's really a matter of preference. I also wanted to understand the internals, which is how I got to both my package and this article.
+
+All that said, I think it important to point out that neither "library" attempts to address concerns like lazy loading, connection speed based scaling, or resolution based scaling. As with most choices in programming, your mileage may vary, and you should choose the right approach for your problem. There is no one package to rule them all.
 
 ### Closing
 In less than 100 lines of code, we accomplished the goal I set at the start of this article. We are able to quickly speed up the load of the page, provide a better user experience, and optimize the resources available to our site. The other advantage of this approach is that it can be applied to more than just images - json, files, etc could be wrapped by the same approach.
 
 ### Attribution
-* [Schwankie.com source](https://github.com/jgretz/schwankie)
+* [react-sw-img source](https://github.com/jgretz/react-sw-img)
 * [Photo from Pexels](https://www.pexels.com/photo/traffic-car-vehicle-speed-8775/)
