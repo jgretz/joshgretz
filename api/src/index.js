@@ -3,7 +3,7 @@ import nodeBitsExpress, {cors, bodyParser} from 'node-bits-express';
 import nodeBitsCode from 'node-bits-code';
 import nodeBitsSpa from 'node-bits-spa';
 
-import {configureCompression} from './util';
+import {configureCompression, configureExpires} from './util';
 
 nodeBits([
   nodeBitsExpress({
@@ -11,6 +11,7 @@ nodeBits([
     configurations: [
       cors({methods: [GET, POST, PUT, DELETE, OPTIONS]}), bodyParser(),
       configureCompression(),
+      configureExpires(),
     ],
   }),
   nodeBitsCode({
