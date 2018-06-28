@@ -1,22 +1,21 @@
 import {isDev} from '../services';
 
+const maxExpires = (res, next) => {
+  res.setHeader('Cache-Control', 'public, max-age=2592000');
+  res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());
+
+  next();
+};
+
 export default () => app => {
   if (isDev()) {
     return;
   }
 
-  app.get('*.css', (req, res, next) => {
-    res.setHeader('Cache-Control', 'public, max-age=2592000');
-    res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());
-
-    next();
-  });
-
-  app.get('*.js', (req, res, next) => {
-    res.setHeader('Cache-Control', 'public, max-age=2592000');
-    res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());
-
-    next();
+  ['*.css', '*.js', '*.png'].forEach(pattern => {
+    app.get(pattern, (req, res, next) => {
+      maxExpires(res, next);
+    });
   });
 
   app.get('/api/blog/map', (req, res, next) => {
