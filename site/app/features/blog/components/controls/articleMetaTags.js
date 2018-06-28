@@ -1,6 +1,7 @@
-import $ from 'jquery';
+import React from 'react';
 import {connect} from 'react-redux';
 
+import {MetaTags} from '../../../shared/components';
 import {activeArticleInfoSelector} from '../../selectors';
 import {imageUrlForArticle} from '../../services';
 
@@ -9,24 +10,13 @@ const metaTags = ({info}) => {
     return null;
   }
 
-  const isRoot = location.pathname === '/';
-  if (isRoot) {
-    return null;
-  }
-
-  const title = `Josh Gretz | ${info.title}`;
-
-  $('title').html(title);
-  $('meta[name=description]').attr('content', info.description);
-  $('meta[property="og:title"]').attr('content', title);
-  $('meta[property="og:url"]').attr('content', window.location.href);
-  $('meta[property="og:description"]').attr('content', info.description);
-  $('meta[property="og:image"]').attr('content', imageUrlForArticle(info));
-
-  $('#seo-h1').html(title);
-  $('#seo-h2').html(info.description);
-
-  return null;
+  return (
+    <MetaTags
+      pageTitle={info.title}
+      description={info.description}
+      imageUrl={imageUrlForArticle(info)}
+    />
+  );
 };
 
 const mapStateToProps = state => ({

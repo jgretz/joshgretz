@@ -1,5 +1,6 @@
 import React from 'react';
 import {Progress} from 'semantic-ui-react';
+import {MetaTags} from '../../shared/components';
 
 export default () => (
   <div className="resume">
@@ -264,5 +265,11 @@ export default () => (
         </ul>
       </div>
     </div>
+
+    <MetaTags
+      pageTitle="Resume"
+      description="Josh Gretz is maker living in Pittsburgh. This site contains his musings, thoughts, and learnings earned through his tinkering and career."
+      imageUrl="https://i.imgur.com/FrQNZnN.jpg"
+    />
   </div>
 );

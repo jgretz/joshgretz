@@ -1,5 +1,6 @@
 import React from 'react';
 import {Icon} from 'semantic-ui-react';
+import {MetaTags} from '../../shared/components';
 
 export default () => (
   <div className="about">
@@ -65,5 +66,11 @@ export default () => (
       I grew up in Columbus, OH. It&#39;s a wonderful city and home to my
       beloved Buckeyes.
     </div>
+
+    <MetaTags
+      pageTitle="About"
+      description="Josh Gretz is maker living in Pittsburgh. This site contains his musings, thoughts, and learnings earned through his tinkering and career."
+      imageUrl="https://i.imgur.com/FrQNZnN.jpg"
+    />
   </div>
 );
