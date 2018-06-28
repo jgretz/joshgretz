@@ -266,10 +266,6 @@ export default () => (
       </div>
     </div>
 
-    <MetaTags
-      pageTitle="Resume"
-      description="Josh Gretz is maker living in Pittsburgh. This site contains his musings, thoughts, and learnings earned through his tinkering and career."
-      imageUrl="https://i.imgur.com/FrQNZnN.jpg"
-    />
+    <MetaTags pageTitle="Resume" />
   </div>
 );

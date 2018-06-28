@@ -67,10 +67,6 @@ export default () => (
       beloved Buckeyes.
     </div>
 
-    <MetaTags
-      pageTitle="About"
-      description="Josh Gretz is maker living in Pittsburgh. This site contains his musings, thoughts, and learnings earned through his tinkering and career."
-      imageUrl="https://i.imgur.com/FrQNZnN.jpg"
-    />
+    <MetaTags pageTitle="About" />
   </div>
 );

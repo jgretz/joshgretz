@@ -1,14 +1,12 @@
 import $ from 'jquery';
+import {GENERIC_TITLE, GENERIC_DESC, GENERIC_IMG} from '../constants';
 
-export default ({pageTitle, description, imageUrl}) => {
-  const isRoot = location.pathname === '/';
-  if (isRoot) {
-    pageTitle = 'Musings of a Maker';
-    description =
-      'Josh Gretz is maker living in Pittsburgh. This site contains his musings, thoughts, and learnings earned through his tinkering and career.';
-    imageUrl = 'https://i.imgur.com/FrQNZnN.jpg';
-  }
-
+export default ({
+  pageTitle = GENERIC_TITLE,
+  description = GENERIC_DESC,
+  imageUrl = GENERIC_IMG,
+  type = 'website',
+}) => {
   const title = `Josh Gretz | ${pageTitle}`;
 
   $('title').html(title);
@@ -17,6 +15,7 @@ export default ({pageTitle, description, imageUrl}) => {
   $('meta[property="og:url"]').attr('content', window.location.href);
   $('meta[property="og:description"]').attr('content', description);
   $('meta[property="og:image"]').attr('content', imageUrl);
+  $('meta[property="og:type"]').attr('content', type);
   $('link[rel=canonical]').attr('href', window.location.href);
 
   $('#seo-h1').html(title);
