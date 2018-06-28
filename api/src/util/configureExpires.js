@@ -11,4 +11,12 @@ export default () => app => {
 
     next();
   });
+
+
+  app.get('/api/blog/map', (req, res, next) => {
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.setHeader('Expires', new Date(Date.now() + 86400000).toUTCString());
+
+    next();
+  });
 };

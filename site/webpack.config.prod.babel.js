@@ -2,6 +2,7 @@ import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 import path from 'path';
 import {EnvironmentPlugin} from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -34,6 +35,9 @@ export default {
     new HtmlWebpackPlugin({
       template: 'app/index.ejs',
       inject: true,
+    }),
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'async',
     }),
     new Stylish(),
     new CopyWebpackPlugin([
