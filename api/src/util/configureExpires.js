@@ -5,13 +5,19 @@ export default () => app => {
     return;
   }
 
-  app.get('/site/*', (req, res, next) => {
+  app.get('*.css', (req, res, next) => {
     res.setHeader('Cache-Control', 'public, max-age=2592000');
     res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());
 
     next();
   });
 
+  app.get('*.js', (req, res, next) => {
+    res.setHeader('Cache-Control', 'public, max-age=2592000');
+    res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());
+
+    next();
+  });
 
   app.get('/api/blog/map', (req, res, next) => {
     res.setHeader('Cache-Control', 'public, max-age=86400');
