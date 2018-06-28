@@ -1,12 +1,15 @@
+import path from 'path';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
-import path from 'path';
+import HtmlCriticalWebpackPlugin from 'html-critical-webpack-plugin';
 import {EnvironmentPlugin} from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import Stylish from 'webpack-stylish';
+
+const OUTPUT_PATH = path.resolve(__dirname, './lib');
 
 export default {
   mode: 'production',
@@ -15,7 +18,7 @@ export default {
     main: ['babel-polyfill', './app/index.js'],
   },
   output: {
-    path: path.resolve(__dirname, './lib'),
+    path: OUTPUT_PATH,
     publicPath: '/',
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
@@ -43,6 +46,19 @@ export default {
     new CopyWebpackPlugin([
       {from: './app/images/favicon.png', to: './favicon.png'},
     ]),
+    new HtmlCriticalWebpackPlugin({
+      base: OUTPUT_PATH,
+      src: 'index.html',
+      dest: 'index.html',
+      inline: true,
+      minify: true,
+      extract: true,
+      width: 375,
+      height: 565,
+      penthouse: {
+        blockJSRequests: false,
+      },
+    }),
   ],
   module: {
     rules: [
