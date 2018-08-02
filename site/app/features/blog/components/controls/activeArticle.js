@@ -47,7 +47,7 @@ class ActiveArticle extends Component {
           </div>
         </div>
 
-        <ReactMarkdown source={content} />
+        <ReactMarkdown className="article-content" source={content} />
       </div>
     );
   }
