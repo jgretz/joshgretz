@@ -12,7 +12,7 @@ export default () => (
         produce software products people love. I strongly believe that the best
         software is built by people for people, that software development is
         artistic endeavor rooted in engineering sensibility, and that code can
-        be an artistic medium. I have strong opinions, but try to hold them
+        be an artistic medium. I have strong opinions but try to hold them
         loosely. I desire to continually improve.
       </pre>
     </div>
@@ -108,7 +108,7 @@ export default () => (
             <div>(January 2009 - January 2013)</div>
             <ul>
               <li>
-                Developed ciriculumn for senior level mobile development course.
+                Developed curriculum for senior level mobile development course.
               </li>
               <li>Lectured twice weekly to classes of 15 - 25 students.</li>
               <li>
