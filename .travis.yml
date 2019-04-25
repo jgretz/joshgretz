@@ -1,11 +1,12 @@
 language: node_js
 os: osx
 node_js:
-- node
+  - node
+  - "10"
 after_success:
-- yarn build
+  - yarn build
 before_deploy:
-- cd ./lib
+  - cd ./lib
 deploy:
   provider: heroku
   skip_cleanup: true
