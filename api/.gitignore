@@ -1,6 +1,0 @@
-node_modules/
-lib/
-*.log
-.idea/
-*.heapsnapshot
-private.js
