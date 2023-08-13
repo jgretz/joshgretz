@@ -3,7 +3,7 @@ import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from '@remi
 import {Suspense, lazy} from 'react';
 
 import stylesheet from '~/tailwind.css';
-import Sidebar from './components/sidebar';
+import Card from './components/card';
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: stylesheet}];
 
@@ -21,7 +21,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Sidebar />
+        <Card />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
