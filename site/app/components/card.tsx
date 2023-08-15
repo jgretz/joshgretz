@@ -4,7 +4,7 @@ import avatar from '~/assets/images/josh-g.png';
 
 export default function Card() {
   return (
-    <div className="bg-cardbg flex flex-col items-center justify-center fixed top-0 left-0 w-full border-b border-accent sm:border-r sm:w-[200px] sm:h-full sm:border-b-0">
+    <div className="bg-cardbg flex flex-col items-center justify-center z-10 absolute sm:fixed top-0 left-0 w-full border-b border-accent sm:border-r sm:w-[200px] sm:h-full sm:border-b-0">
       <img
         src={avatar}
         alt="Josh Gretz Head - Hand Drawn Avatar"
@@ -31,5 +31,3 @@ export default function Card() {
     </div>
   );
 }
-
-//border-r border-accent w-[200px] h-full fixed top-0 left-0

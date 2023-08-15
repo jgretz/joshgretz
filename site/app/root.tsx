@@ -22,7 +22,9 @@ export default function App() {
       </head>
       <body>
         <Card />
-        <Outlet />
+        <div className="absolute z-0 top-[210px] left-0 sm:top-0 sm:left-[200px]">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
