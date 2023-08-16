@@ -22,7 +22,7 @@ export default function App() {
       </head>
       <body>
         <Card />
-        <div className="absolute z-0 top-[210px] left-0 sm:top-0 sm:left-[200px]">
+        <div className="absolute z-0 top-[210px] left-0 sm:top-0 sm:left-[200px] sm:h-full">
           <Outlet />
         </div>
         <ScrollRestoration />

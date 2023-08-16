@@ -6,7 +6,7 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="p-5">
+    <div className="p-5 h-full w-full sm:flex sm:flex-col sm:justify-center">
       <div>
         I&#39;m Josh Gretz - a maker living in Pittsbugh. I love learning, exploring, and creating.
         You can normally find me in shorts (even in December) sitting in front of a computer delving
