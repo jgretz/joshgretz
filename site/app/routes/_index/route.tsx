@@ -1,7 +1,7 @@
 import type {V2_MetaFunction} from '@remix-run/node';
 
 export const meta: V2_MetaFunction = () => {
-  return [{title: 'JoshGretz.io'}, {name: 'description', content: ''}];
+  return [{title: 'Josh Gretz'}, {name: 'description', content: ''}];
 };
 
 export default function Index() {
