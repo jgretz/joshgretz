@@ -5,7 +5,7 @@ import strava from '~/assets/images/strava-icon.png';
 
 export default function Card() {
   return (
-    <div className="bg-cardbg flex flex-col items-center justify-center z-10 absolute sm:fixed top-0 left-0 w-full border-b border-accent sm:border-r sm:w-[200px] sm:h-full sm:border-b-0">
+    <div className="flex flex-col items-center justify-center">
       <img
         src={avatar}
         alt="Josh Gretz Head - Hand Drawn Avatar"

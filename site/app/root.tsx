@@ -3,7 +3,7 @@ import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from '@remi
 import {Suspense, lazy} from 'react';
 
 import stylesheet from '~/tailwind.css';
-import Card from './components/card';
+import Bar from './components/bar';
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: stylesheet}];
 
@@ -21,8 +21,8 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Card />
-        <div className="absolute z-0 top-[210px] left-0 sm:top-0 sm:left-[200px] sm:h-full">
+        <Bar />
+        <div className="absolute z-0 top-[240px] left-0 sm:top-0 sm:left-[200px] sm:h-full">
           <Outlet />
         </div>
         <ScrollRestoration />
