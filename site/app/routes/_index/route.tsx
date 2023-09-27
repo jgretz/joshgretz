@@ -1,51 +1,46 @@
 import type {V2_MetaFunction} from '@remix-run/node';
+import type {ReactNode} from 'react';
 
 export const meta: V2_MetaFunction = () => {
   return [{title: 'Josh Gretz'}, {name: 'description', content: ''}];
 };
 
+interface ContentBlockProps {
+  children: ReactNode;
+}
+
+function ContentBlock({children}: ContentBlockProps) {
+  return <div className="my-2">{children}</div>;
+}
+
 export default function Index() {
   return (
     <div className="p-5 h-full w-full max-w-7xl sm:flex sm:flex-col sm:justify-center">
-      <div>
-        I&#39;m Josh Gretz - a maker living in Pittsbugh. I love learning, exploring, and creating.
-        You can normally find me in shorts (even in December) sitting in front of a computer delving
-        into some new experiment. When I&#39;m not being beguiled by code, you can find me playing
-        basketball, watching any sport known to man (seriously, I even love staying up late to watch
-        Olympic Handball), or creating some tasty morsel in the kitchen. No matter what or where
-        I&#39;m making, I&#39;m committed to leaving the world a little better than I found it.
-      </div>
+      <ContentBlock>
+        I'm a husband, father, maker, developer, runner, cook, baker, nerd, geek, and fan of nearly
+        every sport invented.
+      </ContentBlock>
 
-      <h3 className="font-bold text-2xl my-3">By Day</h3>
-      <div>
-        I&#39;m the CTO of Truefit, an awesome software company in Pittsburgh. I spend my days
-        helping our talented team explore new areas, expand their skills, and imagine creative
-        approaches to creating software products people love. I am privileged to work with an
-        amazing group of people that understand the challenges our customers face and are gifted at
-        overcoming those challenges with innovative solutions. I count myself blessed that this same
-        cadre of creators also are kind enough to put up with my eccentricities on a daily basis.
-      </div>
+      <ContentBlock>
+        I believe that being a polymath is a wonderful way to approach life. I love drinking from
+        the firehose on a daily basis.
+      </ContentBlock>
 
-      <h3 className="font-bold text-2xl my-3">By Night</h3>
-      <div>
-        I&#39;m the father of three sons, who daily manage to surpass the &#34;wish&#34; my parents
-        had for me to have children just like me. I am also blessed to be the husband of a
-        beautiful, creative and patient wife. Many of my nights are spent poking at some new idea,
-        topic, or thought that popped into my ADD brain.
-      </div>
+      <ContentBlock>
+        I am driven to see genius be realized. I am inspired by crafting a better reality through
+        the fusion of ideas, collaboration, and hard work. I have strong opinions, yet try to hold
+        them loosely, and strive to express them humbly. I desire to continually improve.
+      </ContentBlock>
 
-      <h3 className="font-bold text-2xl my-3">Where I&#39;ve Been</h3>
-      <div>
-        I joined Truefit as an intern in 2003 and have been there ever since. Over the years,
-        I&#39;ve been blessed to be able to be part of a journey that has taken us from a small
-        company that no one knew anything about in Cranberry Twp to an increasingly well known and
-        respected boutique innovation firm in downtown Pittsburgh. Before Truefit, I attended Grove
-        City College. I graduated in 2004 with a B.S. in Computer Information Systems and a minor in
-        Business. Over the years since graduation, I&#39;ve enjoyed many opportunites to remain
-        involved with the CS department, even serving as an adjunct professor for a while.
-        <br />
-        <br />I grew up in Columbus, OH. It&#39;s a wonderful city and home to my beloved Buckeyes.
-      </div>
+      <ContentBlock>
+        I believe that the best software is built by people for people. I see software development
+        as an artistic endeavor rooted in engineering sensibility. I hold that code can be an
+        artistic medium.
+      </ContentBlock>
+
+      <ContentBlock>
+        This site is an attempt to be a reflection of all of these thoughts and more ...
+      </ContentBlock>
     </div>
   );
 }
