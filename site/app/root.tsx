@@ -1,14 +1,10 @@
 import type {LinksFunction} from '@remix-run/node';
 import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from '@remix-run/react';
-import {Suspense, lazy} from 'react';
 
 import stylesheet from '~/tailwind.css';
 import Bar from './components/bar';
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: stylesheet}];
-
-const RemixDevTools =
-  process.env.NODE_ENV === 'development' ? lazy(() => import('remix-development-tools')) : null;
 
 export default function App() {
   return (
@@ -21,18 +17,15 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Bar />
-        <div className="absolute z-0 top-[240px] left-0 sm:top-0 sm:left-[200px] sm:h-full">
+        <div className="z-10 absolute sm:fixed top-0 left-0 w-full sm:w-[200px] sm:h-full">
+          <Bar />
+        </div>
+        <div className="z-0 absolute top-[240px] sm:top-0 left-0 sm:left-[200px] sm:min-h-screen">
           <Outlet />
         </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-        {RemixDevTools ? (
-          <Suspense>
-            <RemixDevTools />
-          </Suspense>
-        ) : null}
       </body>
     </html>
   );

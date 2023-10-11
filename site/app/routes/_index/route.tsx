@@ -1,29 +1,21 @@
-import type {V2_MetaFunction} from '@remix-run/node';
-import type {ReactNode} from 'react';
+import type {MetaFunction} from '@remix-run/node';
+import Page from '~/components/page';
+import ContentBlock from './contentblock';
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{title: 'Josh Gretz'}, {name: 'description', content: ''}];
 };
 
-interface ContentBlockProps {
-  children: ReactNode;
-}
-
-function ContentBlock({children}: ContentBlockProps) {
-  return <div className="my-2">{children}</div>;
-}
-
 export default function Index() {
   return (
-    <div className="p-5 h-full w-full max-w-7xl sm:flex sm:flex-col sm:justify-center">
+    <Page>
       <ContentBlock>
         I'm a husband, father, maker, developer, runner, cook, baker, nerd, geek, and fan of nearly
         every sport invented.
       </ContentBlock>
 
       <ContentBlock>
-        I believe that being a polymath is a wonderful way to approach life. I love drinking from
-        the firehose on a daily basis.
+        I believe that being a polymath is a wonderful way to approach life.
       </ContentBlock>
 
       <ContentBlock>
@@ -38,9 +30,7 @@ export default function Index() {
         artistic medium.
       </ContentBlock>
 
-      <ContentBlock>
-        This site is an attempt to be a reflection of all of these thoughts and more ...
-      </ContentBlock>
-    </div>
+      <ContentBlock>This site is a reflection of all of these thoughts and more ...</ContentBlock>
+    </Page>
   );
 }
