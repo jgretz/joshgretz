@@ -3,10 +3,10 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix build",
-    "dev": "remix dev",
+    "build": "npx remix build",
+    "dev": "npx remix dev",
     "deploy": "fly deploy --remote-only",
-    "start": "remix-serve build",
+    "start": "npx remix-serve build/index.js",
     "typecheck": "tsc"
   },
   "eslintIgnore": [

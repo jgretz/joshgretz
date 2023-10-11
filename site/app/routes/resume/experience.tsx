@@ -126,7 +126,7 @@ export default function Experience() {
               Optimize the workload across teams and ensure our ability to make and keep client
               commitments.
             </JobDetail>
-            <li>Develop the culture by recruiting engineering talent.</li>
+            <JobDetail>Develop the culture by recruiting engineering talent.</JobDetail>
           </ul>
         </Job>
         <Job>
