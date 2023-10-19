@@ -20,7 +20,7 @@ export default function App() {
         <div className="z-10 absolute sm:fixed top-0 left-0 w-full sm:w-[200px] sm:h-full">
           <Bar />
         </div>
-        <div className="z-0 absolute top-[240px] sm:top-0 left-0 sm:left-[200px] sm:min-h-screen">
+        <div className="z-0 absolute top-[240px] sm:top-0 left-0 sm:pl-[200px] sm:min-h-screen w-full">
           <Outlet />
         </div>
         <ScrollRestoration />
