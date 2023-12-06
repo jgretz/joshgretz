@@ -1,5 +1,5 @@
 import {useMatch} from '@remix-run/react';
-import MenuItem from '~/components/menuitem';
+import MenuItem from '~/components/menuItem';
 
 export default function Menu() {
   const match = useMatch('admin/login');

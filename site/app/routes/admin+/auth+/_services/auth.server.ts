@@ -3,7 +3,7 @@ import {Authenticator, AuthorizationError} from 'remix-auth';
 import {GoogleStrategy} from 'remix-auth-google';
 import type {User} from '~/Types';
 import {sessionStorage} from './session.server';
-import findUserByEmail from './finduserbyemail';
+import findUserByEmail from './findUserByEmail';
 
 let googleStrategy = new GoogleStrategy(
   {

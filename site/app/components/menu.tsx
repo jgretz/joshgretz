@@ -1,4 +1,4 @@
-import MenuItem from './menuitem';
+import MenuItem from './menuItem';
 
 export default function Menu() {
   return (

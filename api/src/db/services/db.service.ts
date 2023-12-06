@@ -8,7 +8,6 @@ export class DrizzleService {
   db: PostgresJsDatabase<typeof schema>;
 
   constructor() {
-    console.log(process.env.DATABASE_URL);
     const queryClient = postgres(process.env.DATABASE_URL);
     this.db = drizzle(queryClient, {schema});
   }
