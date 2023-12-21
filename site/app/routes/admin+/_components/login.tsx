@@ -1,5 +1,5 @@
 import {Form} from '@remix-run/react';
-import {ROUTES} from './_constants/routes';
+import {ROUTES} from '../_constants/routes';
 
 export default function Login() {
   return (

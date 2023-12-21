@@ -15,6 +15,9 @@ export const users = pgTable(
     id: serial('id').primaryKey(),
     email: varchar('email', {length: 256}).notNull(),
     admin: boolean('admin').default(false).notNull(),
+    strava_id: integer('strava_id'),
+    strava_access_token: varchar('strava_access_token', {length: 50}),
+    strava_code: varchar('strava_code', {length: 50}),
   },
   (users) => {
     return {
@@ -22,14 +25,6 @@ export const users = pgTable(
     };
   },
 );
-
-export const tokens = pgTable('tokens', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id')
-    .notNull()
-    .references(() => users.id),
-  strava: varchar('strava', {length: 500}),
-});
 
 export const stravaActivities = pgTable('strava_activities', {
   id: serial('id').primaryKey(),

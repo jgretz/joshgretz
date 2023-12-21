@@ -1,6 +1,6 @@
 import {LoaderFunctionArgs, json, redirect} from '@remix-run/node';
-import {requireUser} from './_services/requireUser';
-import {ROUTES} from './_constants/routes';
+import {requireUser} from '../_services/requireUser';
+import {ROUTES} from '../_constants/routes';
 import {Button} from '~/components/ui/button';
 import {useLoaderData} from '@remix-run/react';
 import {useCallback} from 'react';
@@ -8,8 +8,7 @@ import {useCallback} from 'react';
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await requireUser(request);
   if (!user) {
-    console.log(user);
-    return redirect(ROUTES.LOGIN);
+    return redirect(ROUTES.ADMIN);
   }
 
   const url = new URL(request.url);

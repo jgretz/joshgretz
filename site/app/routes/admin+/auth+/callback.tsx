@@ -5,6 +5,6 @@ import {ROUTES} from '../_constants/routes';
 export function loader({request}: LoaderFunctionArgs) {
   return authenticator.authenticate('google', request, {
     successRedirect: ROUTES.ADMIN,
-    failureRedirect: ROUTES.LOGIN,
+    failureRedirect: ROUTES.ADMIN,
   });
 }

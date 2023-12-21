@@ -8,8 +8,13 @@ export class FindUserByEmailService {
   constructor(private drizzle: DrizzleService) {}
 
   async get(email: string) {
-    return await this.drizzle.db.query.users.findFirst({
-      where: eq(users.email, email),
-    });
+    try {
+      return await this.drizzle.db.query.users.findFirst({
+        where: eq(users.email, email),
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 }
