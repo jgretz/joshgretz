@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {User} from '~/Types';
-import {API_URLS} from '../../_constants/apiUrls';
+import {API_URLS} from '../../_constants/apiurls';
 
 export async function updateStravaAccessDetails(
   user: User,

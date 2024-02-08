@@ -19,17 +19,11 @@ export async function loader({request}: LoaderFunctionArgs): Promise<{}> {
     return redirect(ROUTES.STRAVA);
   }
 
-  console.log('token', token);
-
   // get strava data
   const stravaData = await getStravaAccessDetails(token);
 
-  console.log('stravaData', stravaData);
-
   // update our access information
   await updateStravaAccessDetails(user, token, stravaData.access_token, stravaData.athlete.id);
-
-  console.log('updated strava access details');
 
   // done
   return redirect(ROUTES.STRAVA);
