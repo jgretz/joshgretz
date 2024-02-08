@@ -1,0 +1,4 @@
+{
+  "*.{js,jsx,ts,tsx}": ["eslint --cache --fix", "bash -c 'npm run typecheck'"],
+  "*.{js,ts,tsx,css,md}": "prettier --write"
+}

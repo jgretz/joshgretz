@@ -1,2 +1,3 @@
-# joshgretzio
-The source of https://www.joshgretz.io
+# joshgretz.com
+
+The source for joshgretz.com
