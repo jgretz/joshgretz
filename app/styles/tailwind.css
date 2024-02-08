@@ -7,10 +7,10 @@
     --background: hsl(0, 0%, 7%);
     --foreground: hsl(0 0% 100%);
 
-    --border: hsl(0 72% 46.9%);
-    --input: hsl(0 72% 46.9%);
+    --border: hsl(153 53.2% 74.5%);
+    --input: hsl(153 53.2% 74.5%);
 
-    --primary: hsl(0 72% 46.9%);
+    --primary: hsl(153 53.2% 74.5%);
     --primary-foreground: hsl(0 0% 100%);
 
     --error: hsl(0 72% 46.9%);
