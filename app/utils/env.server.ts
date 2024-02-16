@@ -45,6 +45,7 @@ export function getClientEnv() {
   return {
     MODE: process.env.NODE_ENV,
     SENTRY_DSN: process.env.SENTRY_DSN,
+    API_URL: process.env.API_URL,
   };
 }
 

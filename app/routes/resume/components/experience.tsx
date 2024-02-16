@@ -20,8 +20,8 @@ function JobTitle({ title, company, companylink, tenure, location }: JobTitlePro
     <div>
       <div className="text-lg font-semibold leading-snug">
         <span>{title}</span>
-        <span className="text-gray-200"> @ </span>
-        <span className="text-gray-200">
+        <span className="text-secondary"> @ </span>
+        <span className="text-secondary">
           <a href={companylink} target="_blank" rel="noreferrer">
             {company}
           </a>

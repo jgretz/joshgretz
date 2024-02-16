@@ -4,16 +4,17 @@
 
 @layer base {
   :root {
-    --background: hsl(0, 0%, 7%);
-    --foreground: hsl(0 0% 100%);
+    --background: #fff;
+    --foreground: #000;
 
-    --border: hsl(153 53.2% 74.5%);
-    --input: hsl(153 53.2% 74.5%);
-
-    --primary: hsl(153 53.2% 74.5%);
-    --primary-foreground: hsl(0 0% 100%);
+    --primary: #f98866;
+    --secondary: #333;
 
     --error: hsl(0 72% 46.9%);
+  }
+  .side {
+    --background: #000;
+    --primary: #f98866;
   }
 }
 

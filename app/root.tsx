@@ -98,6 +98,7 @@ function Document({ children, nonce, env }: DocumentArgs) {
 
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+
         <Links />
       </head>
       <body>
@@ -123,10 +124,10 @@ function App() {
   return (
     <AuthenticityTokenProvider token={data.csrfToken}>
       <Document nonce={nonce} env={data.ENV}>
-        <div className="absolute left-0 top-0 z-10 w-full sm:fixed sm:h-full sm:w-[200px]">
+        <div className="side absolute left-0 top-0 z-10 w-full bg-background text-white sm:fixed sm:h-full sm:w-[200px]">
           <Bar />
         </div>
-        <div className="absolute left-0 top-[240px] z-0 w-full sm:top-0 sm:min-h-screen sm:pl-[200px]">
+        <div className="absolute left-0 top-[240px] z-0 w-full bg-background text-black sm:top-0 sm:min-h-screen sm:pl-[200px]">
           <Outlet />
         </div>
 
