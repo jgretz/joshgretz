@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "qwtel.sqlite-viewer",
+    "yoavbls.pretty-ts-errors",
+    "kamikillerto.vscode-colorize"
+  ]
+}
