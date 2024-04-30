@@ -1,7 +1,16 @@
 {
   "name": "joshgretz",
+  "type": "module",
   "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.2.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
   "workspaces": [
+    "apps/*",
     "packages/*"
   ]
 }

@@ -4,19 +4,21 @@ A monorepo for the multiple pieces that make up joshgretz.com.
 
 these include:
 
-## com
+## Apps
+
+### com
 
 The source code for the client hosted at https://joshgretz.com
 
-## api
+### api
 
 the backend for the site
 
-## minion
+### minion
 
 a worker that I run on side machine to do some back office tasks like stats, summaries, etc ...
 
-## 301
+### 301
 
 A small utility to handle the redirect to the .com site
 
@@ -27,6 +29,8 @@ redirects with a 301 for:
 - joshgretz.dev
 - joshgretz.us
 
-## strava
+## Packages
+
+### Strava
 
 shared logic for interacting with the strava api
