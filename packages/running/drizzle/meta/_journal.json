@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1697485652564,
+      "tag": "0000_marvelous_mockingbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1703189002803,
+      "tag": "0001_bent_nightmare",
+      "breakpoints": true
+    }
+  ]
+}

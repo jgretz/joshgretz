@@ -19,9 +19,27 @@
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
 
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
     // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
-  }
+    "noPropertyAccessFromIndexSignature": false,
+
+    // Import
+    "paths": {
+      "openweather": ["./packages/openweather/src"],
+      "running": ["./packages/running/src"],
+      "strava": ["./packages/strava/src"],
+      "utility": ["./packages/utility/src"],
+      "users": ["./packages/users/src"]
+    }
+  },
+
+  "references": [
+    {"openweather": "./packages/openweather"},
+    {"running": "./packages/running"},
+    {"strava": "./packages/strava"},
+    {"utility": "./packages/utility"},
+    {"users": "./packages/users"}
+  ]
 }
