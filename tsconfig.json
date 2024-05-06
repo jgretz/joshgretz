@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
@@ -27,11 +28,11 @@
 
     // Import
     "paths": {
-      "openweather": ["./packages/openweather/src"],
-      "running": ["./packages/running/src"],
-      "strava": ["./packages/strava/src"],
-      "utility": ["./packages/utility/src"],
-      "users": ["./packages/users/src"]
+      "openweather": ["./packages/openweather/src/index.ts"],
+      "running": ["./packages/running/src/index.ts"],
+      "strava": ["./packages/strava/src/index.ts"],
+      "utility": ["./packages/utility/src/index.ts"],
+      "users": ["./packages/users/src/index.ts"]
     }
   },
 
