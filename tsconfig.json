@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+
     // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
@@ -18,16 +19,17 @@
     // Best practices
     "strict": true,
     "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
 
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
-    // Some stricter flags (disabled by default)
     "noPropertyAccessFromIndexSignature": false,
 
     // Import
     "paths": {
+      "@joshgretz-api": ["./apps/api/src/index.ts"],
+      "@admin/*": ["./apps/admin/app/*"],
+
       "openweather": ["./packages/openweather/src/index.ts"],
       "running": ["./packages/running/src/index.ts"],
       "strava": ["./packages/strava/src/index.ts"],

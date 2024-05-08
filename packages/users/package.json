@@ -7,5 +7,10 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.10",
+    "pg": "^8.11.5",
+    "postgres": "^3.4.4"
   }
 }

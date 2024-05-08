@@ -1,5 +1,8 @@
-# base node image
-FROM node:20-bullseye-slim as base
+# Adjust BUN_VERSION as desired
+ARG BUN_VERSION=1.1.4
+FROM oven/bun:${BUN_VERSION}-slim as base
+
+LABEL fly_launch_runtime="Bun"
 
 # set for base and all layer that inherit from it
 ENV NODE_ENV production
@@ -9,8 +12,8 @@ FROM base as deps
 
 WORKDIR /remixapp
 
-ADD package.json package-lock.json ./
-RUN npm install --include=dev
+ADD package.json bun.lockb ./
+RUN bun install --include=dev
 
 # Setup production node_modules
 FROM base as production-deps
@@ -18,8 +21,9 @@ FROM base as production-deps
 WORKDIR /remixapp
 
 COPY --from=deps /remixapp/node_modules /remixapp/node_modules
-ADD package.json package-lock.json ./
-RUN npm prune --omit=dev
+ADD package.json bun.lockb ./
+RUN rm -rf /remixapp/node_modules
+RUN bun install --production
 
 # Build the app
 FROM base as build
@@ -27,14 +31,17 @@ FROM base as build
 WORKDIR /remixapp
 
 COPY --from=deps /remixapp/node_modules /remixapp/node_modules
-ADD package.json package-lock.json postcss.config.js tailwind.config.cjs tsconfig.json vite.config.ts ./
+ADD package.json bun.lockb postcss.config.js tailwind.config.cjs tsconfig.json vite.config.ts ./
 ADD app/ app/
 ADD public/ public/
 
-RUN npm run build
+RUN bun run build
 
 # Finally, build the production image with minimal footprint
 FROM base
+
+ENV PORT="3000"
+ENV NODE_ENV="production"
 
 WORKDIR /remixapp
 
@@ -44,4 +51,5 @@ COPY --from=build /remixapp/package.json /remixapp/package.json
 
 ADD server.js ./
 
-CMD ["npm", "start"]
+EXPOSE 3000
+CMD ["bun", "start"]

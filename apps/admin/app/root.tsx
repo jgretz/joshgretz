@@ -1,10 +1,22 @@
-import {Links, Meta, Outlet, Scripts, ScrollRestoration} from '@remix-run/react';
-
-import {GlobalPendingIndicator} from '@/components/global-pending-indicator';
-import {Header} from '@/components/header';
-import {Error} from '@/components/error';
+import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
+import type {LoaderFunctionArgs} from '@remix-run/node';
 
 import './globals.css';
+
+import {GlobalPendingIndicator} from './components/global-pending-indicator';
+import {Header} from './components/header';
+import {Error} from './components/error';
+
+import {getUser} from './services/auth/getUser';
+import Login from './components/login';
+
+export async function loader({request}: LoaderFunctionArgs) {
+  const user = await getUser(request);
+
+  return {
+    user,
+  };
+}
 
 function App({children}: {children: React.ReactNode}) {
   return (
@@ -27,11 +39,11 @@ function App({children}: {children: React.ReactNode}) {
 }
 
 export default function Root() {
-  return (
-    <App>
-      <Outlet />
-    </App>
-  );
+  const {user} = useLoaderData<typeof loader>();
+
+  const Content = user ? <Outlet /> : <Login />;
+
+  return <App>{Content}</App>;
 }
 
 export function ErrorBoundary() {

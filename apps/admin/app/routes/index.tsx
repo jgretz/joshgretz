@@ -1,8 +1,8 @@
-import {title} from '@/config.shared';
 import type {MetaFunction} from '@remix-run/node';
+import {title} from '@admin/config.shared';
 
 export const meta: MetaFunction = () => {
-  return [{title: title()}, {name: 'description', content: 'Josh Gretz - CTO, Runner, and Maker.'}];
+  return [{title: title()}, {name: 'description', content: 'Josh Gretz'}];
 };
 
 export default function Index() {
