@@ -1,4 +1,12 @@
-import {pgTable, serial, varchar, boolean, uniqueIndex} from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  varchar,
+  boolean,
+  uniqueIndex,
+  numeric,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 export const users = pgTable(
   'users',
@@ -10,7 +18,24 @@ export const users = pgTable(
   },
   (users) => {
     return {
-      emailIndex: uniqueIndex('email_idx').on(users.email),
+      emailIndex: uniqueIndex('users_email_idx').on(users.email),
+    };
+  },
+);
+
+export const thirdPartyAccess = pgTable(
+  'third_party_access',
+  {
+    id: serial('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+
+    strava_id: integer('strava_id'),
+    strava_access_token: varchar('strava_access_token', {length: 50}),
+    strava_code: varchar('strava_code', {length: 50}),
+  },
+  (thirdPartyAccess) => {
+    return {
+      userIdIndex: uniqueIndex('third_party_access_user_idx').on(thirdPartyAccess.user_id),
     };
   },
 );

@@ -1,0 +1,1 @@
+ALTER TABLE "third_party_access" ALTER COLUMN "user_id" SET DATA TYPE integer;

@@ -2,9 +2,18 @@ export interface RunningConfig {
   databaseUrl: string;
 }
 
+export interface ThirdPartyAccess {
+  id?: number;
+  user_id: number;
+
+  strava_id: string;
+  strava_access_token: string;
+  strava_code: string;
+}
+
 export interface Activity {
   id?: number;
-  userId: number;
+  user_id: number;
 
   strava_id: string;
   name: string;

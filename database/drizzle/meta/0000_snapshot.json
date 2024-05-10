@@ -1,10 +1,8 @@
 {
-  "version": "5",
-  "dialect": "pg",
-  "id": "8f28fd02-2092-45a9-b207-0bbcf0fb63d2",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "strava_activities": {
+    "public.strava_activities": {
       "name": "strava_activities",
       "schema": "",
       "columns": {
@@ -98,21 +96,21 @@
         "strava_activities_user_id_users_id_fk": {
           "name": "strava_activities_user_id_users_id_fk",
           "tableFrom": "strava_activities",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "tokens": {
+    "public.tokens": {
       "name": "tokens",
       "schema": "",
       "columns": {
@@ -140,21 +138,21 @@
         "tokens_user_id_users_id_fk": {
           "name": "tokens_user_id_users_id_fk",
           "tableFrom": "tokens",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -198,5 +196,7 @@
     "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "8f28fd02-2092-45a9-b207-0bbcf0fb63d2",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }

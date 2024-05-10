@@ -6,5 +6,5 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  return <main className="container prose py-8"></main>;
+  return <main className="container prose py-8">Dashboard (Eventually :))</main>;
 }

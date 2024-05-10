@@ -15,6 +15,20 @@
       "when": 1703189002803,
       "tag": "0001_bent_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1715292384711,
+      "tag": "0002_cooing_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1715292944689,
+      "tag": "0003_fearless_echo",
+      "breakpoints": true
     }
   ]
 }

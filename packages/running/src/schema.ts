@@ -3,37 +3,17 @@ import {
   integer,
   serial,
   varchar,
-  boolean,
   numeric,
   uniqueIndex,
   timestamp,
   index,
 } from 'drizzle-orm/pg-core';
 
-export const users = pgTable(
-  'strava_access',
-  {
-    id: serial('id').primaryKey(),
-    user_id: numeric('user_id').notNull(),
-    admin: boolean('admin').default(false).notNull(),
-    strava_id: integer('strava_id'),
-    strava_access_token: varchar('strava_access_token', {length: 50}),
-    strava_code: varchar('strava_code', {length: 50}),
-  },
-  (users) => {
-    return {
-      userIdIndex: uniqueIndex('userId_idx').on(users.user_id),
-    };
-  },
-);
-
 export const activities = pgTable(
   'activities',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id')
-      .notNull()
-      .references(() => users.id),
+    user_id: integer('user_id').notNull(),
 
     strava_id: varchar('strava_id', {length: 50}).notNull(),
     name: varchar('name', {length: 300}),
@@ -67,9 +47,9 @@ export const activities = pgTable(
   },
   (activities) => {
     return {
-      userIdIndex: index('user_id_idx').on(activities.userId),
-      stravaIdIndex: uniqueIndex('strava_id_idx').on(activities.strava_id),
-      latLonIndex: index('lat_lon_idx').on(activities.start_lat, activities.start_lng),
+      userIdIndex: index('activity_user_id_idx').on(activities.user_id),
+      stravaIdIndex: uniqueIndex('activity_strava_id_idx').on(activities.strava_id),
+      latLonIndex: index('activity_lat_lon_idx').on(activities.start_lat, activities.start_lng),
     };
   },
 );
@@ -78,9 +58,7 @@ export const gear = pgTable(
   'gear',
   {
     id: serial('id').primaryKey(),
-    userId: integer('user_id')
-      .notNull()
-      .references(() => users.id),
+    user_id: integer('user_id').notNull(),
 
     strava_id: varchar('gear_id', {length: 100}).notNull(),
     brand_name: varchar('brand_name', {length: 300}),
@@ -91,8 +69,8 @@ export const gear = pgTable(
   },
   (gear) => {
     return {
-      userIdIndex: index('user_id_idx').on(gear.userId),
-      stravaIdIndex: uniqueIndex('strava_id_idx').on(gear.strava_id),
+      userIdIndex: index('gear_user_id_idx').on(gear.user_id),
+      stravaIdIndex: uniqueIndex('gear_strava_id_idx').on(gear.strava_id),
     };
   },
 );
