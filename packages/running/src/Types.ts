@@ -1,14 +1,6 @@
 export interface RunningConfig {
   databaseUrl: string;
-}
-
-export interface ThirdPartyAccess {
-  id?: number;
-  user_id: number;
-
-  strava_id: string;
-  strava_access_token: string;
-  strava_code: string;
+  amqpUrl: string;
 }
 
 export interface Activity {
@@ -44,4 +36,12 @@ export interface Activity {
   elev_high: string;
   elev_low: string;
   suffer_score: string;
+}
+
+export enum Queues {
+  Running = 'running',
+}
+
+export enum Commands {
+  LoadActivitiesSince = 'load-activities-since',
 }

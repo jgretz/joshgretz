@@ -4,6 +4,6 @@ import type {Minion} from '../../domain';
 function handle(message: AMQPMessage) {}
 
 export default {
-  queueName: 'retrieveMostRecentActivities',
+  queueName: Queues.Running,
   consume: handle,
 } as Minion;

@@ -8,6 +8,7 @@ import {thirdPartyAccessForUser} from './query/thirdPartyAccessForUser.ts';
 import {setThirdPartyAccessForUser} from './command/setThirdPartyAccessForUser.ts';
 
 export * from './Types.ts';
+export {Api} from './api';
 
 export default function (config: UsersConfig) {
   const database = db(config.databaseUrl, schema);
