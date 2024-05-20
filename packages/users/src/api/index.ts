@@ -1,5 +1,8 @@
 import {Elysia, t} from 'elysia';
-import Users, {type ThirdPartyAccess, type User} from 'users';
+import {findUserByEmail} from '../query/findUserByEmail';
+import {setThirdPartyAccessForUser} from '../command/setThirdPartyAccessForUser';
+import {thirdPartyAccessForUser} from '../query/thirdPartyAccessForUser';
+import type {User, ThirdPartyAccess, Database} from '../Types';
 
 const userFromEmailQuerySchema = {
   query: t.Object({
@@ -24,30 +27,30 @@ const thirdPartyAccessForUserCommandSchema = {
   }),
 };
 
-const {
-  query: {findUserByEmail, thirdPartyAccessForUser},
-  command: {setThirdPartyAccessForUser},
-} = Users({databaseUrl: process.env.DATABASE_URL || ''});
-
-export const Api = new Elysia({prefix: '/users'})
-  .get(
-    '/query',
-    ({query: {email}}): Promise<User | undefined> => {
-      return findUserByEmail(email);
-    },
-    userFromEmailQuerySchema,
-  )
-  .get(
-    '/third-party-access',
-    ({query: {user_id}}): Promise<ThirdPartyAccess | undefined> => {
-      return thirdPartyAccessForUser({id: user_id} as User);
-    },
-    thirdPartyAccessForUserQuerySchema,
-  )
-  .post(
-    '/third-party-access',
-    async ({body: {user_id, ...access}}) => {
-      await setThirdPartyAccessForUser({id: user_id} as User, access);
-    },
-    thirdPartyAccessForUserCommandSchema,
-  );
+export function createApi(database: Database) {
+  return new Elysia({prefix: '/users'})
+    .decorate('findUserByEmail', findUserByEmail(database))
+    .decorate('thirdPartyAccessForUser', thirdPartyAccessForUser(database))
+    .decorate('setThirdPartyAccessForUser', setThirdPartyAccessForUser(database))
+    .get(
+      '/query',
+      ({query: {email}, findUserByEmail}): Promise<User | undefined> => {
+        return findUserByEmail(email);
+      },
+      userFromEmailQuerySchema,
+    )
+    .get(
+      '/third-party-access',
+      ({query: {user_id}, thirdPartyAccessForUser}): Promise<ThirdPartyAccess | undefined> => {
+        return thirdPartyAccessForUser({id: user_id} as User);
+      },
+      thirdPartyAccessForUserQuerySchema,
+    )
+    .post(
+      '/third-party-access',
+      async ({body: {user_id, ...access}, setThirdPartyAccessForUser}) => {
+        await setThirdPartyAccessForUser({id: user_id} as User, access);
+      },
+      thirdPartyAccessForUserCommandSchema,
+    );
+}

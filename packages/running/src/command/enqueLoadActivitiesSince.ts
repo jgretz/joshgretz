@@ -1,12 +1,12 @@
-import type {AmqpWrapper} from 'utility';
+import type {Amqp} from 'utility';
 import type {User} from 'users';
-import {Commands, Queues} from '../Types';
+import {Tasks, Queues} from '../Types';
 
-export function enqueueLoadActivitiesSince(amqp: AmqpWrapper) {
+export function enqueueLoadActivitiesSince(amqp: Amqp) {
   return async function (user: User, date: Date) {
     await amqp.publish(
       Queues.Running,
-      Commands.LoadActivitiesSince,
+      Tasks.LoadActivitiesSince,
       JSON.stringify({user_id: user.id, date}),
     );
   };

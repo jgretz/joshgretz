@@ -1,16 +1,23 @@
-import {startMinions} from './domain';
-import runningMinions from './running';
+import Running from 'running';
+import gru from './gru';
+import {amqp} from 'utility';
 
-const gru = {
-  minions: [...runningMinions],
-};
+// environment
+const DATABASE_URL = process.env.DATABASE_URL || '';
+const AMPQ_URL = process.env.AMQP_URL || '';
 
+// Tasks
+const {Tasks: RunningTasks} = Running({databaseUrl: DATABASE_URL, amqpUrl: AMPQ_URL});
+const tasks = [...RunningTasks];
+
+// run
 async function boot() {
-  const stopMinions = await startMinions(gru);
+  const amqpWrapper = amqp(AMPQ_URL);
+  const stop = await gru(amqpWrapper, tasks);
 
-  console.log('Waiting to activate minions ... To exit press CTRL+C ');
+  console.log('Minions on alert ... To exit press CTRL+C ');
   process.on('SIGINT', () => {
-    stopMinions();
+    stop();
 
     process.exit(0);
   });

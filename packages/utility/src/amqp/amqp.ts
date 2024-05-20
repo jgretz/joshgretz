@@ -1,25 +1,89 @@
-import {AMQPClient} from '@cloudamqp/amqp-client';
+import {AMQPClient, AMQPMessage} from '@cloudamqp/amqp-client';
+import {ManagedKeyedQueues} from '../misc/ManagedKeyedQueues';
 
-export type AmqpWrapper = {
-  connection: AMQPClient;
+export type Amqp = {
   publish(queue: string, key: string, message: string): Promise<void>;
+  subscribe(
+    queue: string,
+    key: string,
+    consume: (msg: AMQPMessage) => void | Promise<void>,
+  ): Promise<() => void>;
 };
 
 export function amqp(url: string) {
   const connection = new AMQPClient(url);
+  const memQueue = new ManagedKeyedQueues<void>();
 
   return {
-    connection,
-
     async publish(queue: string, key: string, message: string) {
-      await connection.connect();
+      const queueKey = `${queue}:${key}`;
+      const args = {
+        onStart: async () => {
+          console.log('Connecting to AMQP');
+          await connection.connect();
+        },
+        onEmpty: async () => {
+          console.log('Closing Connection to AMQP');
+          await connection.close();
+        },
+      };
 
-      const channel = await connection.channel();
-      await channel.queue(queue, {durable: false});
+      memQueue.push(args, queueKey, async () => {
+        console.log('Publishing message');
 
-      await channel.basicPublish('', key, message);
+        try {
+          const channel = await connection.channel();
+          await channel.queue(queue, {durable: false});
 
-      connection.close();
+          await channel.basicPublish('', queue, message, {headers: {key}});
+        } catch (error) {
+          console.error('Error publishing message', error);
+        }
+      });
+
+      setTimeout(async () => {
+        await memQueue.pop(queueKey);
+      }, 250);
+    },
+
+    async subscribe(
+      queue: string,
+      key: string,
+      consume: (msg: AMQPMessage) => void | Promise<void>,
+    ) {
+      const queueKey = `${queue}:${key}`;
+      const args = {
+        onStart: async () => {
+          console.log('Connecting to AMQP');
+          await connection.connect();
+        },
+        onEmpty: async () => {
+          console.log('Closing Connection to AMQP');
+          await connection.close();
+        },
+      };
+
+      memQueue.push(args, queueKey, async () => {
+        console.log('Subscribing to message');
+
+        try {
+          const channel = await connection.channel();
+          const channelQueue = await channel.queue(queue, {durable: false});
+
+          await channelQueue.subscribe({noAck: true}, async (msg) => {
+            if (msg.properties.headers?.key === key) {
+              console.log(`Received message: ${queueKey}`);
+              await consume(msg);
+            }
+          });
+        } catch (error) {
+          console.error('Error subscribing to message', error);
+        }
+      });
+
+      return () => {
+        memQueue.pop(queueKey);
+      };
     },
   };
 }

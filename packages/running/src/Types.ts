@@ -1,3 +1,5 @@
+import type {PostgresJsDatabase} from 'drizzle-orm/postgres-js';
+
 export interface RunningConfig {
   databaseUrl: string;
   amqpUrl: string;
@@ -38,10 +40,12 @@ export interface Activity {
   suffer_score: string;
 }
 
+export type Database = PostgresJsDatabase<typeof import('./schema')>;
+
 export enum Queues {
   Running = 'running',
 }
 
-export enum Commands {
+export enum Tasks {
   LoadActivitiesSince = 'load-activities-since',
 }
