@@ -1,4 +1,4 @@
-import {queryStringFromJson} from 'utility';
+import {encodeQueryStringFromJsonObject} from 'utility';
 import type {Activity, StravaConfig} from '../Types';
 import stravaRequest from '../stravaRequest';
 
@@ -30,7 +30,7 @@ export default function (config: StravaConfig) {
         ...initialParameters,
         page,
       };
-      const queryString = queryStringFromJson(parameters);
+      const queryString = encodeQueryStringFromJsonObject(parameters);
       const activities = await request<Activity[]>(`/athlete/activities?${queryString}`);
 
       if (!retrieveAll) {

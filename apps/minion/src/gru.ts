@@ -1,4 +1,4 @@
-import type {Amqp, Task} from 'utility';
+import type {Amqp, Task} from 'amqp';
 
 export default async function (amqp: Amqp, tasks: Task[]) {
   console.log('[✅] Gru is starting to orchestrate minions ...');

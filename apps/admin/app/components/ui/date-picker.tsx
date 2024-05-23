@@ -1,19 +1,31 @@
 'use client';
 
-import {format} from 'date-fns';
+import {format, formatISO, parseISO} from 'date-fns';
 import {CalendarIcon} from '@radix-ui/react-icons';
 
 import {cn} from '@admin/lib/styles';
 import {Button} from '@admin/components/ui/button';
 import {Calendar} from '@admin/components/ui/calendar';
 import {Popover, PopoverContent, PopoverTrigger} from '@admin/components/ui/popover';
+import {useInputControl, type FieldMetadata} from '@conform-to/react';
+import {useCallback, useState} from 'react';
 
 interface Props {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  meta: FieldMetadata<Date>;
 }
 
-export function DatePicker({date, setDate}: Props) {
+export function DatePicker({meta}: Props) {
+  const control = useInputControl<string>(meta);
+  const [date, setDate] = useState(control.value ? new Date(parseISO(control.value)) : undefined);
+
+  const handleSelect = useCallback(
+    (date: Date | undefined) => {
+      setDate(date);
+      control.change(date ? formatISO(date) : undefined);
+    },
+    [control],
+  );
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -29,7 +41,7 @@ export function DatePicker({date, setDate}: Props) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+        <Calendar mode="single" selected={date} onSelect={handleSelect} initialFocus />
       </PopoverContent>
     </Popover>
   );

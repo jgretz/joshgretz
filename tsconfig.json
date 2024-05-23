@@ -30,7 +30,9 @@
       "@joshgretz-api": ["./apps/api/src/index.ts"],
       "@admin/*": ["./apps/admin/app/*"],
 
-      "openweather": ["./packages/openweather/src/index.ts"],
+      "amqp": ["./packages/amqp/src/index.ts"],
+      "database": ["./packages/database/index.ts"],
+      "geoapify": ["./packages/geoapify/src/index.ts"],
       "running": ["./packages/running/src/index.ts"],
       "strava": ["./packages/strava/src/index.ts"],
       "utility": ["./packages/utility/src/index.ts"],
@@ -39,7 +41,9 @@
   },
 
   "references": [
-    {"openweather": "./packages/openweather"},
+    {"amqp": "./packages/amqp"},
+    {"database": "./packages/database"},
+    {"geoapify": "./packages/geoapify"},
     {"running": "./packages/running"},
     {"strava": "./packages/strava"},
     {"utility": "./packages/utility"},

@@ -2,7 +2,8 @@ import {Elysia, t} from 'elysia';
 import {findUserByEmail} from '../query/findUserByEmail';
 import {setThirdPartyAccessForUser} from '../command/setThirdPartyAccessForUser';
 import {thirdPartyAccessForUser} from '../query/thirdPartyAccessForUser';
-import type {User, ThirdPartyAccess, Database} from '../Types';
+import type {User, ThirdPartyAccess} from '../Types';
+import type {Database} from 'database';
 
 const userFromEmailQuerySchema = {
   query: t.Object({

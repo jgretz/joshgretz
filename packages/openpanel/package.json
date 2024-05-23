@@ -1,5 +1,5 @@
 {
-  "name": "utility",
+  "name": "openpanel",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
@@ -7,6 +7,5 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  },
-  "dependencies": {}
+  }
 }

@@ -1,12 +1,12 @@
-import {db} from 'utility';
+import {createDatabase} from 'database';
 import type {UsersConfig} from './Types.ts';
-import * as schema from './schema';
 import {createApi} from './api';
 
 export * from './Types.ts';
+export {thirdPartyAccessForUser} from './query/thirdPartyAccessForUser';
 
 export default function (config: UsersConfig) {
-  const database = db(config.databaseUrl, schema);
+  const database = createDatabase(config.databaseUrl);
 
   return {
     Api: createApi(database),

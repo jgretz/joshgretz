@@ -1,5 +1,5 @@
 {
-  "name": "utility",
+  "name": "amqp",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
@@ -8,5 +8,7 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@cloudamqp/amqp-client": "^3.1.1"
+  }
 }

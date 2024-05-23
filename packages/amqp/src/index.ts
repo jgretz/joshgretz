@@ -1,5 +1,5 @@
 import {AMQPClient, AMQPMessage} from '@cloudamqp/amqp-client';
-import {ManagedKeyedQueues} from '../misc/ManagedKeyedQueues';
+import {ManagedKeyedQueues} from './queues/ManagedKeyedQueues';
 
 export type Amqp = {
   publish(queue: string, key: string, message: string): Promise<void>;
@@ -9,6 +9,13 @@ export type Amqp = {
     consume: (msg: AMQPMessage) => void | Promise<void>,
   ): Promise<() => void>;
 };
+
+export interface Task {
+  queue: string;
+  message: string;
+
+  consume: (msg: AMQPMessage) => void | Promise<void>;
+}
 
 export function amqp(url: string) {
   const connection = new AMQPClient(url);

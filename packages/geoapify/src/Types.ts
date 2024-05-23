@@ -6,6 +6,6 @@ export interface Location {
   lon: number;
 }
 
-export interface WeatherConfig {
+export interface GeoConfig {
   apiKey: string;
 }

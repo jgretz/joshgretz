@@ -1,22 +1,23 @@
 import {Elysia, t} from 'elysia';
 import type {User} from 'users';
-import {enqueueLoadActivitiesSince} from '../command/enqueLoadActivitiesSince';
-import type {Amqp} from 'utility';
+import type {Amqp} from 'amqp';
+import {enqueueLoadActivities} from '../command/enqueLoadActivities';
 
 const enqueueLoadActivitiesSinceCommandSchema = {
   body: t.Object({
     user_id: t.Number(),
-    date: t.Date(),
+    from: t.Date(),
+    to: t.Date(),
   }),
 };
 
 export function createApi(amqp: Amqp) {
   return new Elysia({prefix: '/activities'})
-    .decorate('enqueueLoadActivitiesSince', enqueueLoadActivitiesSince(amqp))
+    .decorate('enqueueLoadActivities', enqueueLoadActivities(amqp))
     .post(
-      '/load-since',
-      async ({body: {user_id, date}, enqueueLoadActivitiesSince}) => {
-        await enqueueLoadActivitiesSince({id: user_id} as User, date);
+      '/load-activities',
+      async ({body: {user_id, from, to}, enqueueLoadActivities}) => {
+        await enqueueLoadActivities({id: user_id} as User, from, to);
       },
       enqueueLoadActivitiesSinceCommandSchema,
     );

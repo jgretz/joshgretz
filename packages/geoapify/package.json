@@ -1,5 +1,5 @@
 {
-  "name": "openweather",
+  "name": "geoapify",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {

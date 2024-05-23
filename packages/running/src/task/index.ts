@@ -1,7 +1,8 @@
-import type {Amqp} from 'utility';
-import type {Database} from '../Types';
-import loadActivitiesSince from './loadActivitiesSince';
+import type {Amqp} from 'amqp';
+import type {Database} from 'database';
+import type {Geo} from 'packages/geoapify/src';
+import loadActivities from './loadActivities';
 
-export function createTasks(database: Database, amqp: Amqp) {
-  return [loadActivitiesSince];
+export function createTasks(database: Database, amqp: Amqp, geo: Geo) {
+  return [loadActivities(database, geo)];
 }
