@@ -1,12 +1,10 @@
-# fly.toml app configuration file generated for joshgretz-www on 2024-05-06T14:57:45-04:00
+# fly.toml app configuration file generated for joshgretz-api on 2024-05-24T15:16:43-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'joshgretz-com'
+app = 'joshgretz-api'
 primary_region = 'ewr'
-kill_signal = 'SIGINT'
-kill_timeout = '5s'
 
 [build]
 
