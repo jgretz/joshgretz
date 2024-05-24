@@ -1,12 +1,4 @@
-import {
-  pgTable,
-  serial,
-  varchar,
-  boolean,
-  uniqueIndex,
-  numeric,
-  integer,
-} from 'drizzle-orm/pg-core';
+import {pgTable, serial, varchar, boolean, uniqueIndex, integer} from 'drizzle-orm/pg-core';
 
 export const users = pgTable(
   'users',
