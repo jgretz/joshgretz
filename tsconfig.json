@@ -29,6 +29,7 @@
     "paths": {
       "@joshgretz-api": ["./apps/api/src/index.ts"],
       "@admin/*": ["./apps/admin/app/*"],
+      "@www/*": ["./apps/www/app/*"],
 
       "amqp": ["./packages/amqp/src/index.ts"],
       "database": ["./packages/database/index.ts"],
