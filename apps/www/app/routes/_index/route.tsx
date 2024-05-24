@@ -1,9 +1,10 @@
-import {type MetaFunction} from '@remix-run/node';
 import ContentBlock from '@www/components/content-block';
 import Page from '@www/components/page';
+import type {MetaFunction} from '@remix-run/node';
+import {title} from '@www/config.shared';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Josh Gretz'}, {name: 'description', content: ''}];
+  return [{title: title()}, {name: 'description', content: 'Josh Gretz'}];
 };
 
 export default function Index() {
