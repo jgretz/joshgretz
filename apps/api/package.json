@@ -7,10 +7,11 @@
     "start": "bun run src/index.ts"
   },
   "dependencies": {
+    "@elysiajs/bearer": "^1.0.2",
     "elysia": "latest"
   },
   "devDependencies": {
     "bun-types": "latest"
   },
-  "module": "src/index.js"
+  "module": "src/index.ts"
 }

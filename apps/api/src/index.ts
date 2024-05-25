@@ -1,6 +1,8 @@
-import {Elysia} from 'elysia';
+import Elysia from 'elysia';
 import Users from 'users';
 import Running from 'running';
+import Health from './health';
+import bearer from '@elysiajs/bearer';
 
 // environment
 const PORT = process.env.PORT || 3003;
@@ -12,8 +14,22 @@ const {Api: UsersApi} = Users({databaseUrl: DATABASE_URL});
 const {Api: RunningApi} = Running({databaseUrl: DATABASE_URL, amqpUrl: AMPQ_URL});
 
 // run
-const app = new Elysia().use(UsersApi).use(RunningApi).listen(PORT);
-console.log(`JoshGretz-API is running at ${app.server?.hostname}:${app.server?.port}`);
+const root = new Elysia()
+  .use(Health)
+  .use(bearer())
+  .guard(
+    {
+      beforeHandle({set, bearer}) {
+        if (bearer !== process.env.HELMET) return (set.status = 'Unauthorized');
+      },
+    },
+    (app) => {
+      return app.use(UsersApi).use(RunningApi);
+    },
+  )
+  .listen(PORT);
+
+console.log(`JoshGretz-API is running at ${root.server?.hostname}:${root.server?.port}`);
 
 // export type for intellisense
-export type App = typeof app;
+export type App = typeof root;

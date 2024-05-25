@@ -1,5 +1,5 @@
 import {type Database, Schema} from 'database';
-import type {Geo} from 'packages/geoapify/src';
+import type {Geo} from 'geoapify';
 import type {Activity} from 'strava';
 import {and, eq} from 'drizzle-orm';
 

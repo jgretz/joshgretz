@@ -27,7 +27,7 @@
 
     // Import
     "paths": {
-      "@joshgretz-api": ["./apps/api/src/index.ts"],
+      "@api": ["./apps/api/src/index.ts"],
       "@admin/*": ["./apps/admin/app/*"],
       "@www/*": ["./apps/www/app/*"],
 

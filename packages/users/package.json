@@ -12,6 +12,7 @@
     "drizzle-orm": "^0.30.10",
     "elysia": "^1.0.20",
     "pg": "^8.11.5",
-    "postgres": "^3.4.4"
+    "postgres": "^3.4.4",
+    "database": "workspace:*"
   }
 }
