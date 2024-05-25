@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "deploy-301": "fly deploy --config ./deploy/301/fly.toml --dockerfile ./deploy/301/Dockerfile",
-    "deploy-api": "fly deploy --config ./deploy/api/fly.toml --dockerfile ./deploy/api/Dockerfile"
+    "deploy-api": "fly deploy --config ./deploy/api/fly.toml --dockerfile ./deploy/api/Dockerfile",
+    "deploy-admin": "fly deploy --config ./deploy/admin/fly.toml --dockerfile ./deploy/admin/Dockerfile"
   }
 }
