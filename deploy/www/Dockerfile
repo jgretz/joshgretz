@@ -17,22 +17,22 @@ RUN apt-get update -qq && \
 # Copy Files
 COPY --link package.json tsconfig.json ./
 COPY --link packages ./packages
-COPY --link apps/admin ./apps/admin
+COPY --link apps/www ./apps/www
 
 # Install dependencies
 RUN bun install --ci
-RUN cd apps/admin && bun install --ci
+RUN cd apps/www && bun install --ci
 
 # build
-RUN cd apps/admin && bun run build
+RUN cd apps/www && bun run build
 
 # Finally, build the production image with minimal footprint
 FROM base
 
-COPY --from=build /app/apps/admin/node_modules /app/node_modules
-COPY --from=build /app/apps/admin/build /app/build
-COPY --from=build /app/apps/admin/package.json /app/package.json
-COPY --from=build /app/apps/admin/server.js /app/server.js
+COPY --from=build /app/apps/www/node_modules /app/node_modules
+COPY --from=build /app/apps/www/build /app/build
+COPY --from=build /app/apps/www/package.json /app/package.json
+COPY --from=build /app/apps/www/server.js /app/server.js
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
