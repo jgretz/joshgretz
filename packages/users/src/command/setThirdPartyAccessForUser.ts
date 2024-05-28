@@ -1,7 +1,8 @@
-import {Schema, type Database} from 'database';
-import type {ThirdPartyAccess, User} from '../Types';
+import {Schema} from 'database';
+import type {ThirdPartyAccess, User, UsersContainer} from '../Types';
+import {InjectIn} from 'injectx';
 
-export function setThirdPartyAccessForUser(database: Database) {
+const command = function ({database}: UsersContainer) {
   return async function (user: User, access: ThirdPartyAccess) {
     await database
       .insert(Schema.thirdPartyAccess)
@@ -11,4 +12,6 @@ export function setThirdPartyAccessForUser(database: Database) {
       })
       .onConflictDoUpdate({target: Schema.thirdPartyAccess.user_id, set: access});
   };
-}
+};
+
+export const setThirdPartyAccessForUser = InjectIn(command);

@@ -2,7 +2,7 @@ import {ROUTES} from '@admin/constants/routes';
 import {getUser} from '@admin/services/auth/getUser';
 import setThirdPartyAccess from '@admin/services/joshgretz-api/users/setThirdPartyAccess';
 import {redirect, type LoaderFunctionArgs} from '@remix-run/node';
-import {requestAuthToken} from 'strava';
+import Strava from 'strava';
 
 export async function loader({request}: LoaderFunctionArgs): Promise<{}> {
   // verify we have a logged in user
@@ -20,7 +20,7 @@ export async function loader({request}: LoaderFunctionArgs): Promise<{}> {
   }
 
   // get strava data
-  const tokenResponse = await requestAuthToken(code);
+  const tokenResponse = await Strava.utility.requestAuthToken(code);
 
   // update our access information
   await setThirdPartyAccess(user, {

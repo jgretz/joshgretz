@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.0.2",
-    "elysia": "latest"
+    "elysia": "latest",
+    "injectx": "^1.0.4"
   },
   "devDependencies": {
     "bun-types": "latest"

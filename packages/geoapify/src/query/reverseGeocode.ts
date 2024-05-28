@@ -1,13 +1,14 @@
 import axios from 'axios';
-import type {GeoConfig, Location} from './Types';
+import type {GeoapifyContainer, Location} from '../Types';
 import {encodeQueryStringFromJsonObject} from 'utility';
+import {InjectIn} from 'injectx';
 
-export function reverseGeoLookup(config: GeoConfig) {
+function query({apiKey}: GeoapifyContainer) {
   return async function (lat: number, lon: number) {
     const queryString = encodeQueryStringFromJsonObject({
       lat,
       lon,
-      apiKey: config.apiKey,
+      apiKey,
     });
 
     const url = `https://api.geoapify.com/v1/geocode/reverse?${queryString}`;
@@ -20,3 +21,5 @@ export function reverseGeoLookup(config: GeoConfig) {
     return response.data[0];
   };
 }
+
+export const reverseGeocode = InjectIn(query);

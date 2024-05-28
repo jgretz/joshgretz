@@ -1,19 +1,27 @@
+import {GetContainer} from 'injectx';
 import type {RunningConfig} from './Types';
-import {createApi} from './api';
-import {createTasks} from './task';
 import {amqp} from 'amqp';
 import {createDatabase} from 'database';
-import Geo from 'packages/geoapify/src';
+import {enqueueLoadActivities} from './command/enqueLoadActivities';
+import {findActivityByStravaId} from './query/findActivityByStravaId';
+import {findFirstActivityByLatLon} from './query/findFirstActivityByLatLon';
 
 export * from './Types';
+export {Api} from './api';
 
-export default function (config: RunningConfig) {
-  const database = createDatabase(config.databaseUrl);
-  const amqpWrapper = amqp(config.amqpUrl);
-  const geo = Geo({apiKey: config.geoApiKey || ''}); // TODO: fix this key being optional so the API doesnt need it - really need a context concept
-
-  return {
-    Api: createApi(database, amqpWrapper),
-    Tasks: createTasks(database, amqpWrapper, geo),
-  };
+export function setupRunningContainer({databaseUrl, amqpUrl}: RunningConfig) {
+  GetContainer()
+    .Bind(createDatabase(databaseUrl), {name: 'database'})
+    .Bind(amqp(amqpUrl), {name: 'amqp'});
 }
+
+export default {
+  queries: {
+    findActivityByStravaId,
+    findFirstActivityByLatLon,
+  },
+
+  commands: {
+    enqueueLoadActivities,
+  },
+};

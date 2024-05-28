@@ -1,10 +1,6 @@
-import type {Gear, StravaConfig} from '../Types';
+import type {Gear} from '../Types';
 import stravaRequest from '../stravaRequest';
 
-export default function (config: StravaConfig) {
-  const request = stravaRequest(config);
-
-  return function (gearId: number) {
-    return request<Gear>(`/gear/${gearId}`);
-  };
+export default function (gearId: number) {
+  return stravaRequest<Gear>(`/gear/${gearId}`);
 }

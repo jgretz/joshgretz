@@ -1,6 +1,6 @@
 import Elysia from 'elysia';
-import Users from 'users';
-import Running from 'running';
+import {setupUserContainer, Api as UsersApi} from 'users';
+import {setupRunningContainer, Api as RunningApi} from 'running';
 import Health from './health';
 import bearer from '@elysiajs/bearer';
 
@@ -9,9 +9,9 @@ const PORT = process.env.PORT || 3003;
 const DATABASE_URL = process.env.DATABASE_URL || '';
 const AMPQ_URL = process.env.AMQP_URL || '';
 
-// APIs
-const {Api: UsersApi} = Users({databaseUrl: DATABASE_URL});
-const {Api: RunningApi} = Running({databaseUrl: DATABASE_URL, amqpUrl: AMPQ_URL});
+// setup IOC / DI containers
+setupUserContainer({databaseUrl: DATABASE_URL});
+setupRunningContainer({databaseUrl: DATABASE_URL, amqpUrl: AMPQ_URL});
 
 // run
 const root = new Elysia()

@@ -10,13 +10,6 @@ export type Amqp = {
   ): Promise<() => void>;
 };
 
-export interface Task {
-  queue: string;
-  message: string;
-
-  consume: (msg: AMQPMessage) => void | Promise<void>;
-}
-
 export function amqp(url: string) {
   const connection = new AMQPClient(url);
   const memQueue = new ManagedKeyedQueues<void>();

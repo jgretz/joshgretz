@@ -1,12 +1,15 @@
-import type {GeoConfig} from './Types.ts';
-import {reverseGeoLookup} from './reverseGeoLookup.ts';
+import {GetContainer} from 'injectx';
+import type {GeoapifyConfig} from './Types.ts';
+import {reverseGeocode} from './query/reverseGeocode.ts';
 
 export * from './Types.ts';
 
-export type Geo = ReturnType<typeof createGeo>;
-
-export default function createGeo(config: GeoConfig) {
-  return {
-    reverseGeoLookup: reverseGeoLookup(config),
-  };
+export function setupGeoapifyContainer({apiKey}: GeoapifyConfig) {
+  GetContainer().Bind(apiKey, {name: 'apiKey'});
 }
+
+export default {
+  queries: {
+    reverseGeocode,
+  },
+};

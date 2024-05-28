@@ -5,14 +5,16 @@ import type {LoaderFunctionArgs} from '@remix-run/node';
 import {useLoaderData} from '@remix-run/react';
 import {useCallback} from 'react';
 
-import {generateAuthUrl} from 'strava';
+import Strava from 'strava';
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
   const access = await getThirdPartyAccess(user!);
 
   const url = new URL(request.url);
-  const authUrl = generateAuthUrl(`${url.protocol}//${url.hostname}:${url.port}/strava/callback`);
+  const authUrl = Strava.utility.generateAuthUrl(
+    `${url.protocol}//${url.hostname}:${url.port}/strava/callback`,
+  );
 
   return {
     user,

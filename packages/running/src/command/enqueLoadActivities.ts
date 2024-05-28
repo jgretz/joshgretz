@@ -1,8 +1,8 @@
-import type {Amqp} from 'amqp';
 import type {User} from 'users';
-import {Tasks, Queues} from '../Types';
+import {Tasks, Queues, type RunningContainer} from '../Types';
+import {InjectIn} from 'injectx';
 
-export function enqueueLoadActivities(amqp: Amqp) {
+function command({amqp}: RunningContainer) {
   return async function (user: User, from: Date, to: Date) {
     await amqp.publish(
       Queues.Running,
@@ -11,3 +11,5 @@ export function enqueueLoadActivities(amqp: Amqp) {
     );
   };
 }
+
+export const enqueueLoadActivities = InjectIn(command);

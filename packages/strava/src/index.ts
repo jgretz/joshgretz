@@ -1,3 +1,4 @@
+import {GetContainer} from 'injectx';
 import type {StravaConfig} from './Types.ts';
 import getActivities from './activities/getActivities.ts';
 import getActivity from './activities/getActivity.ts';
@@ -8,14 +9,18 @@ import getGear from './gear/getGear.ts';
 
 export * from './Types.ts';
 
-export {generateAuthUrl, requestAuthToken};
-
-export default function (config: StravaConfig) {
-  return {
-    getAthlete: getAthlete(config),
-    getGear: getGear(config),
-
-    getActivities: getActivities(config),
-    getActivity: getActivity(config),
-  };
+export function setupStravaContainer({accessToken}: StravaConfig) {
+  GetContainer().Bind(accessToken, {name: 'accessToken'});
 }
+
+export default {
+  utility: {generateAuthUrl, requestAuthToken},
+
+  queries: {
+    getAthlete,
+    getGear,
+
+    getActivities,
+    getActivity,
+  },
+};

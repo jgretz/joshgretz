@@ -1,7 +1,14 @@
+import type {Amqp} from 'amqp';
+import type {Database} from 'database';
+
 export interface RunningConfig {
   databaseUrl: string;
   amqpUrl: string;
-  geoApiKey?: string;
+}
+
+export interface RunningContainer {
+  database: Database;
+  amqp: Amqp;
 }
 
 export enum Queues {

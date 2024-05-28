@@ -52,3 +52,7 @@ export interface Activity {
 export interface StravaConfig {
   accessToken: string;
 }
+
+export interface StravaContainer {
+  accessToken: string;
+}

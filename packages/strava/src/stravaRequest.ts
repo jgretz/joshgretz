@@ -1,16 +1,17 @@
 import axios from 'axios';
-import type {StravaConfig} from './Types';
+import {GetContainer} from 'injectx';
 
-export default function (config: StravaConfig) {
-  return async function <T>(path: string): Promise<T> {
-    const url = `https://www.strava.com/api/v3${path}`;
+export default async function <T>(path: string): Promise<T> {
+  const url = `https://www.strava.com/api/v3${path}`;
 
-    const response = await axios.get<T>(url, {
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-      },
-    });
+  // doing this rather than InjectIn to because the InjectIn call loses the generic typing of the function
+  const accessToken = GetContainer().resolve('accessToken');
 
-    return response.data;
-  };
+  const response = await axios.get<T>(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return response.data;
 }

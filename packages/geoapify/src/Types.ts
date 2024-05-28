@@ -6,6 +6,10 @@ export interface Location {
   lon: number;
 }
 
-export interface GeoConfig {
+export interface GeoapifyConfig {
+  apiKey: string;
+}
+
+export interface GeoapifyContainer {
   apiKey: string;
 }

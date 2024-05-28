@@ -1,8 +1,9 @@
 import {eq} from 'drizzle-orm';
-import type {User} from '../Types';
-import {Schema, type Database} from 'database';
+import type {User, UsersContainer} from '../Types';
+import {Schema} from 'database';
+import {InjectIn} from 'injectx';
 
-export function thirdPartyAccessForUser(database: Database) {
+const query = function ({database}: UsersContainer) {
   return async function (user: User) {
     const access = await database.query.thirdPartyAccess.findFirst({
       where: eq(Schema.thirdPartyAccess.user_id, user.id),
@@ -10,4 +11,6 @@ export function thirdPartyAccessForUser(database: Database) {
 
     return access;
   };
-}
+};
+
+export const thirdPartyAccessForUser = InjectIn(query);

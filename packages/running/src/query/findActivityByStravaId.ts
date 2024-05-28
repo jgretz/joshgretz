@@ -1,7 +1,9 @@
-import {Schema, type Database} from 'database';
+import {Schema} from 'database';
 import {eq} from 'drizzle-orm';
+import type {RunningContainer} from '../Types';
+import {InjectIn} from 'injectx';
 
-export function findActivityByStravaId(database: Database) {
+function query({database}: RunningContainer) {
   return async function (strava_id: string) {
     const activity = await database.query.activities.findFirst({
       where: eq(Schema.activities.strava_id, strava_id),
@@ -10,3 +12,5 @@ export function findActivityByStravaId(database: Database) {
     return activity;
   };
 }
+
+export const findActivityByStravaId = InjectIn(query);

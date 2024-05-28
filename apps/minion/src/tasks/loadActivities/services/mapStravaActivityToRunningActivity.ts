@@ -1,13 +1,13 @@
-import {type Database, Schema} from 'database';
-import type {Activity as StravaActivity} from 'strava';
-import {findActivityByStravaId} from '../../query/findActivityByStravaId';
-import {eq} from 'drizzle-orm';
-import type {Geo} from 'packages/geoapify/src';
-import lookupLocationForActivity from './lookupLocationForActivity';
+import Running from 'running';
+import {type Activity as StravaActivity} from 'strava';
+import {lookupLocationForActivity} from './lookupLocationForActivity';
 
-type Activity = Awaited<ReturnType<ReturnType<typeof findActivityByStravaId>>>;
+type RunningActivity = Awaited<ReturnType<typeof Running.queries.findActivityByStravaId>>;
 
-function shouldUpdateLocation(activity: StravaActivity, existingActivity: Activity | undefined) {
+function shouldUpdateLocation(
+  activity: StravaActivity,
+  existingActivity: RunningActivity | undefined,
+) {
   if (!existingActivity) {
     return true;
   }
@@ -30,16 +30,14 @@ function shouldUpdateLocation(activity: StravaActivity, existingActivity: Activi
   return false;
 }
 
-async function mapToActivity(
-  database: Database,
-  geo: Geo,
+export async function mapStravaActivityToRunningActivity(
   user_id: number,
   activity: StravaActivity,
-  existingActivity: Activity,
+  existingActivity: RunningActivity,
 ) {
   // get locaiton data
   const location = shouldUpdateLocation(activity, existingActivity)
-    ? await lookupLocationForActivity(database, geo, activity)
+    ? await lookupLocationForActivity(activity)
     : {
         city: existingActivity?.location_city,
         state: existingActivity?.location_state,
@@ -79,24 +77,5 @@ async function mapToActivity(
     elev_high: activity.elev_high?.toString(),
     elev_low: activity.elev_low?.toString(),
     suffer_score: activity.suffer_score?.toString(),
-  };
-}
-
-export default function (database: Database, geo: Geo, user_id: number) {
-  return async function (stravaActivity: StravaActivity) {
-    const existing = await findActivityByStravaId(database)(stravaActivity.id.toString());
-    const activity = await mapToActivity(database, geo, user_id, stravaActivity, existing);
-
-    // update or insert
-    if (activity.id) {
-      console.log('updating activity', activity.id);
-      await database
-        .update(Schema.activities)
-        .set(activity)
-        .where(eq(Schema.activities.id, activity.id));
-    } else {
-      console.log('inserting activity', activity.id);
-      await database.insert(Schema.activities).values(activity);
-    }
   };
 }

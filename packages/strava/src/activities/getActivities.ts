@@ -1,5 +1,5 @@
 import {encodeQueryStringFromJsonObject} from 'utility';
-import type {Activity, StravaConfig} from '../Types';
+import type {Activity} from '../Types';
 import stravaRequest from '../stravaRequest';
 
 interface SearchParameters {
@@ -18,29 +18,25 @@ function parseSearchParameters(search: SearchParameters) {
   };
 }
 
-export default function (config: StravaConfig) {
-  const request = stravaRequest(config);
+export default async function (search: SearchParameters = {}) {
+  const initialParameters = parseSearchParameters(search);
+  const retrieveAll = search.page === undefined && search.count === undefined;
 
-  return async function (search: SearchParameters = {}) {
-    const initialParameters = parseSearchParameters(search);
-    const retrieveAll = search.page === undefined && search.count === undefined;
+  async function loadActivities(page: number): Promise<Activity[]> {
+    const parameters = {
+      ...initialParameters,
+      page,
+    };
+    const queryString = encodeQueryStringFromJsonObject(parameters);
+    const activities = await stravaRequest<Activity[]>(`/athlete/activities?${queryString}`);
 
-    async function loadActivities(page: number): Promise<Activity[]> {
-      const parameters = {
-        ...initialParameters,
-        page,
-      };
-      const queryString = encodeQueryStringFromJsonObject(parameters);
-      const activities = await request<Activity[]>(`/athlete/activities?${queryString}`);
-
-      if (!retrieveAll) {
-        return activities;
-      }
-
-      // the strava API returns an empty array when there are no more activities rather than meta data about the request
-      return activities.length === 0 ? [] : activities.concat(await loadActivities(page + 1));
+    if (!retrieveAll) {
+      return activities;
     }
 
-    return loadActivities(initialParameters.page);
-  };
+    // the strava API returns an empty array when there are no more activities rather than meta data about the request
+    return activities.length === 0 ? [] : activities.concat(await loadActivities(page + 1));
+  }
+
+  return loadActivities(initialParameters.page);
 }
