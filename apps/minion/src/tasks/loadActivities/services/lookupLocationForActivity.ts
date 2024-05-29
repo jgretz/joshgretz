@@ -3,7 +3,7 @@ import type {Activity} from 'strava';
 import Running from 'running';
 
 export async function lookupLocationForActivity(activity: Activity) {
-  if (!activity.start_latlng) {
+  if (!activity.start_latlng || activity.start_latlng.length < 2) {
     return undefined;
   }
 

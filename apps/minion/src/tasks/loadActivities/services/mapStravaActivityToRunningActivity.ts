@@ -13,9 +13,9 @@ function shouldUpdateLocation(
   }
 
   if (
-    existingActivity.location_city ||
-    existingActivity.location_state ||
-    existingActivity.location_country
+    !existingActivity.location_city ||
+    !existingActivity.location_state ||
+    !existingActivity.location_country
   ) {
     return true;
   }
