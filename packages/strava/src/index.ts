@@ -13,9 +13,9 @@ export function setupStravaContainer({accessToken}: StravaConfig) {
   GetContainer().Bind(accessToken, {name: 'accessToken'});
 }
 
-export default {
-  utility: {generateAuthUrl, requestAuthToken},
+export const utilities = {generateAuthUrl, requestAuthToken};
 
+export default {
   queries: {
     getAthlete,
     getGear,

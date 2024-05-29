@@ -4,15 +4,14 @@ import getThirdPartyAccess from '@admin/services/joshgretz-api/users/getThirdPar
 import type {LoaderFunctionArgs} from '@remix-run/node';
 import {useLoaderData} from '@remix-run/react';
 import {useCallback} from 'react';
-
-import Strava from 'strava';
+import {utilities} from 'strava';
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
   const access = await getThirdPartyAccess(user!);
 
   const url = new URL(request.url);
-  const authUrl = Strava.utility.generateAuthUrl(
+  const authUrl = utilities.generateAuthUrl(
     `${url.protocol}//${url.hostname}:${url.port}/strava/callback`,
   );
 
