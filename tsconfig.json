@@ -35,9 +35,11 @@
       "database": ["./packages/database/index.ts"],
       "geoapify": ["./packages/geoapify/src/index.ts"],
       "running": ["./packages/running/src/index.ts"],
+      "ping": ["./packages/ping/src/index.ts"],
       "strava": ["./packages/strava/src/index.ts"],
       "utility": ["./packages/utility/src/index.ts"],
-      "users": ["./packages/users/src/index.ts"]
+      "users": ["./packages/users/src/index.ts"],
+      "workflow": ["./packages/workflow/src/index.ts"]
     }
   },
 
@@ -45,9 +47,11 @@
     {"amqp": "./packages/amqp"},
     {"database": "./packages/database"},
     {"geoapify": "./packages/geoapify"},
+    {"ping": "./packages/ping"},
     {"running": "./packages/running"},
     {"strava": "./packages/strava"},
     {"utility": "./packages/utility"},
-    {"users": "./packages/users"}
+    {"users": "./packages/users"},
+    {"workflow": "./packages/workflow"}
   ]
 }

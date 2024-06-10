@@ -4,10 +4,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
+    "debug": "bun run --inspect --watch src/index.ts",
     "start": "bun run src/index.ts"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.0.2",
+    "@elysiajs/cors": "^1.0.2",
     "elysia": "latest",
     "injectx": "^1.0.4"
   },

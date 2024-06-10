@@ -2,11 +2,11 @@ import {Schema} from 'database';
 import type {Activity as StravaActivity} from 'strava';
 import Running from 'running';
 import {eq} from 'drizzle-orm';
-import type {TaskContainer} from 'apps/minion/src/Types';
+import type {MinionContainer} from 'apps/minion/src/Types';
 import {InjectIn} from 'injectx';
 import {mapStravaActivityToRunningActivity} from './mapStravaActivityToRunningActivity';
 
-function service({database}: TaskContainer) {
+function service({database}: MinionContainer) {
   return async function (stravaActivity: StravaActivity, user_id: number) {
     const existing = await Running.queries.findActivityByStravaId(stravaActivity.id.toString());
     const activity = await mapStravaActivityToRunningActivity(user_id, stravaActivity, existing);

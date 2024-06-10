@@ -22,6 +22,9 @@ export function Header() {
         <Link className="flex items-center space-x-2" to="/strava">
           Strava
         </Link>
+        <Link className="flex items-center space-x-2" to="/ping">
+          Ping
+        </Link>
       </div>
     </header>
   );

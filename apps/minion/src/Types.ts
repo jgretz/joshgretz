@@ -2,12 +2,12 @@ import type {Database} from 'database';
 import {type Amqp} from 'amqp';
 import type {AMQPMessage} from '@cloudamqp/amqp-client';
 
-export interface TaskConfig {
+export interface MinionConfig {
   databaseUrl: string;
   amqpUrl: string;
 }
 
-export interface TaskContainer {
+export interface MinionContainer {
   database: Database;
   amqp: Amqp;
 }

@@ -9,12 +9,15 @@ import {Error} from './components/error';
 
 import {getUser} from './services/auth/getUser';
 import Login from './components/login';
+import {getClientEnv} from './utils/env.server';
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
 
   return {
     user,
+
+    env: getClientEnv(),
   };
 }
 
@@ -39,11 +42,21 @@ function App({children}: {children: React.ReactNode}) {
 }
 
 export default function Root() {
-  const {user} = useLoaderData<typeof loader>();
+  const {user, env} = useLoaderData<typeof loader>();
 
   const Content = user ? <Outlet /> : <Login />;
 
-  return <App>{Content}</App>;
+  return (
+    <App>
+      {Content}
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `process = { env: ${JSON.stringify(env)}};`,
+        }}
+      />
+    </App>
+  );
 }
 
 export function ErrorBoundary() {
