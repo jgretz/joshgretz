@@ -8,23 +8,19 @@ export interface WorkflowContainer {
   exchange: string;
 }
 
-export interface Command {
-  key: string;
-  payload: any;
-}
-
 export interface Event<T = any> {
   key: string;
-  payload: T;
+  payload?: T;
 }
 
 export interface Service {
   key: string;
 
-  executeCommand: <T>(payload: T) => Event | Event[] | Promise<Event> | Promise<Event[]>;
+  executeCommand: (payload: any) => Event | Event[] | Promise<Event> | Promise<Event[]>;
 }
 
-export interface Workflow {
-  name: string;
-  commands: string[];
+export interface Response<R> {
+  success: boolean;
+  result?: R;
+  error?: unknown;
 }

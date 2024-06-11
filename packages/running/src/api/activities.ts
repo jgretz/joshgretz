@@ -1,8 +1,8 @@
 import {Elysia, t} from 'elysia';
-import type {User} from 'users';
-import {enqueueLoadActivities} from '../command/enqueLoadActivities';
+import {publish} from 'workflow';
+import {RunningWorkflows} from '../Types';
 
-const enqueueLoadActivitiesSinceCommandSchema = {
+const enqueueImportStravaActivitiesForDateRangeSchema = {
   body: t.Object({
     user_id: t.Number(),
     from: t.Date(),
@@ -11,9 +11,9 @@ const enqueueLoadActivitiesSinceCommandSchema = {
 };
 
 export default new Elysia({prefix: '/activities'}).post(
-  '/load-activities',
+  '/import-activities',
   async ({body: {user_id, from, to}}) => {
-    await enqueueLoadActivities({id: user_id} as User, from, to);
+    await publish(RunningWorkflows.ImportStravaActivitiesForDateRange, {user_id, from, to});
   },
-  enqueueLoadActivitiesSinceCommandSchema,
+  enqueueImportStravaActivitiesForDateRangeSchema,
 );

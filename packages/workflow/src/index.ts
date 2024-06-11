@@ -7,6 +7,7 @@ export * from './services/publish';
 export * from './services/consume';
 export * from './services/servicebus';
 export * from './services/orchestrator';
+export * from './services/workflow';
 
 export function setupWorkflowContainer({amqpUrl, exchange}: WorkflowConfig) {
   GetContainer().Bind(amqpUrl, {name: 'amqpUrl'});

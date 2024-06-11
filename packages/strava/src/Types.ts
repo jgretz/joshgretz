@@ -1,4 +1,5 @@
 export type Location = number[];
+import Strava from '../../../apps/admin/app/routes/strava+/index';
 
 export interface Athlete {
   id: number;
@@ -55,4 +56,22 @@ export interface StravaConfig {
 
 export interface StravaContainer {
   accessToken: string;
+}
+
+export enum StravaCommands {
+  LoadActivitiesForDateRange = 'loadactivitiesfordaterange',
+}
+
+export enum StravaEvents {
+  LoadActivitiesForDateRangeResponse = 'loadactivitiesfordaterange_response',
+}
+
+export interface LoadActivitiesForDateRangeRequest {
+  accessToken: string;
+  from: string;
+  to: string;
+}
+
+export interface LoadActivitiesForDateRangeResponse {
+  activities: Activity[];
 }

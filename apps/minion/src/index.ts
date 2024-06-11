@@ -1,29 +1,37 @@
 import {setupGeoapifyContainer} from 'geoapify';
 import {setupRunningContainer} from 'running';
 import {setupUserContainer} from 'users';
-import {setupWorkflowContainer, startServiceBus} from 'workflow';
+import {setupWorkflowContainer, ServiceBus, Orchestrator} from 'workflow';
 
 // environment
 const DATABASE_URL = process.env.DATABASE_URL || '';
 const AMPQ_URL = process.env.AMQP_URL || '';
+const AMPQ_EXCHANGE = process.env.AMQP_EXCHANGE || '';
 const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY || '';
 
 // setup containers
 setupUserContainer({databaseUrl: DATABASE_URL});
-setupRunningContainer({databaseUrl: DATABASE_URL, amqpUrl: AMPQ_URL});
+setupRunningContainer({databaseUrl: DATABASE_URL});
 setupGeoapifyContainer({apiKey: GEOAPIFY_API_KEY});
-setupWorkflowContainer({amqpUrl: AMPQ_URL, exchange: 'workflow'});
+setupWorkflowContainer({amqpUrl: AMPQ_URL, exchange: AMPQ_EXCHANGE});
 
-// import services
-import {Ping} from 'ping';
+// import Busses
+import {Bus as PingBus} from 'ping';
+import {Bus as UsersBus} from 'users';
+import {Bus as StravaBus} from 'strava';
+
+//import Orchestrators
+import {Orch as RunningOrch} from 'running';
 
 // run
 async function boot() {
-  const stop = await startServiceBus([Ping]);
+  const bus = new ServiceBus().use(PingBus).use(UsersBus).use(StravaBus).start();
+  const orch = new Orchestrator().use(RunningOrch).start();
 
   console.log('Minions on alert ... To exit press CTRL+C ');
-  process.on('SIGINT', () => {
-    stop();
+  process.on('SIGINT', async () => {
+    await bus.stop();
+    await orch.stop();
 
     process.exit(0);
   });

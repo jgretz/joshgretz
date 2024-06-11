@@ -1,6 +1,6 @@
 import {Button} from '@admin/components/ui/button';
 import {DatePicker} from '@admin/components/ui/date-picker';
-import loadActivities from '@admin/services/joshgretz-api/running/loadActivities';
+import importActivities from '@admin/services/joshgretz-api/running/importActivities';
 import {useActionData, useLoaderData} from '@remix-run/react';
 import type {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 import {getUser} from '@admin/services/auth/getUser';
@@ -32,7 +32,7 @@ export async function action({request}: ActionFunctionArgs) {
 
   const {user_id, from, to} = submission.value;
   try {
-    await loadActivities(user_id, from, to);
+    await importActivities(user_id, from, to);
   } catch (error) {
     console.error(error);
     return submission.reply({
@@ -61,10 +61,10 @@ export default function LoadSince() {
 
       <div>{form.errors}</div>
       <div>
-        <label>Load Activites Range:</label>
+        <label>Import Activites Range:</label>
         <DatePicker meta={fields.from} /> - <DatePicker meta={fields.to} />
       </div>
-      <Button type="submit">Load Activities</Button>
+      <Button type="submit">Import Activities</Button>
     </form>
   );
 }

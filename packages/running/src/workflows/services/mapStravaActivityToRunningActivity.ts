@@ -1,8 +1,8 @@
-import Running from 'running';
 import {type Activity as StravaActivity} from 'strava';
 import {lookupLocationForActivity} from './lookupLocationForActivity';
+import type {findActivityByStravaId} from '../../query/findActivityByStravaId';
 
-type RunningActivity = Awaited<ReturnType<typeof Running.queries.findActivityByStravaId>>;
+type RunningActivity = Awaited<ReturnType<typeof findActivityByStravaId>>;
 
 function shouldUpdateLocation(
   activity: StravaActivity,

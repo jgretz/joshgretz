@@ -14,7 +14,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@cloudamqp/amqp-client": "^3.1.1",
     "injectx": "^1.0.4"
   }
 }

@@ -9,8 +9,8 @@ export default function Ping() {
   const handleClick = useCallback(async () => {
     const response = await ping();
 
-    if (response.data?.payload.alive) {
-      setLastPing(new Date(response.data.payload.timestamp));
+    if (response.data?.alive) {
+      setLastPing(new Date(response.data.timestamp));
     }
   }, [ping]);
 

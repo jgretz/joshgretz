@@ -7,6 +7,7 @@ import {setThirdPartyAccessForUser} from './command/setThirdPartyAccessForUser.t
 
 export * from './Types.ts';
 export {Api} from './api/index';
+export {Bus} from './services/index';
 
 export function setupUserContainer({databaseUrl}: UsersConfig) {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

@@ -8,6 +8,7 @@ import requestAuthToken from './auth/requestAuthToken.ts';
 import getGear from './gear/getGear.ts';
 
 export * from './Types.ts';
+export {Bus} from './services/index.ts';
 
 export function setupStravaContainer({accessToken}: StravaConfig) {
   GetContainer().Bind(accessToken, {name: 'accessToken'});

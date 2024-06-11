@@ -20,3 +20,19 @@ export interface ThirdPartyAccess {
   strava_access_token?: string | null;
   strava_code?: string | null;
 }
+
+export interface ThirdPartyAccessForUserRequest {
+  user_id: number;
+}
+
+export interface ThirdPartyAccessForUserResponse {
+  access?: ThirdPartyAccess;
+}
+
+export enum UsersCommands {
+  ThirdPartyAccessForUser = 'ThirdPartyAccessForUser',
+}
+
+export enum UsersEvents {
+  ThirdPartyAccessForUserResponse = 'ThirdPartyAccessForUserResponse',
+}

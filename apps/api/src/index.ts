@@ -11,11 +11,12 @@ import {setupWorkflowContainer} from 'workflow';
 const PORT = process.env.PORT || 3003;
 const DATABASE_URL = process.env.DATABASE_URL || '';
 const AMPQ_URL = process.env.AMQP_URL || '';
+const AMPQ_EXCHANGE = process.env.AMQP_EXCHANGE || '';
 
 // setup IOC / DI containers
 setupUserContainer({databaseUrl: DATABASE_URL});
 setupRunningContainer({databaseUrl: DATABASE_URL, amqpUrl: AMPQ_URL});
-setupWorkflowContainer({amqpUrl: AMPQ_URL, exchange: 'workflow'});
+setupWorkflowContainer({amqpUrl: AMPQ_URL, exchange: AMPQ_EXCHANGE});
 
 // run
 const root = new Elysia()

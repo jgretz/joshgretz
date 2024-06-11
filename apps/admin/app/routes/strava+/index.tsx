@@ -8,7 +8,7 @@ export default function Strava() {
           <Link to="/strava/connect">Connect To Strava</Link>
         </li>
         <li>
-          <Link to="/strava/load-activities">Load Activities</Link>
+          <Link to="/strava/import-activities">Import Activities</Link>
         </li>
       </ul>
     </div>

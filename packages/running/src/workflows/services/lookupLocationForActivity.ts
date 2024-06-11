@@ -1,6 +1,6 @@
 import Geoapify from 'geoapify';
 import type {Activity} from 'strava';
-import Running from 'running';
+import {findFirstActivityByLatLon} from '../../query/findFirstActivityByLatLon';
 
 export async function lookupLocationForActivity(activity: Activity) {
   if (!activity.start_latlng || activity.start_latlng.length < 2) {
@@ -11,7 +11,7 @@ export async function lookupLocationForActivity(activity: Activity) {
   console.log(
     `Looking up location for activity ${activity.start_latlng[0]}, ${activity.start_latlng[1]}`,
   );
-  const existing = await Running.queries.findFirstActivityByLatLon(
+  const existing = await findFirstActivityByLatLon(
     activity.start_latlng[0].toString(),
     activity.start_latlng[1].toString(),
   );
