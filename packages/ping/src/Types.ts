@@ -3,10 +3,6 @@ export interface PingResponse {
   timestamp: number;
 }
 
-export enum PingCommands {
+export enum PingMessages {
   Ping = 'ping',
-}
-
-export enum PingEvents {
-  PingResponse = 'ping_response',
 }

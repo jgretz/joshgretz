@@ -1,66 +1,73 @@
-import {publishExpectResponse} from './publish';
-import {type Event} from '../Types';
+import {publishAndWaitForResponse} from './publish';
+import {match} from 'ts-pattern';
+import {error, success} from './utility/busResponse';
+import type {BusResponse} from '../Types';
 
-type BusCommand = {key: string};
-type CodeCommand = (payload?: any) => any | Promise<any>;
-type Command = BusCommand | CodeCommand;
+type CodeStep = (payload?: any) => any | Promise<any>;
+type BusStep = string;
 
-async function execute(command: Command, payload: any) {
+type Step = BusStep | CodeStep;
+
+async function executeBusStep(key: string, payload: any) {
+  return await publishAndWaitForResponse(key, payload);
+}
+
+async function executeCodeStep(fn: CodeStep, payload: any) {
+  const result = await fn(payload);
+  return success(result);
+}
+
+async function execute(step: Step, payload: any) {
   try {
-    if ((command as BusCommand).key !== undefined) {
-      const response = await publishExpectResponse((command as BusCommand).key, payload);
-      if (response.success) {
-        return {
-          success: true,
-          result: (response.result as Event).payload,
-        };
-      }
-
-      return {
-        success: false,
-      };
-    }
-
-    const result = await (command as CodeCommand)(payload);
-    return {
-      success: true,
-      result,
-    };
+    return await match(step)
+      .returnType<Promise<BusResponse<any>>>()
+      .when(
+        (step) => step instanceof Function,
+        (fn) => executeCodeStep(fn as CodeStep, payload),
+      )
+      .otherwise((key) => executeBusStep(key as string, payload));
   } catch (err) {
-    return {
-      success: false,
-      error: err,
-    };
+    return error(err);
   }
 }
 
 export class Workflow {
-  private commands: Command[];
+  private steps: Step[];
 
   public key: string;
 
   constructor(key: string) {
     this.key = key;
-    this.commands = [];
+    this.steps = [];
   }
 
-  use(command: string | string[] | CodeCommand | Workflow | Workflow[]) {
-    if (Array.isArray(command)) {
-      command.forEach((c) => this.use(c));
-    } else if (command instanceof Workflow) {
-      this.commands.push(...command.commands);
-    } else if (typeof command === 'string') {
-      this.commands.push({key: command});
-    } else {
-      this.commands.push(command);
-    }
+  use(step: Step | Step[] | Workflow | Workflow[]) {
+    match(step)
+      .when(
+        (step) => step instanceof Array,
+        (x) => (x as Array<Step | Workflow>).forEach((step) => this.use(step)),
+      )
+      .when(
+        (step) => step instanceof Workflow,
+        (x) => this.use((x as Workflow).steps),
+      )
+      .when(
+        (step) => step instanceof Function,
+        (x) => {
+          this.steps.push(x as CodeStep);
+        },
+      )
+      .otherwise((step) => {
+        this.steps.push(step as BusStep);
+      });
+
     return this;
   }
 
   async execute(payload?: any) {
     let nextPayload = payload;
-    for await (const command of this.commands) {
-      const response = await execute(command, nextPayload);
+    for await (const step of this.steps) {
+      const response = await execute(step, nextPayload);
       if (!response.success) {
         break;
       }

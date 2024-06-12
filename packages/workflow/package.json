@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "injectx": "^1.0.4",
-    "rabbitmq-client": "^4.6.0"
+    "rabbitmq-client": "^4.6.0",
+    "ts-pattern": "^5.2.0"
   }
 }

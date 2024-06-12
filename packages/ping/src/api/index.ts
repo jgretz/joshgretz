@@ -1,12 +1,11 @@
 import {Elysia} from 'elysia';
-import {publishExpectResponse, type Event} from 'workflow';
-import {PingCommands, type PingResponse} from '../Types';
+import {publishAndWaitForResponse} from 'workflow';
+import {PingMessages, type PingResponse} from '../Types';
 
 export const Api = new Elysia().get('/ping', async ({error}) => {
-  const response = await publishExpectResponse<undefined, Event<PingResponse>>(PingCommands.Ping);
-
+  const response = await publishAndWaitForResponse<undefined, PingResponse>(PingMessages.Ping);
   if (response.success) {
-    return response.result?.payload;
+    return response.result;
   }
 
   return error(500, response.error);

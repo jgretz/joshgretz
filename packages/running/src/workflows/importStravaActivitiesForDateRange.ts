@@ -1,5 +1,5 @@
-import {StravaCommands} from 'strava';
-import {UsersCommands} from 'users';
+import {StravaMessages} from 'strava';
+import {UsersMessages} from 'users';
 import {Workflow} from 'workflow';
 import {RunningWorkflows} from '../Types';
 import {parseISO} from 'date-fns';
@@ -29,8 +29,8 @@ export const importStravaActivitiesForDateRange = new Workflow(
   RunningWorkflows.ImportStravaActivitiesForDateRange,
 )
   .use(log('Starting to import activities'))
-  .use(UsersCommands.ThirdPartyAccessForUser)
+  .use(UsersMessages.ThirdPartyAccessForUser)
   .use(prepareForStravaQuery)
-  .use(StravaCommands.LoadActivitiesForDateRange)
+  .use(StravaMessages.LoadActivitiesForDateRange)
   .use(importActivities)
   .use(log('Imported activities'));

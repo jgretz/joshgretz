@@ -1,7 +1,11 @@
 import {connect} from './rabbit/connect';
 import {createConsumer} from './rabbit/createConsumer';
+import {encapsulate} from './utility/encapsulate';
 
-export function consume<T>(key: string, handler: (payload: T) => any | Promise<any>) {
+export function consume<T>(
+  key: string,
+  handler: <R extends {} | void>(payload: T) => R | Promise<R>,
+) {
   const rabbit = connect();
 
   const consumer = createConsumer(rabbit, key, async (message, reply) => {
@@ -10,14 +14,10 @@ export function consume<T>(key: string, handler: (payload: T) => any | Promise<a
       const response = await handler(payload);
 
       if (response && message.replyTo) {
-        const json = JSON.stringify(response);
-        if (json.length > Math.pow(2, 15)) {
-          console.log('Response too large to send');
-          return;
-        }
-        await reply(json);
+        await reply(encapsulate(response));
       }
     } catch (error) {
+      console.log(key);
       console.error(error);
     }
   });

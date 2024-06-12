@@ -1,33 +1,35 @@
 import {consume} from './consume';
-import {type Service} from '../Types';
-import {publish} from './publish';
+import {type BusService} from '../Types';
+import {match} from 'ts-pattern';
 
 export class ServiceBus {
-  private services: Service[];
-  private stopConsumers?: (() => Promise<void> | void)[];
+  private services: BusService<any, any>[];
+  private stopConsumers?: (() => void | Promise<void>)[];
 
   constructor() {
     this.services = [];
   }
 
-  use(service: Service | ServiceBus) {
-    const services = service instanceof ServiceBus ? service.services : [service];
-    this.services.push(...services);
+  use<T, R extends {} | void>(
+    item: BusService<T, R> | BusService<T, R>[] | ServiceBus | ServiceBus[],
+  ) {
+    match(item)
+      .when(
+        (item) => item instanceof Array,
+        (x) => (x as Array<BusService<T, R> | ServiceBus>).forEach((y) => this.use(y)),
+      )
+      .when(
+        (item) => item instanceof ServiceBus,
+        (x) => this.use((x as ServiceBus).services),
+      )
+      .otherwise((item) => this.services.push(item as BusService<any, any>));
 
     return this;
   }
 
   start() {
     this.stopConsumers = this.services.map((service) => {
-      return consume(service.key, async (payload) => {
-        const events = await service.executeCommand(payload);
-
-        for await (const event of Array.isArray(events) ? events : [events]) {
-          await publish(event.key, event.payload);
-        }
-
-        return events;
-      });
+      return consume(service.key, service.execute);
     });
 
     return this;

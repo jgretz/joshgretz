@@ -1,5 +1,6 @@
 import type {Workflow} from './workflow';
 import {consume} from './consume';
+import {match} from 'ts-pattern';
 
 export class Orchestrator {
   private workflows: Workflow[];
@@ -10,13 +11,16 @@ export class Orchestrator {
   }
 
   use(workflow: Workflow | Workflow[] | Orchestrator | Orchestrator[]) {
-    if (Array.isArray(workflow)) {
-      workflow.forEach((w) => this.use(w));
-    } else if (workflow instanceof Orchestrator) {
-      this.use(workflow.workflows);
-    } else {
-      this.workflows.push(workflow);
-    }
+    match(workflow)
+      .when(
+        (w) => Array.isArray(w),
+        (w) => (w as Array<Workflow | Orchestrator>).forEach((x) => this.use(x)),
+      )
+      .when(
+        (w) => w instanceof Orchestrator,
+        (w) => this.use((w as Orchestrator).workflows),
+      )
+      .otherwise((w) => this.workflows.push(w as Workflow));
 
     return this;
   }

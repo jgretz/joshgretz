@@ -8,18 +8,13 @@ export interface WorkflowContainer {
   exchange: string;
 }
 
-export interface Event<T = any> {
-  key: string;
-  payload?: T;
-}
-
-export interface Service {
+export interface BusService<T, R extends object | void> {
   key: string;
 
-  executeCommand: (payload: any) => Event | Event[] | Promise<Event> | Promise<Event[]>;
+  execute: (payload: T) => R | Promise<R>;
 }
 
-export interface Response<R> {
+export interface BusResponse<R extends object | void> {
   success: boolean;
   result?: R;
   error?: unknown;
