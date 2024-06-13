@@ -17,7 +17,7 @@ export function consume<T>(
         await reply(encapsulate(response));
       }
     } catch (error) {
-      console.log(key);
+      console.error(`Error occured: ${key}`);
       console.error(error);
     }
   });

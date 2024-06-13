@@ -1,45 +1,101 @@
-import type {Workflow} from './workflow';
-import {consume} from './consume';
 import {match} from 'ts-pattern';
+import {ServiceBus} from './servicebus';
+import type {BusService, OrchestratorHook} from '../Types';
 
-export class Orchestrator {
-  private workflows: Workflow[];
-  private stopWorkflows?: (() => void)[];
+export class Orchestrator extends ServiceBus {
+  protected hooks: {[key: string]: OrchestratorHook[]};
 
   constructor() {
-    this.workflows = [];
+    super();
+
+    this.hooks = {};
   }
 
-  use(workflow: Workflow | Workflow[] | Orchestrator | Orchestrator[]) {
-    match(workflow)
+  useHook(hook: OrchestratorHook | OrchestratorHook[]) {
+    match(hook)
       .when(
-        (w) => Array.isArray(w),
-        (w) => (w as Array<Workflow | Orchestrator>).forEach((x) => this.use(x)),
+        (hook) => hook instanceof Array,
+        (x) => (x as Array<OrchestratorHook>).forEach((y) => this.useHook(y)),
       )
-      .when(
-        (w) => w instanceof Orchestrator,
-        (w) => this.use((w as Orchestrator).workflows),
-      )
-      .otherwise((w) => this.workflows.push(w as Workflow));
+      .otherwise((hook) => {
+        const key = (hook as OrchestratorHook).key;
+        if (!this.hooks[key]) {
+          this.hooks[key] = [];
+        }
+
+        this.hooks[key].push(hook as OrchestratorHook);
+      });
 
     return this;
   }
 
-  start() {
-    this.stopWorkflows = this.workflows.map((workflow) => {
-      return consume(workflow.key, async (payload) => await workflow.execute(payload));
-    });
+  override use<T, R extends void | {}>(
+    item: BusService<T, R> | BusService<T, R>[] | ServiceBus | ServiceBus[],
+  ): this {
+    match(item)
+      .when(
+        (item) => item instanceof Array,
+        (x) => super.use(x),
+      )
+      .when(
+        (item) => item instanceof ServiceBus,
+        (x) => super.use(x),
+      )
+      .otherwise((item) => {
+        const wrappedService = {
+          key: (item as BusService<T, R>).key,
+          execute: this.wrapServiceExecute(item as BusService<T, R>),
+        };
+
+        super.use(wrappedService);
+      });
 
     return this;
   }
 
-  async stop() {
-    if (!this.stopWorkflows) {
-      return;
+  private wrapServiceExecute<T, R extends void | {}>(service: BusService<T, R>) {
+    return async (payload: T) => {
+      const beforeHookResult = await this.executeBeforeHooks(service.key, payload);
+      if (beforeHookResult.eject) {
+        return;
+      }
+
+      const result = await service.execute(beforeHookResult.payload);
+      const finalResult = await this.executeAfterHooks(service.key, result);
+
+      return finalResult;
+    };
+  }
+
+  private async executeBeforeHooks(key: string, payload: any) {
+    const hooks = this.hooks[key] || [];
+
+    // before hooks
+    let payloadToUse = payload;
+    for await (const hook of hooks) {
+      const beforeHookResult = await hook.beforeExecute(payloadToUse);
+      if (beforeHookResult?.eject) {
+        return {
+          eject: true,
+        };
+      }
+
+      payloadToUse = beforeHookResult?.payload || payloadToUse;
     }
 
-    await Promise.all(this.stopWorkflows.map((stop) => stop()));
+    return {
+      payload: payloadToUse,
+    };
+  }
 
-    return this;
+  private async executeAfterHooks(key: string, result: any) {
+    const hooks = this.hooks[key] || [];
+
+    for await (const hook of hooks) {
+      const afterHookResult = await hook.afterExecute(result);
+      result = afterHookResult?.result || result;
+    }
+
+    return result;
   }
 }

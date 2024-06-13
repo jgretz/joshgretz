@@ -1,7 +1,7 @@
 import {setupGeoapifyContainer} from 'geoapify';
 import {setupRunningContainer} from 'running';
 import {setupUserContainer} from 'users';
-import {setupWorkflowContainer, ServiceBus, Orchestrator} from 'workflow';
+import {setupWorkflowContainer, ServiceBus} from 'workflow';
 
 // environment
 const DATABASE_URL = process.env.DATABASE_URL || '';
@@ -19,19 +19,15 @@ setupWorkflowContainer({amqpUrl: AMPQ_URL, exchange: AMPQ_EXCHANGE});
 import {Bus as PingBus} from 'ping';
 import {Bus as UsersBus} from 'users';
 import {Bus as StravaBus} from 'strava';
-
-//import Orchestrators
-import {Orch as RunningOrch} from 'running';
+import {Bus as RunningBus} from 'running';
 
 // run
 async function boot() {
-  const bus = new ServiceBus().use(PingBus).use(UsersBus).use(StravaBus).start();
-  const orch = new Orchestrator().use(RunningOrch).start();
+  const bus = new ServiceBus().use(PingBus).use(UsersBus).use(StravaBus).use(RunningBus).start();
 
   console.log('Minions on alert ... To exit press CTRL+C ');
   process.on('SIGINT', async () => {
     await bus.stop();
-    await orch.stop();
 
     process.exit(0);
   });

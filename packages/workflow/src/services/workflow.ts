@@ -1,7 +1,7 @@
 import {publishAndWaitForResponse} from './publish';
 import {match} from 'ts-pattern';
 import {error, success} from './utility/busResponse';
-import type {BusResponse} from '../Types';
+import type {BusResponse, BusService} from '../Types';
 
 type CodeStep = (payload?: any) => any | Promise<any>;
 type BusStep = string;
@@ -31,7 +31,7 @@ async function execute(step: Step, payload: any) {
   }
 }
 
-export class Workflow {
+export class Workflow<T, R extends {} | void> implements BusService<T, R> {
   private steps: Step[];
 
   public key: string;
@@ -41,15 +41,15 @@ export class Workflow {
     this.steps = [];
   }
 
-  use(step: Step | Step[] | Workflow | Workflow[]) {
+  use(step: Step | Step[] | Workflow<any, any> | Workflow<any, any>[]) {
     match(step)
       .when(
         (step) => step instanceof Array,
-        (x) => (x as Array<Step | Workflow>).forEach((step) => this.use(step)),
+        (x) => (x as Array<Step | Workflow<any, any>>).forEach((step) => this.use(step)),
       )
       .when(
         (step) => step instanceof Workflow,
-        (x) => this.use((x as Workflow).steps),
+        (x) => this.use((x as Workflow<any, any>).steps),
       )
       .when(
         (step) => step instanceof Function,
@@ -64,23 +64,23 @@ export class Workflow {
     return this;
   }
 
-  async execute(payload?: any) {
-    let nextPayload = payload;
+  async execute(payload?: T) {
+    let payloadAcc = {...payload};
     for await (const step of this.steps) {
-      const response = await execute(step, nextPayload);
+      const response = await execute(step, payloadAcc);
       if (!response.success) {
         break;
       }
 
       const {result} = response;
       if (result !== null && typeof result === 'object') {
-        nextPayload = {
-          ...nextPayload,
+        payloadAcc = {
+          ...payloadAcc,
           ...(result as object),
         };
       }
     }
 
-    return nextPayload;
+    return payloadAcc as R;
   }
 }

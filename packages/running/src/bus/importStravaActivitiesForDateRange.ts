@@ -19,18 +19,10 @@ async function importActivities(payload: any) {
   );
 }
 
-function log(message: string) {
-  return function () {
-    console.log(message);
-  };
-}
-
 export const importStravaActivitiesForDateRange = new Workflow(
   RunningWorkflows.ImportStravaActivitiesForDateRange,
 )
-  .use(log('Starting to import activities'))
   .use(UsersMessages.ThirdPartyAccessForUser)
   .use(prepareForStravaQuery)
   .use(StravaMessages.LoadActivitiesForDateRange)
-  .use(importActivities)
-  .use(log('Imported activities'));
+  .use(importActivities);

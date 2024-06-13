@@ -4,7 +4,7 @@ import {createDatabase} from 'database';
 
 export * from './Types';
 export {Api} from './api';
-export {Orch} from './workflows';
+export {Bus} from './bus';
 
 export function setupRunningContainer({databaseUrl}: RunningConfig) {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

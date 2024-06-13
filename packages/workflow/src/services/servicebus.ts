@@ -3,8 +3,8 @@ import {type BusService} from '../Types';
 import {match} from 'ts-pattern';
 
 export class ServiceBus {
-  private services: BusService<any, any>[];
-  private stopConsumers?: (() => void | Promise<void>)[];
+  protected services: BusService<any, any>[];
+  protected stopConsumers?: (() => void | Promise<void>)[];
 
   constructor() {
     this.services = [];

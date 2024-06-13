@@ -19,3 +19,21 @@ export interface BusResponse<R extends object | void> {
   result?: R;
   error?: unknown;
 }
+
+export interface HookBeforeResult {
+  eject?: boolean;
+  payload?: any;
+}
+
+export interface HookAfterResult {
+  result?: any;
+}
+
+export interface OrchestratorHook {
+  key: string;
+
+  beforeExecute: (
+    payload: any,
+  ) => HookBeforeResult | Promise<HookBeforeResult> | void | Promise<void>;
+  afterExecute: (result: any) => HookAfterResult | Promise<HookAfterResult> | void | Promise<void>;
+}

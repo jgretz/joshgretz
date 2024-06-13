@@ -7,6 +7,7 @@ export default function Ping() {
   const [lastPing, setLastPing] = useState<Date | undefined>(undefined);
 
   const handleClick = useCallback(async () => {
+    // TODO: this is here for testing purposes, factor this out so i dont have to have env vars in the client
     const response = await ping();
 
     if (response.data?.alive) {
