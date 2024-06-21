@@ -3,12 +3,12 @@ import {ServiceBus} from './servicebus';
 import type {BusService, OrchestratorHook} from '../Types';
 
 export class Orchestrator extends ServiceBus {
-  protected hooks: {[key: string]: OrchestratorHook[]};
+  protected hooks: OrchestratorHook[];
 
   constructor() {
     super();
 
-    this.hooks = {};
+    this.hooks = [];
   }
 
   useHook(hook: OrchestratorHook | OrchestratorHook[]) {
@@ -18,12 +18,7 @@ export class Orchestrator extends ServiceBus {
         (x) => (x as Array<OrchestratorHook>).forEach((y) => this.useHook(y)),
       )
       .otherwise((hook) => {
-        const key = (hook as OrchestratorHook).key;
-        if (!this.hooks[key]) {
-          this.hooks[key] = [];
-        }
-
-        this.hooks[key].push(hook as OrchestratorHook);
+        this.hooks.push(hook as OrchestratorHook);
       });
 
     return this;
@@ -67,8 +62,19 @@ export class Orchestrator extends ServiceBus {
     };
   }
 
+  private hooksForKey(key: string) {
+    return this.hooks.filter((hook) =>
+      match(hook.key)
+        .when(
+          (x) => x instanceof RegExp,
+          (x) => (x as RegExp).test(key),
+        )
+        .otherwise((x) => x === key),
+    );
+  }
+
   private async executeBeforeHooks(key: string, payload: any) {
-    const hooks = this.hooks[key] || [];
+    const hooks = this.hooksForKey(key);
 
     // before hooks
     let payloadToUse = payload;
@@ -89,7 +95,7 @@ export class Orchestrator extends ServiceBus {
   }
 
   private async executeAfterHooks(key: string, result: any) {
-    const hooks = this.hooks[key] || [];
+    const hooks = this.hooksForKey(key);
 
     for await (const hook of hooks) {
       const afterHookResult = await hook.afterExecute(result);

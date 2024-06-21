@@ -30,7 +30,7 @@ export interface HookAfterResult {
 }
 
 export interface OrchestratorHook {
-  key: string;
+  key: string | RegExp;
 
   beforeExecute: (
     payload: any,
