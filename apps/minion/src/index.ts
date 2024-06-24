@@ -2,18 +2,23 @@ import {setupGeoapifyContainer} from 'geoapify';
 import {setupRunningContainer} from 'running';
 import {setupUserContainer} from 'users';
 import {setupWorkflowContainer, ServiceBus} from 'workflow';
+import z from 'zod';
+import {parseEnv} from 'env';
 
 // environment
-const DATABASE_URL = process.env.DATABASE_URL || '';
-const AMPQ_URL = process.env.AMQP_URL || '';
-const AMPQ_EXCHANGE = process.env.AMQP_EXCHANGE || '';
-const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY || '';
+const envSchema = z.object({
+  DATABASE_URL: z.string(),
+  AMQP_URL: z.string(),
+  AMQP_EXCHANGE: z.string(),
+  GEOAPIFY_API_KEY: z.string(),
+});
+const env = parseEnv(envSchema);
 
 // setup containers
-setupUserContainer({databaseUrl: DATABASE_URL});
-setupRunningContainer({databaseUrl: DATABASE_URL});
-setupGeoapifyContainer({apiKey: GEOAPIFY_API_KEY});
-setupWorkflowContainer({amqpUrl: AMPQ_URL, exchange: AMPQ_EXCHANGE});
+setupUserContainer({databaseUrl: env.DATABASE_URL});
+setupRunningContainer({databaseUrl: env.DATABASE_URL});
+setupGeoapifyContainer({apiKey: env.GEOAPIFY_API_KEY});
+setupWorkflowContainer({amqpUrl: env.AMQP_URL, exchange: env.AMQP_EXCHANGE});
 
 // import Busses
 import {Bus as PingBus} from 'ping';

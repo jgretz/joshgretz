@@ -31,6 +31,7 @@
       "@admin/*": ["./apps/admin/app/*"],
       "@www/*": ["./apps/www/app/*"],
 
+      "env": ["./packages/env/src/index.ts"],
       "database": ["./packages/database/index.ts"],
       "geoapify": ["./packages/geoapify/src/index.ts"],
       "running": ["./packages/running/src/index.ts"],
@@ -43,6 +44,7 @@
   },
 
   "references": [
+    {"env": "./packages/env"},
     {"database": "./packages/database"},
     {"geoapify": "./packages/geoapify"},
     {"ping": "./packages/ping"},
