@@ -1,7 +1,7 @@
 import {GitHubLogoIcon, LinkedInLogoIcon, InstagramLogoIcon} from '@radix-ui/react-icons';
 import avatar from '@www/assets/images/josh-g.png';
 import strava from '@www/assets/images/strava-icon.png';
-import bluesky from '@www/assets/images/bluesky.svg';
+import bluesky from '@www/assets/images/bluesky.png';
 
 export default function Card() {
   return (
