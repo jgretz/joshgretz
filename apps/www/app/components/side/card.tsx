@@ -1,6 +1,7 @@
 import {GitHubLogoIcon, LinkedInLogoIcon, InstagramLogoIcon} from '@radix-ui/react-icons';
 import avatar from '@www/assets/images/josh-g.png';
 import strava from '@www/assets/images/strava-icon.png';
+import bluesky from '@www/assets/images/bluesky.svg';
 
 export default function Card() {
   return (
@@ -20,6 +21,9 @@ export default function Card() {
         </a>
         <a href="https://www.instagram.com/joshgretz/" target="_blank" rel="noreferrer">
           <InstagramLogoIcon className="mx-2" />
+        </a>
+        <a href="https://bsky.app/profile/joshgretz.bsky.social" target="_blank" rel="noreferrer">
+          <img src={bluesky} alt="bluesky icon" className="h-[15px] w-[15px] mx-[8px] bg-black" />
         </a>
         <a href="https://www.strava.com/athletes/67556995" target="_blank" rel="noreferrer">
           <img src={strava} alt="strava icon" className="h-[15px] w-[15px] mx-[8px] bg-black" />
