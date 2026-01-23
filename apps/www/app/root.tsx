@@ -19,6 +19,7 @@ function App({ children }: { children: React.ReactNode }) {
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<link rel="icon" type="image/png" href="/favicon.png" />
 				<Meta />
 				<Links />
 			</head>
@@ -49,7 +50,13 @@ export default function Root() {
 export function ErrorBoundary() {
 	return (
 		<App>
-			<ErrorPage />
+			<div className="side absolute left-0 top-0 z-10 w-full bg-black text-white sm:fixed sm:h-full sm:w-[200px]">
+				<Bar />
+			</div>
+
+			<div className="absolute left-0 top-[240px] z-0 w-full bg-background text-black sm:top-0 sm:min-h-screen sm:pl-[200px]">
+				<ErrorPage />
+			</div>
 		</App>
 	);
 }

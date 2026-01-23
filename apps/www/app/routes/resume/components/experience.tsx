@@ -83,7 +83,11 @@ export default function Experience() {
 			<Section>Experience</Section>
 
 			<Company name="ForceBuilders" link="https://www.forcebuilders.io">
-				<Role title="Co-Founder & CTO" tenure="April 2023 – Present" location="Remote">
+				<Role
+					title="Co-Founder & CTO"
+					tenure="April 2023 – Present"
+					location="Remote"
+				>
 					<RoleText>
 						We help organizations build and scale highly functioning software
 						teams — with a focus on People, Process, and Product. We ignite
@@ -141,7 +145,11 @@ export default function Experience() {
 			</Company>
 
 			<Company name="Truefit" link="https://www.truefit.io">
-				<Role title="CTO" tenure="June 2015 – November 2024" location="Pittsburgh, PA">
+				<Role
+					title="CTO"
+					tenure="June 2015 – November 2024"
+					location="Pittsburgh, PA"
+				>
 					<RoleText>
 						Led the technical vision, engineering organization, and solutions
 						engineering efforts for a boutique software consultancy. Served as
@@ -215,7 +223,11 @@ export default function Experience() {
 					</RoleSection>
 				</Role>
 
-				<Role title="Director of Engineering" tenure="August 2013 – June 2015" location="Pittsburgh, PA">
+				<Role
+					title="Director of Engineering"
+					tenure="August 2013 – June 2015"
+					location="Pittsburgh, PA"
+				>
 					<RoleText>
 						Saw an organizational need and stepped up to fill it. Created the
 						Director of Engineering role to bridge technical leadership with
@@ -259,7 +271,11 @@ export default function Experience() {
 					</RoleSection>
 				</Role>
 
-				<Role title="Software Architect" tenure="May 2008 – August 2013" location="Pittsburgh, PA">
+				<Role
+					title="Software Architect"
+					tenure="May 2008 – August 2013"
+					location="Pittsburgh, PA"
+				>
 					<RoleText>
 						Led architecture and delivery across multiple simultaneous custom
 						software projects. Served as technical lead, client liaison, and
@@ -312,7 +328,11 @@ export default function Experience() {
 			</Company>
 
 			<Company name="Grove City College" link="https://www.gcc.edu">
-				<Role title="Adjunct Professor" tenure="May 2009 – May 2013" location="Grove City, PA">
+				<Role
+					title="Adjunct Professor"
+					tenure="May 2009 – May 2013"
+					location="Grove City, PA"
+				>
 					<ul>
 						<Bullet>
 							Developed and taught senior-level mobile development course
