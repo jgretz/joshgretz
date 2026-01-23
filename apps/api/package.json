@@ -11,7 +11,12 @@
     "@elysiajs/bearer": "^1.0.2",
     "@elysiajs/cors": "^1.0.2",
     "elysia": "latest",
-    "injectx": "^1.0.4"
+    "env": "workspace:*",
+    "injectx": "^1.0.4",
+    "ping": "workspace:*",
+    "running": "workspace:*",
+    "users": "workspace:*",
+    "workflow": "workspace:*"
   },
   "devDependencies": {
     "bun-types": "latest"

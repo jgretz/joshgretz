@@ -14,6 +14,13 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "injectx": "^1.0.4"
+    "env": "workspace:*",
+    "geoapify": "workspace:*",
+    "injectx": "^1.0.4",
+    "ping": "workspace:*",
+    "running": "workspace:*",
+    "strava": "workspace:*",
+    "users": "workspace:*",
+    "workflow": "workspace:*"
   }
 }

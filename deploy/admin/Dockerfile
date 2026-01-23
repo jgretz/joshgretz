@@ -1,5 +1,5 @@
 # Adjust BUN_VERSION as desired
-ARG BUN_VERSION=1.1.12
+ARG BUN_VERSION=1.3.5
 FROM oven/bun:${BUN_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Bun"
