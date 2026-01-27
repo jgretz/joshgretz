@@ -1,29 +1,13 @@
-import {vitePlugin as remix} from '@remix-run/dev';
-import {flatRoutes} from 'remix-flat-routes';
-import {defineConfig} from 'vite';
-import envOnly from 'vite-env-only';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vite';
+import tsConfigPaths from 'vite-tsconfig-paths';
+import { tanstackStart } from '@tanstack/react-start/plugin/vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  server: {
-    port: 3000,
-  },
+  server: { port: 3000 },
   plugins: [
-    envOnly(),
-    tsconfigPaths({root: './'}),
-    remix({
-      ignoredRouteFiles: ['**/*'],
-      serverModuleFormat: 'esm',
-      routes: async (defineRoutes) => {
-        return flatRoutes('routes', defineRoutes, {
-          ignoredRouteFiles: ['**/*.test.{js,jsx,ts,tsx}', '**/__*.*'],
-        });
-      },
-      future: {
-        v3_fetcherPersist: true,
-        v3_relativeSplatPath: true,
-        v3_throwAbortReason: true,
-      },
-    }),
+    tsConfigPaths({ ignoreConfigErrors: true }),
+    tanstackStart({ target: 'bun', customViteReactPlugin: true }),
+    react(),
   ],
 });

@@ -29,7 +29,7 @@
     "paths": {
       "@api": ["./apps/api/src/index.ts"],
       "@admin/*": ["./apps/admin/app/*"],
-      "@www/*": ["./apps/www/app/*"],
+      "@www/*": ["./apps/www/src/*"],
 
       "env": ["./packages/env/src/index.ts"],
       "database": ["./packages/database/index.ts"],
@@ -41,17 +41,5 @@
       "users": ["./packages/users/src/index.ts"],
       "workflow": ["./packages/workflow/src/index.ts"]
     }
-  },
-
-  "references": [
-    {"env": "./packages/env"},
-    {"database": "./packages/database"},
-    {"geoapify": "./packages/geoapify"},
-    {"ping": "./packages/ping"},
-    {"running": "./packages/running"},
-    {"strava": "./packages/strava"},
-    {"utility": "./packages/utility"},
-    {"users": "./packages/users"},
-    {"workflow": "./packages/workflow"}
-  ]
+  }
 }
