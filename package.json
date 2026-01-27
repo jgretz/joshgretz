@@ -15,12 +15,12 @@
     "packages/**"
   ],
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail bun:dev:*",
-    "dev:api": "cd apps/api && bun run dev",
-    "dev:minion": "cd apps/minion && bun run dev",
-    "dev:admin": "cd apps/admin && bun run dev",
-    "dev:www": "cd apps/www && bun run dev",
-    "dev:301": "cd apps/301 && bun run dev",
+    "dev": "bun run --cwd apps/api dev & bun run --cwd apps/www dev",
+    "dev:api": "bun run --cwd apps/api dev",
+    "dev:www": "bun run --cwd apps/www dev",
+    "dev:minion": "bun run --cwd apps/minion dev",
+    "dev:admin": "bun run --cwd apps/admin dev",
+    "dev:301": "bun run --cwd apps/301 dev",
 
     "build": "concurrently bun:build:*",
     "build:admin": "cd apps/admin && bun run build",

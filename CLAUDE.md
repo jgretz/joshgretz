@@ -37,15 +37,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies (from root)
 bun install
 
-# Development
-bun run --watch apps/api/src/index.ts      # API with hot reload
-bun run --watch apps/minion/src/index.ts   # Minion worker with hot reload
-bun ./apps/www/server.js                   # WWW frontend (NODE_ENV=development)
-bun ./apps/admin/server.js                 # Admin frontend (NODE_ENV=development)
+# Development (main - runs www + api together)
+bun run dev                 # www (3000) + api (3001)
 
-# Or use workspace scripts from app directories
-cd apps/www && bun run dev
-cd apps/api && bun run dev
+# Individual apps
+bun run dev:api             # API only (port 3001)
+bun run dev:www             # WWW only (port 3000)
+bun run dev:minion          # Background worker (separate)
+bun run dev:admin           # Admin (port 3000, not in main dev)
+bun run dev:301             # Redirect service (not in main dev)
 
 # Linting (frontend apps use Biome)
 cd apps/www && bun run lint
