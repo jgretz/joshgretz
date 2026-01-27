@@ -1,6 +1,6 @@
 import {isRouteErrorResponse, useRouteError} from '@remix-run/react';
 
-export function Error() {
+export function ErrorDisplay() {
   const error = useRouteError();
   let status = 500;
   let message = 'An unexpected error occurred.';

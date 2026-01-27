@@ -1,7 +1,7 @@
-import {useCallback, useState} from 'react';
 import {Button} from '@admin/components/ui/button';
 import ping from '@admin/services/joshgretz-api/ping/ping';
 import {formatRelative} from 'date-fns';
+import {useCallback, useState} from 'react';
 
 export default function Ping() {
   const [lastPing, setLastPing] = useState<Date | undefined>(undefined);
@@ -13,7 +13,7 @@ export default function Ping() {
     if (response.data?.alive) {
       setLastPing(new Date(response.data.timestamp));
     }
-  }, [ping]);
+  }, []);
 
   return (
     <div>

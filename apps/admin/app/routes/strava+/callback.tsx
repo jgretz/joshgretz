@@ -1,10 +1,10 @@
 import {ROUTES} from '@admin/constants/routes';
 import {getUser} from '@admin/services/auth/getUser';
 import setThirdPartyAccess from '@admin/services/joshgretz-api/users/setThirdPartyAccess';
-import {redirect, type LoaderFunctionArgs} from '@remix-run/node';
+import {type LoaderFunctionArgs, redirect} from '@remix-run/node';
 import {utilities} from 'strava';
 
-export async function loader({request}: LoaderFunctionArgs): Promise<{}> {
+export async function loader({request}: LoaderFunctionArgs) {
   // verify we have a logged in user
   const user = await getUser(request);
   if (!user) {

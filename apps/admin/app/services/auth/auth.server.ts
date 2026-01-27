@@ -1,8 +1,8 @@
 import {Authenticator, AuthorizationError} from 'remix-auth';
 import {GoogleStrategy} from 'remix-auth-google';
-import {sessionStorage} from '../session/session.server';
-import findUserByEmail from '../joshgretz-api/users/findUserByEmail';
 import type {User} from 'users';
+import findUserByEmail from '../joshgretz-api/users/findUserByEmail';
+import {sessionStorage} from '../session/session.server';
 
 const googleAuth = {
   clientID: process.env.GOOGLE_CLIENT_ID || '',
@@ -21,5 +21,5 @@ const googleStrategy = new GoogleStrategy(googleAuth, async ({profile}) => {
   throw new AuthorizationError(`Email ${email} is not an admin`);
 });
 
-export let authenticator = new Authenticator<User>(sessionStorage);
+export const authenticator = new Authenticator<User>(sessionStorage);
 authenticator.use(googleStrategy);

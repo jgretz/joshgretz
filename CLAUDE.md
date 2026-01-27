@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Important:** If `CLAUDE-LOCAL.md` exists in the repository root, read and follow its instructions as well. It contains local/session-specific rules that supplement this file.
+
 ## Build & Development Commands
 
 ```bash

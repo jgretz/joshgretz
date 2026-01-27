@@ -1,14 +1,14 @@
-import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
 import type {LoaderFunctionArgs} from '@remix-run/node';
+import {Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
 
 import './globals.css';
 
+import {ErrorDisplay} from './components/error';
 import {GlobalPendingIndicator} from './components/global-pending-indicator';
 import {Header} from './components/header';
-import {Error} from './components/error';
 
-import {getUser} from './services/auth/getUser';
 import Login from './components/login';
+import {getUser} from './services/auth/getUser';
 import {getClientEnv} from './utils/env.server';
 
 export async function loader({request}: LoaderFunctionArgs) {
@@ -62,7 +62,7 @@ export default function Root() {
 export function ErrorBoundary() {
   return (
     <App>
-      <Error />
+      <ErrorDisplay />
     </App>
   );
 }

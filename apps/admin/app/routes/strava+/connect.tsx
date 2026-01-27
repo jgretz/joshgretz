@@ -8,7 +8,10 @@ import {utilities} from 'strava';
 
 export async function loader({request}: LoaderFunctionArgs) {
   const user = await getUser(request);
-  const access = await getThirdPartyAccess(user!);
+  if (!user) {
+    return {user: null, access: null, authUrl: ''};
+  }
+  const access = await getThirdPartyAccess(user);
 
   const url = new URL(request.url);
   const authUrl = utilities.generateAuthUrl(
