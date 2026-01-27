@@ -2,7 +2,34 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**Important:** If `CLAUDE-LOCAL.md` exists in the repository root, read and follow its instructions as well. It contains local/session-specific rules that supplement this file.
+## Critical Rules (Always Follow)
+
+- Do what's asked; nothing more, nothing less
+- Be terse in explanations
+- Read CLAUDE-LOCAL.md for local rules and working notes
+- On context restore: re-read this file and all imports
+- After context clear: re-read this file and all imports
+
+## Code Style
+
+- Prettier: single quotes, semicolons, trailing commas
+- ES modules only (import/export), destructure imports
+- Functional > OO > procedural
+- Prefer `() =>` over `function()`
+- Small composable functions
+- Comments for "why" not "what", be terse
+
+## Architecture
+
+- Follow SOLID principles
+- Prefer pattern matching (ts-pattern) over if/else chains
+- React: state-based layout principles, keep layouts clean
+
+## Imports
+
+#.claude/rules/typescript.md
+#.claude/rules/testing.md
+#.claude/rules/git.md
 
 ## Build & Development Commands
 
@@ -64,9 +91,3 @@ This is a Bun monorepo for joshgretz.com with workspaces in `apps/*` and `packag
 - **API Composition**: API routes are Elysia plugins. The main API imports and `.use()`s them.
 - **Message Bus**: Minion worker composes message handlers with `new ServiceBus().use(Bus1).use(Bus2).start()`.
 - **Path Aliases**: tsconfig defines aliases like `database`, `strava`, `users` pointing to package entry points.
-
-## Code Style
-
-- Prettier: single quotes, no bracket spacing, trailing commas
-- Frontend apps: Biome for linting with recommended rules
-- TypeScript strict mode enabled
