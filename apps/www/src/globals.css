@@ -4,36 +4,33 @@
 
 @layer base {
   :root {
-    --background: #fff;
-    --foreground: #000;
+    --background: 39 100% 97%;
+    --foreground: 184 7% 19%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 184 7% 19%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 184 7% 19%;
 
-    --primary: #f98866;
-    --primary-foreground: 210 40% 98%;
+    --primary: 27 53% 36%;
+    --primary-foreground: 39 100% 97%;
 
-    --secondary: #333;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 30 26% 29%;
+    --secondary-foreground: 39 100% 97%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 32 32% 87%;
+    --muted-foreground: 30 22% 44%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 32 32% 87%;
+    --accent-foreground: 184 7% 19%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 39 100% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --border-dark: 217.2 32.6% 17.5%;
-    --input-dark: 217.2 32.6% 17.5%;
-    --ring-dark: 212.7 26.8% 83.9%;
+    --border: 30 26% 29% / 0.15;
+    --input: 30 26% 29% / 0.15;
+    --ring: 27 53% 36%;
 
     --radius: 0.5rem;
   }
@@ -43,7 +40,38 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply min-h-screen bg-warm-gradient font-sans text-warm-700;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

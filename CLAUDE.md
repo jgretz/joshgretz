@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Read CLAUDE-LOCAL.md for local rules and working notes
 - On context restore: re-read this file and all imports
 - After context clear: re-read this file and all imports
+- Be a good boy scout - if you encounter errors, even if they were pre-existing, fix them
 
 ## Code Style
 

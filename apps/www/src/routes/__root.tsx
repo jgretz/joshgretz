@@ -1,22 +1,26 @@
-import {
-  createRootRoute,
-  HeadContent,
-  Outlet,
-  Scripts,
-} from '@tanstack/react-router';
-import Bar from '../components/side/bar';
-import { GlobalPendingIndicator } from '../components/global-pending-indicator';
-import { DefaultCatchBoundary } from '../components/default-catch-boundary';
-import { NotFound } from '../components/not-found';
+import {HeadContent, Outlet, Scripts, createRootRoute, useLocation} from '@tanstack/react-router';
+import {DefaultCatchBoundary} from '../components/default-catch-boundary';
+import {GlobalPendingIndicator} from '../components/global-pending-indicator';
+import {Nav} from '../components/layout/nav';
+import {NotFound} from '../components/not-found';
 import '../globals.css';
 
 export const Route = createRootRoute({
   head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    meta: [{charSet: 'utf-8'}, {name: 'viewport', content: 'width=device-width, initial-scale=1'}],
+    links: [
+      {rel: 'icon', type: 'image/png', href: '/favicon.png'},
+      {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=DM+Sans:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap',
+      },
     ],
-    links: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
   }),
   errorComponent: (props) => {
     return (
@@ -37,7 +41,10 @@ function RootComponent() {
   );
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({children}: {children: React.ReactNode}) {
+  const {pathname} = useLocation();
+  const hideNav = pathname === '/print-resume';
+
   return (
     <html lang="en">
       <head>
@@ -45,12 +52,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <GlobalPendingIndicator />
-        <div className="side absolute left-0 top-0 z-10 w-full bg-black text-white sm:fixed sm:h-full sm:w-[200px]">
-          <Bar />
-        </div>
-        <div className="absolute left-0 top-[240px] z-0 w-full bg-background text-black sm:top-0 sm:min-h-screen sm:pl-[200px]">
-          {children}
-        </div>
+        {!hideNav && <Nav />}
+        {children}
         <Scripts />
       </body>
     </html>

@@ -1,7 +1,3 @@
-function lightDarkVar(baseName) {
-  return `var(--theme-light, hsl(var(--${baseName}))) var(--theme-dark, hsl(var(--${baseName}-dark)))`;
-}
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -22,39 +18,60 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: lightDarkVar('border'),
-        input: lightDarkVar('input'),
-        ring: lightDarkVar('ring'),
-        background: lightDarkVar('background'),
-        foreground: lightDarkVar('foreground'),
+        warm: {
+          50: '#fef9f3',
+          100: '#f5ebe0',
+          200: '#e8dfd5',
+          300: '#d5c4a1',
+          400: '#c4a574',
+          500: '#8b7355',
+          600: '#8b5a2b',
+          700: '#5d4e37',
+          800: '#2d3436',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: lightDarkVar('primary'),
-          foreground: lightDarkVar('primary-foreground'),
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
-          DEFAULT: lightDarkVar('secondary'),
-          foreground: lightDarkVar('secondary-foreground'),
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
         destructive: {
-          DEFAULT: lightDarkVar('destructive'),
-          foreground: lightDarkVar('destructive-foreground'),
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {
-          DEFAULT: lightDarkVar('muted'),
-          foreground: lightDarkVar('muted-foreground'),
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: lightDarkVar('accent'),
-          foreground: lightDarkVar('accent-foreground'),
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
         },
         popover: {
-          DEFAULT: lightDarkVar('popover'),
-          foreground: lightDarkVar('popover-foreground'),
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
         card: {
-          DEFAULT: lightDarkVar('card'),
-          foreground: lightDarkVar('card-foreground'),
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
+      },
+      fontFamily: {
+        serif: ['Libre Baskerville', 'Georgia', 'serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        hand: ['Caveat', 'cursive'],
+      },
+      backgroundImage: {
+        'warm-gradient':
+          'linear-gradient(135deg, #fef9f3 0%, #f5ebe0 30%, #e8dfd5 60%, #d5c4a1 100%)',
+        'nav-fade': 'linear-gradient(to bottom, rgba(254,249,243,0.95), transparent)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -84,106 +101,44 @@ module.exports = {
       transformOrigin: {
         'left-right': '0% 50%',
       },
-      typography: () => ({
+      typography: {
         DEFAULT: {
           css: {
-            color: lightDarkVar('foreground'),
-            '[class~="lead"]': {
-              color: lightDarkVar('foreground'),
-            },
-            a: {
-              color: lightDarkVar('primary'),
-            },
-            strong: {
-              color: lightDarkVar('foreground'),
-            },
-            'a strong': {
-              color: lightDarkVar('primary'),
-            },
-            'blockquote strong': {
-              color: lightDarkVar('foreground'),
-            },
-            'thead th strong': {
-              color: lightDarkVar('foreground'),
-            },
-            'ol > li::marker': {
-              color: lightDarkVar('foreground'),
-            },
-            'ul > li::marker': {
-              color: lightDarkVar('foreground'),
-            },
-            dt: {
-              color: lightDarkVar('foreground'),
-            },
-            blockquote: {
-              color: lightDarkVar('foreground'),
-            },
-            h1: {
-              color: lightDarkVar('foreground'),
-            },
-            'h1 strong': {
-              color: lightDarkVar('foreground'),
-            },
-            h2: {
-              color: lightDarkVar('foreground'),
-            },
-            'h2 strong': {
-              color: lightDarkVar('foreground'),
-            },
-            h3: {
-              color: lightDarkVar('foreground'),
-            },
-            'h3 strong': {
-              color: lightDarkVar('foreground'),
-            },
-            h4: {
-              color: lightDarkVar('foreground'),
-            },
-            'h4 strong': {
-              color: lightDarkVar('foreground'),
-            },
-            kbd: {
-              color: lightDarkVar('foreground'),
-            },
-            code: {
-              color: lightDarkVar('foreground'),
-            },
-            'a code': {
-              color: lightDarkVar('primary'),
-            },
-            'h1 code': {
-              color: lightDarkVar('foreground'),
-            },
-            'h2 code': {
-              color: lightDarkVar('foreground'),
-            },
-            'h3 code': {
-              color: lightDarkVar('foreground'),
-            },
-            'h4 code': {
-              color: lightDarkVar('foreground'),
-            },
-            'blockquote code': {
-              color: lightDarkVar('foreground'),
-            },
-            'thead th code': {
-              color: lightDarkVar('foreground'),
-            },
-            pre: {
-              color: lightDarkVar('foreground'),
-            },
-            'pre code': {
-              color: lightDarkVar('foreground'),
-            },
-            'thead th': {
-              color: lightDarkVar('foreground'),
-            },
-            figcaption: {
-              color: lightDarkVar('foreground'),
-            },
+            color: '#5d4e37',
+            '[class~="lead"]': {color: '#5d4e37'},
+            a: {color: '#8b5a2b'},
+            strong: {color: '#2d3436'},
+            'a strong': {color: '#8b5a2b'},
+            'blockquote strong': {color: '#2d3436'},
+            'thead th strong': {color: '#2d3436'},
+            'ol > li::marker': {color: '#5d4e37'},
+            'ul > li::marker': {color: '#5d4e37'},
+            dt: {color: '#2d3436'},
+            blockquote: {color: '#5d4e37'},
+            h1: {color: '#2d3436'},
+            'h1 strong': {color: '#2d3436'},
+            h2: {color: '#2d3436'},
+            'h2 strong': {color: '#2d3436'},
+            h3: {color: '#2d3436'},
+            'h3 strong': {color: '#2d3436'},
+            h4: {color: '#2d3436'},
+            'h4 strong': {color: '#2d3436'},
+            kbd: {color: '#5d4e37'},
+            code: {color: '#5d4e37'},
+            'a code': {color: '#8b5a2b'},
+            'h1 code': {color: '#2d3436'},
+            'h2 code': {color: '#2d3436'},
+            'h3 code': {color: '#2d3436'},
+            'h4 code': {color: '#2d3436'},
+            'blockquote code': {color: '#5d4e37'},
+            'thead th code': {color: '#2d3436'},
+            pre: {color: '#5d4e37'},
+            'pre code': {color: '#5d4e37'},
+            'thead th': {color: '#2d3436'},
+            figcaption: {color: '#8b7355'},
           },
         },
-      }),
+      },
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],

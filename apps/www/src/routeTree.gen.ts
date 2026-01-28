@@ -9,13 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RunningRouteImport } from './routes/running'
 import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as PrintResumeRouteImport } from './routes/print-resume'
 import { Route as HealthcheckRouteImport } from './routes/healthcheck'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RunningRoute = RunningRouteImport.update({
+  id: '/running',
+  path: '/running',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrintResumeRoute = PrintResumeRouteImport.update({
+  id: '/print-resume',
+  path: '/print-resume',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthcheckRoute = HealthcheckRouteImport.update({
@@ -32,40 +44,68 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/healthcheck': typeof HealthcheckRoute
+  '/print-resume': typeof PrintResumeRoute
   '/resume': typeof ResumeRoute
+  '/running': typeof RunningRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/healthcheck': typeof HealthcheckRoute
+  '/print-resume': typeof PrintResumeRoute
   '/resume': typeof ResumeRoute
+  '/running': typeof RunningRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/healthcheck': typeof HealthcheckRoute
+  '/print-resume': typeof PrintResumeRoute
   '/resume': typeof ResumeRoute
+  '/running': typeof RunningRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/healthcheck' | '/resume'
+  fullPaths: '/' | '/healthcheck' | '/print-resume' | '/resume' | '/running'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/healthcheck' | '/resume'
-  id: '__root__' | '/' | '/healthcheck' | '/resume'
+  to: '/' | '/healthcheck' | '/print-resume' | '/resume' | '/running'
+  id:
+    | '__root__'
+    | '/'
+    | '/healthcheck'
+    | '/print-resume'
+    | '/resume'
+    | '/running'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HealthcheckRoute: typeof HealthcheckRoute
+  PrintResumeRoute: typeof PrintResumeRoute
   ResumeRoute: typeof ResumeRoute
+  RunningRoute: typeof RunningRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/running': {
+      id: '/running'
+      path: '/running'
+      fullPath: '/running'
+      preLoaderRoute: typeof RunningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resume': {
       id: '/resume'
       path: '/resume'
       fullPath: '/resume'
       preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/print-resume': {
+      id: '/print-resume'
+      path: '/print-resume'
+      fullPath: '/print-resume'
+      preLoaderRoute: typeof PrintResumeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/healthcheck': {
@@ -88,7 +128,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HealthcheckRoute: HealthcheckRoute,
+  PrintResumeRoute: PrintResumeRoute,
   ResumeRoute: ResumeRoute,
+  RunningRoute: RunningRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
