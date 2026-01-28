@@ -12,7 +12,6 @@
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "injectx": "^1.0.4",
-    "utility": "workspace:*",
-    "workflow": "workspace:*"
+    "utility": "workspace:*"
   }
 }

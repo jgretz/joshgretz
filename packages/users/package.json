@@ -11,10 +11,8 @@
   "dependencies": {
     "database": "workspace:*",
     "drizzle-orm": "^0.30.10",
-    "elysia": "^1.0.20",
     "injectx": "^1.0.4",
     "pg": "^8.11.5",
-    "postgres": "^3.4.4",
-    "workflow": "workspace:*"
+    "postgres": "^3.4.4"
   }
 }

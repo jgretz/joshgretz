@@ -44,8 +44,6 @@ bun run dev                 # www (3000) + api (3001)
 # Individual apps
 bun run dev:api             # API only (port 3001)
 bun run dev:www             # WWW only (port 3000)
-bun run dev:minion          # Background worker (separate)
-bun run dev:admin           # Admin (port 3000, not in main dev)
 bun run dev:301             # Redirect service (not in main dev)
 
 # Linting (frontend apps use Biome)
@@ -61,10 +59,9 @@ bun run generate  # drizzle-kit generate
 bun run push      # drizzle-kit push
 
 # Deploy to Fly.io
-bun run deploy-api
-bun run deploy-www
-bun run deploy-admin
-bun run deploy-301
+bun run deploy:api
+bun run deploy:www
+bun run deploy:301
 ```
 
 ## Architecture
@@ -73,22 +70,23 @@ This is a Bun monorepo for joshgretz.com with workspaces in `apps/*` and `packag
 
 ### Apps
 
-- **api** - Elysia REST API with bearer auth. Composes routes from domain packages (users, running, ping). Uses `injectx` for dependency injection.
-- **www** - Public website. Remix + Vite + Express, styled with Tailwind. Uses `remix-flat-routes` for file-based routing.
-- **admin** - Admin dashboard. Same stack as www.
-- **minion** - Background worker consuming RabbitMQ messages via `ServiceBus` from the `workflow` package.
+- **api** - Elysia REST API with bearer auth. Routes defined in `src/routes/`. Uses `injectx` for dependency injection.
+- **www** - Public website + admin section. TanStack Start + Vite, styled with Tailwind. Admin routes at `/admin/*` require Google OAuth login.
 - **301** - Redirect service for alternate domains (joshgretz.io, .bio, .dev, .us).
 
 ### Packages (shared libraries)
 
 - **database** - Drizzle ORM with PostgreSQL. Schema in `schema/`. Creates database connections via `createDatabase()`.
 - **env** - Environment variable parsing with Zod via `parseEnv()`.
-- **workflow** - RabbitMQ message bus (`ServiceBus`) for inter-service communication.
-- **users**, **running**, **ping**, **strava**, **geoapify** - Domain packages exporting `Api` (Elysia routes), `Bus` (message handlers), and container setup functions.
+- **users** - User domain: `findUserByEmail()`, `thirdPartyAccessForUser()`, `setThirdPartyAccessForUser()`.
+- **running** - Running domain: `importActivitiesForDateRange()`, activity queries.
+- **strava** - Strava API client: `getActivities()`, `generateAuthUrl()`, `requestAuthToken()`.
+- **ping** - Simple health check endpoint.
+- **geoapify** - Geolocation API client for reverse geocoding.
 
 ### Key Patterns
 
 - **Dependency Injection**: Packages use `injectx` for DI. Call `setupXContainer()` at app startup to bind dependencies.
-- **API Composition**: API routes are Elysia plugins. The main API imports and `.use()`s them.
-- **Message Bus**: Minion worker composes message handlers with `new ServiceBus().use(Bus1).use(Bus2).start()`.
+- **API Routes**: Routes are Elysia plugins defined in `apps/api/src/routes/`. Guarded with bearer token auth.
+- **Admin Auth**: www admin section uses Google OAuth. Session stored in cookie. Protected routes use `requireAuth` beforeLoad guard.
 - **Path Aliases**: tsconfig defines aliases like `database`, `strava`, `users` pointing to package entry points.

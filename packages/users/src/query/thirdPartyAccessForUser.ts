@@ -1,10 +1,10 @@
 import {eq} from 'drizzle-orm';
-import type {User, UsersContainer} from '../Types';
+import type {UsersContainer} from '../Types';
 import {Schema} from 'database';
 import {InjectIn} from 'injectx';
 
-const query = function ({database}: UsersContainer) {
-  return async function (user: User) {
+const query = ({database}: UsersContainer) => {
+  return async (user: {id: number}) => {
     const access = await database.query.thirdPartyAccess.findFirst({
       where: eq(Schema.thirdPartyAccess.user_id, user.id),
     });

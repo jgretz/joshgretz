@@ -1,11 +1,12 @@
 import {GetContainer} from 'injectx';
-import type {UsersConfig} from './Types.ts';
+import type {UsersConfig} from './Types';
 import {createDatabase} from 'database';
 
-export * from './Types.ts';
-export {Api} from './api/index';
-export {Bus} from './bus/index';
+export * from './Types';
+export {findUserByEmail} from './query/findUserByEmail';
+export {thirdPartyAccessForUser} from './query/thirdPartyAccessForUser';
+export {setThirdPartyAccessForUser} from './command/setThirdPartyAccessForUser';
 
-export function setupUserContainer({databaseUrl}: UsersConfig) {
+export const setupUserContainer = ({databaseUrl}: UsersConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});
-}
+};

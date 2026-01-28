@@ -56,7 +56,3 @@ export interface StravaConfig {
 export interface StravaContainer {
   accessToken: string;
 }
-
-export enum StravaMessages {
-  LoadActivitiesForDateRange = 'loadactivitiesfordaterange',
-}

@@ -1,13 +1,3 @@
-import type {Database} from 'database';
-
-export interface UsersConfig {
-  databaseUrl: string;
-}
-
-export interface UsersContainer {
-  database: Database;
-}
-
 export interface User {
   id: number;
   name: string;

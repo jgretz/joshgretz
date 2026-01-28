@@ -1,43 +1,45 @@
 import Elysia from 'elysia';
-import {setupUserContainer, Api as UsersApi} from 'users';
-import {setupRunningContainer, Api as RunningApi} from 'running';
-import {Api as Ping} from 'ping';
-import Health from './health';
+import {setupUserContainer} from 'users';
+import {setupRunningContainer} from 'running';
+import {setupGeoapifyContainer} from 'geoapify';
+import health from './routes/health';
+import users from './routes/users';
+import running from './routes/running';
+import strava from './routes/strava';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
-import {setupWorkflowContainer} from 'workflow';
 import {parseEnv} from 'env';
 
 // environment
 const envSchema = z.object({
   PORT: z.string(),
   DATABASE_URL: z.string(),
-  AMQP_URL: z.string(),
-  AMQP_EXCHANGE: z.string(),
   HELMET: z.string(),
+  GEOAPIFY_API_KEY: z.string(),
 });
 const env = parseEnv(envSchema);
 
 // setup IOC / DI containers
 setupUserContainer({databaseUrl: env.DATABASE_URL});
 setupRunningContainer({databaseUrl: env.DATABASE_URL});
-setupWorkflowContainer({amqpUrl: env.AMQP_URL, exchange: env.AMQP_EXCHANGE});
+setupGeoapifyContainer({apiKey: env.GEOAPIFY_API_KEY});
 
 // run
 const root = new Elysia()
-  .use(Health)
+  .use(health)
   .use(cors())
   .use(bearer())
   .guard(
     {
       beforeHandle({set, bearer}) {
-        if (bearer !== env.HELMET) return (set.status = 'Unauthorized');
+        if (bearer !== env.HELMET) {
+          set.status = 401;
+          return 'Unauthorized';
+        }
       },
     },
-    (app) => {
-      return app.use(UsersApi).use(RunningApi).use(Ping);
-    },
+    (app) => app.use(users).use(running).use(strava),
   )
   .listen(env.PORT);
 

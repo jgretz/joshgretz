@@ -7,7 +7,3 @@ export interface RunningConfig {
 export interface RunningContainer {
   database: Database;
 }
-
-export const RunningWorkflows = {
-  ImportStravaActivitiesForDateRange: 'importStravaActivitiesForDateRange',
-};

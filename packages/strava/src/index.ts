@@ -1,13 +1,14 @@
 import {GetContainer} from 'injectx';
-import type {StravaConfig} from './Types.ts';
-import generateAuthUrl from './auth/generateAuthUrl.ts';
-import requestAuthToken from './auth/requestAuthToken.ts';
+import type {StravaConfig} from './Types';
+import generateAuthUrl from './auth/generateAuthUrl';
+import requestAuthToken from './auth/requestAuthToken';
+import getActivities from './activities/getActivities';
+import getActivity from './activities/getActivity';
 
-export * from './Types.ts';
-export {Bus} from './bus/index.ts';
+export * from './Types';
 
-export function setupStravaContainer({accessToken}: StravaConfig) {
+export const setupStravaContainer = ({accessToken}: StravaConfig) => {
   GetContainer().Bind(accessToken, {name: 'accessToken'});
-}
+};
 
-export const utilities = {generateAuthUrl, requestAuthToken};
+export {generateAuthUrl, requestAuthToken, getActivities, getActivity};

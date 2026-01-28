@@ -3,9 +3,10 @@ import type {RunningConfig} from './Types';
 import {createDatabase} from 'database';
 
 export * from './Types';
-export {Api} from './api';
-export {Bus} from './bus';
+export * from './services';
+export {findActivityByStravaId} from './query/findActivityByStravaId';
+export {findFirstActivityByLatLon} from './query/findFirstActivityByLatLon';
 
-export function setupRunningContainer({databaseUrl}: RunningConfig) {
+export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});
-}
+};
