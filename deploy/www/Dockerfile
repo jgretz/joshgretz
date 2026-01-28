@@ -34,9 +34,9 @@ COPY --from=build /app/node_modules /app/node_modules
 
 # Maintain the monorepo structure for symlink resolution
 COPY --from=build /app/apps/www/node_modules /app/apps/www/node_modules
-COPY --from=build /app/apps/www/build /app/apps/www/build
+COPY --from=build /app/apps/www/dist /app/apps/www/dist
 COPY --from=build /app/apps/www/package.json /app/apps/www/package.json
-COPY --from=build /app/apps/www/server.js /app/apps/www/server.js
+COPY --from=build /app/apps/www/server.ts /app/apps/www/server.ts
 
 WORKDIR /app/apps/www
 
