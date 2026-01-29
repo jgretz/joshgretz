@@ -3,7 +3,6 @@ import {useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {getUserSession} from '../../../services/auth';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {
   deletePersonalRecord,
@@ -16,8 +15,8 @@ export const Route = createFileRoute('/admin/prs/')({
   head: () => ({
     meta: [{title: title('Personal Records')}],
   }),
-  loader: async () => {
-    const user = getUserSession();
+  loader: async ({context}) => {
+    const {user} = context as {user: {id: number} | null};
     if (!user) return {records: []};
     const records = await getPersonalRecords({data: {userId: user.id}});
     return {records};

@@ -40,6 +40,7 @@ const formatDate = (date: string | null): string => {
 };
 
 function ActivityLookup() {
+  const {user} = Route.useRouteContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [mode, setMode] = useState<SearchMode>('title');
   const [results, setResults] = useState<Activity[]>([]);
@@ -49,14 +50,14 @@ function ActivityLookup() {
   const handleSearch = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-      if (!searchTerm.trim()) return;
+      if (!searchTerm.trim() || !user) return;
 
       setLoading(true);
       setSearched(true);
       try {
         const data = await searchActivities({
           data: {
-            userId: 1,
+            userId: user.id,
             ...(mode === 'title' ? {q: searchTerm} : {stravaId: searchTerm}),
           },
         });
@@ -67,7 +68,7 @@ function ActivityLookup() {
         setLoading(false);
       }
     },
-    [searchTerm, mode],
+    [searchTerm, mode, user],
   );
 
   return (

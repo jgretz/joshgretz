@@ -2,6 +2,7 @@ import Elysia from 'elysia';
 import {setupUserContainer} from 'users';
 import {setupRunningContainer} from 'running';
 import {setupGeoapifyContainer} from 'geoapify';
+import {setupJobsContainer} from 'jobs';
 import health from './routes/health';
 import users from './routes/users';
 import running from './routes/running';
@@ -29,6 +30,7 @@ const env = parseEnv(envSchema);
 setupUserContainer({databaseUrl: env.DATABASE_URL});
 setupRunningContainer({databaseUrl: env.DATABASE_URL});
 setupGeoapifyContainer({apiKey: env.GEOAPIFY_API_KEY});
+setupJobsContainer({databaseUrl: env.DATABASE_URL});
 
 // run
 const root = new Elysia()

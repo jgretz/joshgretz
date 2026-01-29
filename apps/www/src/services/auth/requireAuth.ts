@@ -1,8 +1,14 @@
 import {redirect} from '@tanstack/react-router';
-import {isAuthenticated} from './auth-service';
+import type {User} from './types';
 
-export const requireAuth = ({location}: {location: {href: string}}) => {
-  if (!isAuthenticated()) {
+export const requireAuth = ({
+  context,
+  location,
+}: {
+  context: {user: User | null};
+  location: {href: string};
+}) => {
+  if (!context.user || !context.user.admin) {
     throw redirect({
       to: '/admin/login',
       search: {

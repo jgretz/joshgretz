@@ -3,7 +3,6 @@ import {useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {getUserSession} from '../../../services/auth';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {createPersonalRecord} from '../../../services/personal-records/personal-records-server';
 
@@ -17,7 +16,7 @@ export const Route = createFileRoute('/admin/prs/new')({
 
 function NewPersonalRecord() {
   const navigate = useNavigate();
-  const user = getUserSession();
+  const {user} = Route.useRouteContext();
   const [prTitle, setPrTitle] = useState('');
   const [minutes, setMinutes] = useState('');
   const [seconds, setSeconds] = useState('');

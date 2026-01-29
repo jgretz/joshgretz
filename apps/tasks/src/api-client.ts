@@ -87,5 +87,10 @@ export const storeActivity = async (userId: number, activity: StravaActivity): P
     headers: headers(),
     body: JSON.stringify({user_id: userId, activity}),
   });
-  if (!response.ok) throw new Error(`Failed to store activity: ${response.status}`);
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(
+      `Failed to store activity strava_id=${activity.id} type=${activity.type}: ${response.status} ${body}`,
+    );
+  }
 };

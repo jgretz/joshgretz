@@ -1,7 +1,6 @@
 import {createFileRoute} from '@tanstack/react-router';
 import {AdminLayout} from '../../components/layout/admin-layout';
 import {title} from '../../config.shared';
-import {getUserSession} from '../../services/auth';
 import {requireAuth} from '../../services/auth/requireAuth';
 
 export const Route = createFileRoute('/admin/')({
@@ -13,7 +12,7 @@ export const Route = createFileRoute('/admin/')({
 });
 
 function AdminDashboard() {
-  const user = getUserSession();
+  const {user} = Route.useRouteContext();
 
   return (
     <AdminLayout title="Admin Dashboard">

@@ -3,7 +3,6 @@ import {useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {getUserSession} from '../../../services/auth';
 import {importActivities} from '../../../services/auth/auth-server';
 import {requireAuth} from '../../../services/auth/requireAuth';
 
@@ -16,7 +15,7 @@ export const Route = createFileRoute('/admin/strava/import')({
 });
 
 function StravaImport() {
-  const user = getUserSession();
+  const {user} = Route.useRouteContext();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [loading, setLoading] = useState(false);

@@ -12,8 +12,6 @@ const envSchema = z.object({
   // Recovery config (optional)
   RETRY_INTERVAL_MS: z.string().optional(),
   MAX_RETRIES: z.string().optional(),
-  // Strava user for token lookups
-  STRAVA_USER_ID: z.coerce.number().optional(),
 });
 
 export const config = parseEnv(envSchema);

@@ -3,7 +3,6 @@ import {useCallback, useEffect, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {getUserSession} from '../../../services/auth';
 import {getStravaAuthUrl, getThirdPartyAccess} from '../../../services/auth/auth-server';
 import {requireAuth} from '../../../services/auth/requireAuth';
 
@@ -16,7 +15,7 @@ export const Route = createFileRoute('/admin/strava/connect')({
 });
 
 function StravaConnect() {
-  const user = getUserSession();
+  const {user} = Route.useRouteContext();
   const [isConnected, setIsConnected] = useState(false);
   const [loading, setLoading] = useState(true);
 

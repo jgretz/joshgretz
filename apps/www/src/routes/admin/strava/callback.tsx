@@ -1,13 +1,10 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {PageWrapper} from '../../../components/layout/page-wrapper';
-import {getUserSession} from '../../../services/auth';
 import {handleStravaCallback} from '../../../services/auth/auth-server';
-import {requireAuth} from '../../../services/auth/requireAuth';
 
 export const Route = createFileRoute('/admin/strava/callback')({
   component: StravaCallback,
-  beforeLoad: requireAuth,
   validateSearch: (search: Record<string, unknown>) => ({
     code: (search.code as string) || '',
     error: search.error as string | undefined,
@@ -17,9 +14,13 @@ export const Route = createFileRoute('/admin/strava/callback')({
 function StravaCallback() {
   const navigate = useNavigate();
   const {code, error: oauthError} = Route.useSearch();
+  const {user} = Route.useRouteContext();
   const [error, setError] = useState<string | null>(null);
+  const processed = useRef(false);
 
   useEffect(() => {
+    if (processed.current) return;
+
     if (oauthError) {
       setError(`Strava error: ${oauthError}`);
       return;
@@ -30,8 +31,9 @@ function StravaCallback() {
       return;
     }
 
+    processed.current = true;
+
     const processCallback = async () => {
-      const user = getUserSession();
       if (!user) {
         setError('Not authenticated');
         return;
@@ -46,7 +48,7 @@ function StravaCallback() {
     };
 
     processCallback();
-  }, [code, oauthError, navigate]);
+  }, [code, oauthError, navigate, user]);
 
   if (error) {
     return (

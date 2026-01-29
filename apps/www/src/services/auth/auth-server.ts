@@ -1,4 +1,5 @@
 import {createServerFn} from '@tanstack/react-start';
+import {getCookie} from '@tanstack/react-start/server';
 import type {User} from './types';
 
 interface GoogleTokenResponse {
@@ -22,6 +23,19 @@ const getEnv = () => ({
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   apiUrl: process.env.JOSHGRETZ_API_URL || 'http://localhost:3001',
   apiToken: process.env.HELMET || '',
+});
+
+export const getServerSession = createServerFn({
+  method: 'GET',
+}).handler(async (): Promise<User | null> => {
+  const encoded = getCookie('joshgretz-admin');
+  if (!encoded) return null;
+
+  try {
+    return JSON.parse(atob(encoded)) as User;
+  } catch {
+    return null;
+  }
 });
 
 export const getGoogleOAuthUrl = createServerFn({
@@ -211,9 +225,7 @@ export const handleStravaCallback = createServerFn({
     const env = getEnv();
 
     const response = await fetch(
-      `${env.apiUrl}/strava/oauth/callback?code=${encodeURIComponent(data.code)}&user_id=${
-        data.userId
-      }`,
+      `${env.apiUrl}/strava/oauth/callback?code=${encodeURIComponent(data.code)}&user_id=${data.userId}`,
       {
         headers: {Authorization: `Bearer ${env.apiToken}`},
       },

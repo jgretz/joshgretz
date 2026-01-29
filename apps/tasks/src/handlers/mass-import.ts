@@ -8,25 +8,47 @@ export interface MassImportPayload {
   to: string;
 }
 
-export const handleMassImport = async (payload: MassImportPayload): Promise<{imported: number}> => {
+export const handleMassImport = async (payload: MassImportPayload) => {
   const {user_id, from, to} = payload;
 
   console.log(`Starting mass import for user ${user_id} from ${from} to ${to}`);
 
-  // Get valid access token (with refresh if needed)
   const accessToken = await getValidAccessToken(user_id);
   setupStravaContainer({accessToken});
 
-  // Load activities from strava
   const activities = await getActivities({
     before: new Date(to),
     after: new Date(from),
   });
 
-  // Import activities via API
-  await Promise.all(activities.map((activity) => storeActivity(user_id, activity)));
+  const runs = activities.filter((a) => a.type === 'Run');
+  const skipped = activities.length - runs.length;
 
-  console.log(`Imported ${activities.length} activities for user ${user_id}`);
+  console.log(`Found ${activities.length} activities, ${runs.length} runs (skipping ${skipped} non-runs)`);
 
-  return {imported: activities.length};
+  const errors: {strava_id: number; type: string; error: string}[] = [];
+  let imported = 0;
+
+  for (const activity of runs) {
+    try {
+      await storeActivity(user_id, activity);
+      imported++;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      console.error(`Failed to store activity strava_id=${activity.id} type=${activity.type}:`, message);
+      console.error('Activity payload:', JSON.stringify(activity, null, 2));
+      errors.push({strava_id: activity.id, type: activity.type, error: message});
+    }
+  }
+
+  console.log(`Imported ${imported}/${activities.length} activities for user ${user_id}`);
+
+  if (errors.length > 0) {
+    console.error(`${errors.length} activities failed:`, errors);
+    throw new Error(
+      `Imported ${imported}/${activities.length}. Failed: ${errors.map((e) => `${e.strava_id} (${e.type}): ${e.error}`).join('; ')}`,
+    );
+  }
+
+  return {imported, total: activities.length};
 };
