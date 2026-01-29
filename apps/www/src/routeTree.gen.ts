@@ -18,6 +18,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/index'
 import { Route as AdminPrsIndexRouteImport } from './routes/admin/prs/index'
+import { Route as AdminActivitiesIndexRouteImport } from './routes/admin/activities/index'
 import { Route as AdminStravaImportRouteImport } from './routes/admin/strava/import'
 import { Route as AdminStravaConnectRouteImport } from './routes/admin/strava/connect'
 import { Route as AdminStravaCallbackRouteImport } from './routes/admin/strava/callback'
@@ -70,6 +71,11 @@ const AdminPrsIndexRoute = AdminPrsIndexRouteImport.update({
   path: '/admin/prs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminActivitiesIndexRoute = AdminActivitiesIndexRouteImport.update({
+  id: '/admin/activities/',
+  path: '/admin/activities/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminStravaImportRoute = AdminStravaImportRouteImport.update({
   id: '/admin/strava/import',
   path: '/admin/strava/import',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/admin/activities': typeof AdminActivitiesIndexRoute
   '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/strava': typeof AdminStravaIndexRoute
   '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/admin/activities': typeof AdminActivitiesIndexRoute
   '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/strava': typeof AdminStravaIndexRoute
   '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/admin/activities/': typeof AdminActivitiesIndexRoute
   '/admin/prs/': typeof AdminPrsIndexRoute
   '/admin/strava/': typeof AdminStravaIndexRoute
   '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/admin/activities'
     | '/admin/prs'
     | '/admin/strava'
     | '/admin/prs/$id/edit'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/admin/activities'
     | '/admin/prs'
     | '/admin/strava'
     | '/admin/prs/$id/edit'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/admin/activities/'
     | '/admin/prs/'
     | '/admin/strava/'
     | '/admin/prs/$id/edit'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   AdminStravaCallbackRoute: typeof AdminStravaCallbackRoute
   AdminStravaConnectRoute: typeof AdminStravaConnectRoute
   AdminStravaImportRoute: typeof AdminStravaImportRoute
+  AdminActivitiesIndexRoute: typeof AdminActivitiesIndexRoute
   AdminPrsIndexRoute: typeof AdminPrsIndexRoute
   AdminStravaIndexRoute: typeof AdminStravaIndexRoute
   AdminPrsIdEditRoute: typeof AdminPrsIdEditRoute
@@ -290,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPrsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/activities/': {
+      id: '/admin/activities/'
+      path: '/admin/activities'
+      fullPath: '/admin/activities'
+      preLoaderRoute: typeof AdminActivitiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/strava/import': {
       id: '/admin/strava/import'
       path: '/admin/strava/import'
@@ -348,6 +368,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminStravaCallbackRoute: AdminStravaCallbackRoute,
   AdminStravaConnectRoute: AdminStravaConnectRoute,
   AdminStravaImportRoute: AdminStravaImportRoute,
+  AdminActivitiesIndexRoute: AdminActivitiesIndexRoute,
   AdminPrsIndexRoute: AdminPrsIndexRoute,
   AdminStravaIndexRoute: AdminStravaIndexRoute,
   AdminPrsIdEditRoute: AdminPrsIdEditRoute,

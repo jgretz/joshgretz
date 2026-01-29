@@ -11,6 +11,7 @@ export {findPersonalRecordById} from './query/findPersonalRecordById';
 export {createPersonalRecord} from './command/createPersonalRecord';
 export {updatePersonalRecord} from './command/updatePersonalRecord';
 export {deletePersonalRecord} from './command/deletePersonalRecord';
+export {searchActivities} from './query/searchActivities';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

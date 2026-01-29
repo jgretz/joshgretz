@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
     ],
   },
   {label: 'Personal Records', to: '/admin/prs'},
+  {label: 'Activities', to: '/admin/activities'},
 ];
 
 const isActive = (pathname: string, to: string) =>

@@ -1,6 +1,6 @@
 import {Elysia, t} from 'elysia';
 import {Schema} from 'database';
-import {storeStravaActivity} from 'running';
+import {storeStravaActivity, searchActivities} from 'running';
 import {databasePlugin} from '../plugins/database';
 
 const importActivitiesSchema = {
@@ -65,6 +65,19 @@ const storeActivitySchema = {
 
 export default new Elysia({prefix: '/running'})
   .use(databasePlugin)
+  .get(
+    '/activities/search',
+    async ({query: {user_id, q, strava_id}}) => {
+      return await searchActivities({userId: user_id, query: q, stravaId: strava_id});
+    },
+    {
+      query: t.Object({
+        user_id: t.Numeric(),
+        q: t.Optional(t.String()),
+        strava_id: t.Optional(t.String()),
+      }),
+    },
+  )
   .post(
     '/activities/import-activities',
     async ({database, body: {user_id, from, to}}) => {
