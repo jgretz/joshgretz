@@ -17,10 +17,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/index'
+import { Route as AdminPrsIndexRouteImport } from './routes/admin/prs/index'
 import { Route as AdminStravaImportRouteImport } from './routes/admin/strava/import'
 import { Route as AdminStravaConnectRouteImport } from './routes/admin/strava/connect'
 import { Route as AdminStravaCallbackRouteImport } from './routes/admin/strava/callback'
+import { Route as AdminPrsNewRouteImport } from './routes/admin/prs/new'
 import { Route as AdminAuthCallbackRouteImport } from './routes/admin/auth/callback'
+import { Route as AdminPrsIdEditRouteImport } from './routes/admin/prs/$id.edit'
 
 const RunningRoute = RunningRouteImport.update({
   id: '/running',
@@ -62,6 +65,11 @@ const AdminStravaIndexRoute = AdminStravaIndexRouteImport.update({
   path: '/admin/strava/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPrsIndexRoute = AdminPrsIndexRouteImport.update({
+  id: '/admin/prs/',
+  path: '/admin/prs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminStravaImportRoute = AdminStravaImportRouteImport.update({
   id: '/admin/strava/import',
   path: '/admin/strava/import',
@@ -77,9 +85,19 @@ const AdminStravaCallbackRoute = AdminStravaCallbackRouteImport.update({
   path: '/admin/strava/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPrsNewRoute = AdminPrsNewRouteImport.update({
+  id: '/admin/prs/new',
+  path: '/admin/prs/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAuthCallbackRoute = AdminAuthCallbackRouteImport.update({
   id: '/admin/auth/callback',
   path: '/admin/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPrsIdEditRoute = AdminPrsIdEditRouteImport.update({
+  id: '/admin/prs/$id/edit',
+  path: '/admin/prs/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -92,10 +110,13 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin/prs/new': typeof AdminPrsNewRoute
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/strava': typeof AdminStravaIndexRoute
+  '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -106,10 +127,13 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin/prs/new': typeof AdminPrsNewRoute
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/strava': typeof AdminStravaIndexRoute
+  '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,10 +145,13 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin/prs/new': typeof AdminPrsNewRoute
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/admin/prs/': typeof AdminPrsIndexRoute
   '/admin/strava/': typeof AdminStravaIndexRoute
+  '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,10 +164,13 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin'
     | '/admin/auth/callback'
+    | '/admin/prs/new'
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/admin/prs'
     | '/admin/strava'
+    | '/admin/prs/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -151,10 +181,13 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin'
     | '/admin/auth/callback'
+    | '/admin/prs/new'
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/admin/prs'
     | '/admin/strava'
+    | '/admin/prs/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -165,10 +198,13 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/'
     | '/admin/auth/callback'
+    | '/admin/prs/new'
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/admin/prs/'
     | '/admin/strava/'
+    | '/admin/prs/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -180,10 +216,13 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminAuthCallbackRoute: typeof AdminAuthCallbackRoute
+  AdminPrsNewRoute: typeof AdminPrsNewRoute
   AdminStravaCallbackRoute: typeof AdminStravaCallbackRoute
   AdminStravaConnectRoute: typeof AdminStravaConnectRoute
   AdminStravaImportRoute: typeof AdminStravaImportRoute
+  AdminPrsIndexRoute: typeof AdminPrsIndexRoute
   AdminStravaIndexRoute: typeof AdminStravaIndexRoute
+  AdminPrsIdEditRoute: typeof AdminPrsIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -244,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStravaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/prs/': {
+      id: '/admin/prs/'
+      path: '/admin/prs'
+      fullPath: '/admin/prs'
+      preLoaderRoute: typeof AdminPrsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/strava/import': {
       id: '/admin/strava/import'
       path: '/admin/strava/import'
@@ -265,11 +311,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStravaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/prs/new': {
+      id: '/admin/prs/new'
+      path: '/admin/prs/new'
+      fullPath: '/admin/prs/new'
+      preLoaderRoute: typeof AdminPrsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/auth/callback': {
       id: '/admin/auth/callback'
       path: '/admin/auth/callback'
       fullPath: '/admin/auth/callback'
       preLoaderRoute: typeof AdminAuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/prs/$id/edit': {
+      id: '/admin/prs/$id/edit'
+      path: '/admin/prs/$id/edit'
+      fullPath: '/admin/prs/$id/edit'
+      preLoaderRoute: typeof AdminPrsIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -284,10 +344,13 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminAuthCallbackRoute: AdminAuthCallbackRoute,
+  AdminPrsNewRoute: AdminPrsNewRoute,
   AdminStravaCallbackRoute: AdminStravaCallbackRoute,
   AdminStravaConnectRoute: AdminStravaConnectRoute,
   AdminStravaImportRoute: AdminStravaImportRoute,
+  AdminPrsIndexRoute: AdminPrsIndexRoute,
   AdminStravaIndexRoute: AdminStravaIndexRoute,
+  AdminPrsIdEditRoute: AdminPrsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

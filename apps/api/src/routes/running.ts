@@ -1,5 +1,7 @@
 import {Elysia, t} from 'elysia';
-import {importActivitiesForDateRange} from 'running';
+import {Schema} from 'database';
+import {storeStravaActivity} from 'running';
+import {databasePlugin} from '../plugins/database';
 
 const importActivitiesSchema = {
   body: t.Object({
@@ -9,10 +11,79 @@ const importActivitiesSchema = {
   }),
 };
 
-export default new Elysia({prefix: '/running'}).post(
-  '/activities/import-activities',
-  async ({body: {user_id, from, to}}) => {
-    await importActivitiesForDateRange(user_id, from, to);
-  },
-  importActivitiesSchema,
-);
+const storeActivitySchema = {
+  body: t.Object({
+    user_id: t.Number(),
+    activity: t.Object({
+      athlete: t.Object({
+        id: t.Number(),
+        shoes: t.Array(
+          t.Object({
+            id: t.String(),
+            primary: t.Boolean(),
+            name: t.String(),
+            brand_name: t.String(),
+            model_name: t.String(),
+            description: t.String(),
+            resource_state: t.Number(),
+            distance: t.Number(),
+          }),
+        ),
+      }),
+      name: t.String(),
+      distance: t.Number(),
+      moving_time: t.Number(),
+      elapsed_time: t.Number(),
+      total_elevation_gain: t.Number(),
+      type: t.String(),
+      sport_type: t.String(),
+      workout_type: t.String(),
+      id: t.Number(),
+      start_date: t.String(),
+      start_date_local: t.String(),
+      timezone: t.String(),
+      utc_offset: t.Number(),
+      start_latlng: t.Array(t.Number()),
+      end_latlng: t.Array(t.Number()),
+      location_city: t.String(),
+      location_state: t.String(),
+      location_country: t.String(),
+      gear_id: t.String(),
+      average_speed: t.Number(),
+      max_speed: t.Number(),
+      average_cadence: t.Number(),
+      average_watts: t.Number(),
+      max_watts: t.Number(),
+      average_heartrate: t.Number(),
+      max_heartrate: t.Number(),
+      elev_high: t.Number(),
+      elev_low: t.Number(),
+      suffer_score: t.Number(),
+    }),
+  }),
+};
+
+export default new Elysia({prefix: '/running'})
+  .use(databasePlugin)
+  .post(
+    '/activities/import-activities',
+    async ({database, body: {user_id, from, to}}) => {
+      const [job] = await database
+        .insert(Schema.jobs)
+        .values({
+          type: 'mass-import',
+          payload: {user_id, from: from.toISOString(), to: to.toISOString()},
+        })
+        .returning({id: Schema.jobs.id});
+      return {job_id: job.id};
+    },
+    importActivitiesSchema,
+  )
+  .post(
+    '/activities',
+    async ({body: {user_id, activity}}) => {
+      await storeStravaActivity(activity, user_id);
+      return {success: true};
+    },
+    storeActivitySchema,
+  );

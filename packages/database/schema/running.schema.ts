@@ -74,3 +74,22 @@ export const gear = pgTable(
     };
   },
 );
+
+export const personalRecords = pgTable(
+  'personal_records',
+  {
+    id: serial('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    title: varchar('title', {length: 200}).notNull(),
+    time_seconds: integer('time_seconds').notNull(),
+    activity_id: integer('activity_id'),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+  },
+  (pr) => {
+    return {
+      userIdIdx: index('pr_user_id_idx').on(pr.user_id),
+      activityIdIdx: index('pr_activity_id_idx').on(pr.activity_id),
+    };
+  },
+);

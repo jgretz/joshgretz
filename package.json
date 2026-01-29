@@ -19,6 +19,7 @@
     "dev:api": "bun run --cwd apps/api dev",
     "dev:www": "bun run --cwd apps/www dev",
     "dev:301": "bun run --cwd apps/301 dev",
+    "dev:tasks": "bun run --cwd apps/tasks dev",
     "build": "concurrently bun:build:*",
     "build:www": "cd apps/www && bun run build",
     "typecheck": "concurrently bun:typecheck:*",
@@ -27,8 +28,11 @@
     "start:api": "cd apps/api && bun run start",
     "start:www": "cd apps/www && bun run start",
     "start:301": "cd apps/301 && bun run start",
+    "start:tasks": "cd apps/tasks && bun run start",
     "deploy:301": "fly deploy --config ./deploy/301/fly.toml --dockerfile ./deploy/301/Dockerfile",
     "deploy:api": "fly deploy --config ./deploy/api/fly.toml --dockerfile ./deploy/api/Dockerfile",
-    "deploy:www": "fly deploy --config ./deploy/www/fly.toml --dockerfile ./deploy/www/Dockerfile"
+    "deploy:www": "fly deploy --config ./deploy/www/fly.toml --dockerfile ./deploy/www/Dockerfile",
+    "db:generate": "bun run --cwd packages/database generate",
+    "db:migrate": "bun run --cwd packages/database migrate"
   }
 }

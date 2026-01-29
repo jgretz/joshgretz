@@ -21,8 +21,26 @@ const getEnv = () => ({
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   apiUrl: process.env.JOSHGRETZ_API_URL || 'http://localhost:3001',
-  apiToken: process.env.JOSHGRETZ_API_TOKEN || '',
+  apiToken: process.env.HELMET || '',
 });
+
+export const getGoogleOAuthUrl = createServerFn({
+  method: 'GET',
+})
+  .inputValidator((data: {redirectUri: string}) => data)
+  .handler(async ({data}) => {
+    const env = getEnv();
+    const params = new URLSearchParams({
+      client_id: env.googleClientId,
+      redirect_uri: data.redirectUri,
+      response_type: 'code',
+      scope: 'email profile',
+      access_type: 'offline',
+      prompt: 'consent',
+    });
+
+    return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  });
 
 export const exchangeCodeForUser = createServerFn({
   method: 'POST',
@@ -193,7 +211,9 @@ export const handleStravaCallback = createServerFn({
     const env = getEnv();
 
     const response = await fetch(
-      `${env.apiUrl}/strava/oauth/callback?code=${encodeURIComponent(data.code)}&user_id=${data.userId}`,
+      `${env.apiUrl}/strava/oauth/callback?code=${encodeURIComponent(data.code)}&user_id=${
+        data.userId
+      }`,
       {
         headers: {Authorization: `Bearer ${env.apiToken}`},
       },

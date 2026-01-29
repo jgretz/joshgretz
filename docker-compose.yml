@@ -1,0 +1,15 @@
+services:
+  pgboss:
+    image: postgres:16-alpine
+    container_name: joshgretz-pgboss
+    environment:
+      POSTGRES_USER: pgboss
+      POSTGRES_PASSWORD: pgboss
+      POSTGRES_DB: pgboss
+    ports:
+      - '5433:5432'
+    volumes:
+      - pgboss_data:/var/lib/postgresql/data
+
+volumes:
+  pgboss_data:

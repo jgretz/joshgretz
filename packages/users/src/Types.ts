@@ -19,4 +19,6 @@ export interface ThirdPartyAccess {
   strava_id?: number | null;
   strava_access_token?: string | null;
   strava_code?: string | null;
+  strava_refresh_token?: string | null;
+  strava_token_expires_at?: Date | null;
 }

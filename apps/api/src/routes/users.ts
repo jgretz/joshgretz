@@ -24,9 +24,11 @@ const thirdPartyAccessForUserQuerySchema = {
 const thirdPartyAccessForUserCommandSchema = {
   body: t.Object({
     user_id: t.Number(),
-    strava_id: t.Number(),
-    strava_access_token: t.String(),
-    strava_code: t.String(),
+    strava_id: t.Optional(t.Number()),
+    strava_access_token: t.Optional(t.String()),
+    strava_code: t.Optional(t.String()),
+    strava_refresh_token: t.Optional(t.String()),
+    strava_token_expires_at: t.Optional(t.Date()),
   }),
 };
 

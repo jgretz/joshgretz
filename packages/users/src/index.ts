@@ -4,6 +4,7 @@ import {createDatabase} from 'database';
 
 export * from './Types';
 export {findUserByEmail} from './query/findUserByEmail';
+export {findUserByStravaId} from './query/findUserByStravaId';
 export {thirdPartyAccessForUser} from './query/thirdPartyAccessForUser';
 export {setThirdPartyAccessForUser} from './command/setThirdPartyAccessForUser';
 

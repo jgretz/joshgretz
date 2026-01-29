@@ -1,9 +1,9 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
-import {requireAuth} from '../../../services/auth/requireAuth';
+import {PageWrapper} from '../../../components/layout/page-wrapper';
 import {getUserSession} from '../../../services/auth';
 import {handleStravaCallback} from '../../../services/auth/auth-server';
-import {PageWrapper} from '../../../components/layout/page-wrapper';
+import {requireAuth} from '../../../services/auth/requireAuth';
 
 export const Route = createFileRoute('/admin/strava/callback')({
   component: StravaCallback,
@@ -56,7 +56,10 @@ function StravaCallback() {
             <h1 className="mb-4 text-center font-serif text-xl text-red-800">Connection Failed</h1>
             <p className="text-center text-red-600">{error}</p>
             <div className="mt-6 text-center">
-              <a href="/admin/strava/connect" className="text-warm-600 underline hover:text-warm-800">
+              <a
+                href="/admin/strava/connect"
+                className="text-warm-600 underline hover:text-warm-800"
+              >
                 Try again
               </a>
             </div>

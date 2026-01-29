@@ -131,9 +131,7 @@ const GZIP_TYPES = (
  */
 const convertGlobToRegExp = (globPattern: string): RegExp => {
   // Escape regex special chars except *, then replace * with .*
-  const escapedPattern = globPattern
-    .replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&')
-    .replace(/\*/g, '.*');
+  const escapedPattern = globPattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*');
   return new RegExp(`^${escapedPattern}$`, 'i');
 };
 
@@ -200,17 +198,12 @@ const isFileEligibleForPreloading = (relativePath: string): boolean => {
  * Check if a MIME type is compressible
  */
 const isMimeTypeCompressible = (mimeType: string): boolean =>
-  GZIP_TYPES.some((type) =>
-    type.endsWith('/') ? mimeType.startsWith(type) : mimeType === type,
-  );
+  GZIP_TYPES.some((type) => (type.endsWith('/') ? mimeType.startsWith(type) : mimeType === type));
 
 /**
  * Conditionally compress data based on size and MIME type
  */
-const compressDataIfAppropriate = (
-  data: Uint8Array,
-  mimeType: string,
-): Uint8Array | undefined => {
+const compressDataIfAppropriate = (data: Uint8Array, mimeType: string): Uint8Array | undefined => {
   if (!ENABLE_GZIP) return undefined;
   if (data.byteLength < GZIP_MIN_BYTES) return undefined;
   if (!isMimeTypeCompressible(mimeType)) return undefined;
@@ -239,26 +232,22 @@ const createResponseHandler =
       if (ifNone && ifNone === asset.etag) {
         return new Response(null, {
           status: 304,
-          headers: { ETag: asset.etag },
+          headers: {ETag: asset.etag},
         });
       }
       headers.ETag = asset.etag;
     }
 
-    if (
-      ENABLE_GZIP &&
-      asset.gz &&
-      req.headers.get('accept-encoding')?.includes('gzip')
-    ) {
+    if (ENABLE_GZIP && asset.gz && req.headers.get('accept-encoding')?.includes('gzip')) {
       headers['Content-Encoding'] = 'gzip';
       headers['Content-Length'] = String(asset.gz.byteLength);
       const gzCopy = new Uint8Array(asset.gz);
-      return new Response(gzCopy, { status: 200, headers });
+      return new Response(gzCopy, {status: 200, headers});
     }
 
     headers['Content-Length'] = String(asset.raw.byteLength);
     const rawCopy = new Uint8Array(asset.raw);
-    return new Response(rawCopy, { status: 200, headers });
+    return new Response(rawCopy, {status: 200, headers});
   };
 
 /**
@@ -278,28 +267,19 @@ const createCompositeGlobPattern = (): Bun.Glob => {
  * Initialize static routes with intelligent preloading strategy
  * Small files are loaded into memory, large files are served on-demand
  */
-const initializeStaticRoutes = async (
-  clientDirectory: string,
-): Promise<PreloadResult> => {
-  const routes: Record<string, (req: Request) => Response | Promise<Response>> =
-    {};
+const initializeStaticRoutes = async (clientDirectory: string): Promise<PreloadResult> => {
+  const routes: Record<string, (req: Request) => Response | Promise<Response>> = {};
   const loaded: AssetMetadata[] = [];
   const skipped: AssetMetadata[] = [];
 
   log.info(`Loading static assets from ${clientDirectory}...`);
   if (VERBOSE) {
-    console.log(
-      `Max preload size: ${(MAX_PRELOAD_BYTES / 1024 / 1024).toFixed(2)} MB`,
-    );
+    console.log(`Max preload size: ${(MAX_PRELOAD_BYTES / 1024 / 1024).toFixed(2)} MB`);
     if (INCLUDE_PATTERNS.length > 0) {
-      console.log(
-        `Include patterns: ${process.env.ASSET_PRELOAD_INCLUDE_PATTERNS ?? ''}`,
-      );
+      console.log(`Include patterns: ${process.env.ASSET_PRELOAD_INCLUDE_PATTERNS ?? ''}`);
     }
     if (EXCLUDE_PATTERNS.length > 0) {
-      console.log(
-        `Exclude patterns: ${process.env.ASSET_PRELOAD_EXCLUDE_PATTERNS ?? ''}`,
-      );
+      console.log(`Exclude patterns: ${process.env.ASSET_PRELOAD_EXCLUDE_PATTERNS ?? ''}`);
     }
   }
 
@@ -307,7 +287,7 @@ const initializeStaticRoutes = async (
 
   try {
     const glob = createCompositeGlobPattern();
-    for await (const relativePath of glob.scan({ cwd: clientDirectory })) {
+    for await (const relativePath of glob.scan({cwd: clientDirectory})) {
       const filepath = path.join(clientDirectory, relativePath);
       const route = `/${relativePath.split(path.sep).join(path.posix.sep)}`;
 
@@ -345,7 +325,7 @@ const initializeStaticRoutes = async (
           };
           routes[route] = createResponseHandler(asset);
 
-          loaded.push({ ...metadata, size: bytes.byteLength });
+          loaded.push({...metadata, size: bytes.byteLength});
           totalPreloadedBytes += bytes.byteLength;
         } else {
           // Serve large or filtered files on-demand
@@ -370,15 +350,10 @@ const initializeStaticRoutes = async (
 
     // Show detailed file overview only when verbose mode is enabled
     if (VERBOSE && (loaded.length > 0 || skipped.length > 0)) {
-      const allFiles = [...loaded, ...skipped].sort((a, b) =>
-        a.route.localeCompare(b.route),
-      );
+      const allFiles = [...loaded, ...skipped].sort((a, b) => a.route.localeCompare(b.route));
 
       // Calculate max path length for alignment
-      const maxPathLength = Math.min(
-        Math.max(...allFiles.map((f) => f.route.length)),
-        60,
-      );
+      const maxPathLength = Math.min(Math.max(...allFiles.map((f) => f.route.length)), 60);
 
       // Format file size with KB and actual gzip size
       const formatFileSize = (bytes: number, gzBytes?: number) => {
@@ -404,13 +379,11 @@ const initializeStaticRoutes = async (
 
       if (loaded.length > 0) {
         console.log('\n📁 Preloaded into memory:');
-        console.log(
-          'Path                                          │    Size │ Gzip Size',
-        );
+        console.log('Path                                          │    Size │ Gzip Size');
         loaded
           .sort((a, b) => a.route.localeCompare(b.route))
           .forEach((file) => {
-            const { size, gzip } = formatFileSize(file.size);
+            const {size, gzip} = formatFileSize(file.size);
             const paddedPath = file.route.padEnd(maxPathLength);
             const sizeStr = `${size.padStart(7)} kB`;
             const gzipStr = `${gzip.padStart(7)} kB`;
@@ -420,13 +393,11 @@ const initializeStaticRoutes = async (
 
       if (skipped.length > 0) {
         console.log('\n💾 Served on-demand:');
-        console.log(
-          'Path                                          │    Size │ Gzip Size',
-        );
+        console.log('Path                                          │    Size │ Gzip Size');
         skipped
           .sort((a, b) => a.route.localeCompare(b.route))
           .forEach((file) => {
-            const { size, gzip } = formatFileSize(file.size);
+            const {size, gzip} = formatFileSize(file.size);
             const paddedPath = file.route.padEnd(maxPathLength);
             const sizeStr = `${size.padStart(7)} kB`;
             const gzipStr = `${gzip.padStart(7)} kB`;
@@ -438,9 +409,7 @@ const initializeStaticRoutes = async (
     // Show detailed verbose info if enabled
     if (VERBOSE) {
       if (loaded.length > 0 || skipped.length > 0) {
-        const allFiles = [...loaded, ...skipped].sort((a, b) =>
-          a.route.localeCompare(b.route),
-        );
+        const allFiles = [...loaded, ...skipped].sort((a, b) => a.route.localeCompare(b.route));
         console.log('\n📊 Detailed file information:');
         console.log(
           'Status       │ Path                            │ MIME Type                    │ Reason',
@@ -454,12 +423,11 @@ const initializeStaticRoutes = async (
               : !isPreloaded
                 ? 'filtered'
                 : 'preloaded';
-          const route =
-            file.route.length > 30
-              ? file.route.substring(0, 27) + '...'
-              : file.route;
+          const route = file.route.length > 30 ? file.route.substring(0, 27) + '...' : file.route;
           console.log(
-            `${status.padEnd(12)} │ ${route.padEnd(30)} │ ${file.type.padEnd(28)} │ ${reason.padEnd(10)}`,
+            `${status.padEnd(12)} │ ${route.padEnd(30)} │ ${file.type.padEnd(28)} │ ${reason.padEnd(
+              10,
+            )}`,
           );
         });
       } else {
@@ -471,7 +439,9 @@ const initializeStaticRoutes = async (
     console.log(); // Empty line for separation
     if (loaded.length > 0) {
       log.success(
-        `Preloaded ${String(loaded.length)} files (${(totalPreloadedBytes / 1024 / 1024).toFixed(2)} MB) into memory`,
+        `Preloaded ${String(loaded.length)} files (${(totalPreloadedBytes / 1024 / 1024).toFixed(
+          2,
+        )} MB) into memory`,
       );
     } else {
       log.info('No files preloaded into memory');
@@ -481,16 +451,16 @@ const initializeStaticRoutes = async (
       const tooLarge = skipped.filter((f) => f.size > MAX_PRELOAD_BYTES).length;
       const filtered = skipped.length - tooLarge;
       log.info(
-        `${String(skipped.length)} files will be served on-demand (${String(tooLarge)} too large, ${String(filtered)} filtered)`,
+        `${String(skipped.length)} files will be served on-demand (${String(
+          tooLarge,
+        )} too large, ${String(filtered)} filtered)`,
       );
     }
   } catch (error) {
-    log.error(
-      `Failed to load static files from ${clientDirectory}: ${String(error)}`,
-    );
+    log.error(`Failed to load static files from ${clientDirectory}: ${String(error)}`);
   }
 
-  return { routes, loaded, skipped };
+  return {routes, loaded, skipped};
 };
 
 /**
@@ -500,10 +470,10 @@ const initializeServer = async () => {
   log.header('Starting Production Server');
 
   // Load TanStack Start server handler
-  let handler: { fetch: (request: Request) => Response | Promise<Response> };
+  let handler: {fetch: (request: Request) => Response | Promise<Response>};
   try {
     const serverModule = (await import(SERVER_ENTRY_POINT)) as {
-      default: { fetch: (request: Request) => Response | Promise<Response> };
+      default: {fetch: (request: Request) => Response | Promise<Response>};
     };
     handler = serverModule.default;
     log.success('TanStack Start application handler initialized');
@@ -513,7 +483,7 @@ const initializeServer = async () => {
   }
 
   // Build static routes with intelligent preloading
-  const { routes } = await initializeStaticRoutes(CLIENT_DIRECTORY);
+  const {routes} = await initializeStaticRoutes(CLIENT_DIRECTORY);
 
   // Create Bun server
   const server = Bun.serve({
@@ -529,17 +499,15 @@ const initializeServer = async () => {
           return handler.fetch(req);
         } catch (error) {
           log.error(`Server handler error: ${String(error)}`);
-          return new Response('Internal Server Error', { status: 500 });
+          return new Response('Internal Server Error', {status: 500});
         }
       },
     },
 
     // Global error handler
     error(error) {
-      log.error(
-        `Uncaught server error: ${error instanceof Error ? error.message : String(error)}`,
-      );
-      return new Response('Internal Server Error', { status: 500 });
+      log.error(`Uncaught server error: ${error instanceof Error ? error.message : String(error)}`);
+      return new Response('Internal Server Error', {status: 500});
     },
   });
 

@@ -10,6 +10,8 @@
   "dependencies": {
     "@elysiajs/bearer": "^1.0.2",
     "@elysiajs/cors": "^1.0.2",
+    "database": "workspace:*",
+    "drizzle-orm": "^0.30.10",
     "elysia": "latest",
     "env": "workspace:*",
     "geoapify": "workspace:*",

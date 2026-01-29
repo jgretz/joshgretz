@@ -1,4 +1,4 @@
-import type {User, ThirdPartyAccess} from './types';
+import type {ThirdPartyAccess, User} from './types';
 
 const COOKIE_NAME = 'joshgretz-admin';
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7 days
@@ -39,20 +39,6 @@ export const clearUserSession = () => {
 export const isAuthenticated = (): boolean => {
   const user = getUserSession();
   return user !== null && user.admin === true;
-};
-
-export const getGoogleOAuthUrl = (redirectUri: string): string => {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const params = new URLSearchParams({
-    client_id: clientId,
-    redirect_uri: redirectUri,
-    response_type: 'code',
-    scope: 'email profile',
-    access_type: 'offline',
-    prompt: 'consent',
-  });
-
-  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 };
 
 export type {User, ThirdPartyAccess};

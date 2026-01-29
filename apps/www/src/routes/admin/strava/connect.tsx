@@ -1,11 +1,11 @@
-import {createFileRoute, Link} from '@tanstack/react-router';
+import {createFileRoute} from '@tanstack/react-router';
 import {useCallback, useEffect, useState} from 'react';
-import {requireAuth} from '../../../services/auth/requireAuth';
-import {getUserSession} from '../../../services/auth';
-import {getThirdPartyAccess, getStravaAuthUrl} from '../../../services/auth/auth-server';
-import {PageWrapper} from '../../../components/layout/page-wrapper';
+import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
+import {getUserSession} from '../../../services/auth';
+import {getStravaAuthUrl, getThirdPartyAccess} from '../../../services/auth/auth-server';
+import {requireAuth} from '../../../services/auth/requireAuth';
 
 export const Route = createFileRoute('/admin/strava/connect')({
   component: StravaConnect,
@@ -51,28 +51,17 @@ function StravaConnect() {
   const buttonText = isConnected ? 'Reconnect to Strava' : 'Connect to Strava';
 
   return (
-    <PageWrapper className="py-12">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="font-serif text-3xl text-warm-800">Connect to Strava</h1>
-          <Link to="/admin/strava" className="text-warm-600 hover:text-warm-800">
-            ← Back
-          </Link>
-        </div>
-
-        <div className="rounded-lg border border-warm-200 bg-white p-8">
-          {loading ? (
-            <p className="text-center text-warm-600">Loading...</p>
-          ) : (
-            <div className="text-center">
-              {isConnected && (
-                <p className="mb-6 text-green-600">✓ Your Strava account is connected</p>
-              )}
-              <Button onClick={handleConnect}>{buttonText}</Button>
-            </div>
-          )}
-        </div>
+    <AdminLayout title="Connect to Strava">
+      <div className="rounded-lg border border-warm-200 bg-white p-8">
+        {loading ? (
+          <p className="text-center text-warm-600">Loading...</p>
+        ) : (
+          <div className="text-center">
+            {isConnected && <p className="mb-6 text-green-600">Your Strava account is connected</p>}
+            <Button onClick={handleConnect}>{buttonText}</Button>
+          </div>
+        )}
       </div>
-    </PageWrapper>
+    </AdminLayout>
   );
 }

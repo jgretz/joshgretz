@@ -1,9 +1,10 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router';
 import {useCallback, useEffect} from 'react';
-import {getGoogleOAuthUrl, isAuthenticated} from '../../services/auth';
 import {PageWrapper} from '../../components/layout/page-wrapper';
 import {Button} from '../../components/ui/button';
 import {title} from '../../config.shared';
+import {isAuthenticated} from '../../services/auth';
+import {getGoogleOAuthUrl} from '../../services/auth/auth-server';
 
 export const Route = createFileRoute('/admin/login')({
   component: AdminLogin,
@@ -21,9 +22,9 @@ function AdminLogin() {
     }
   }, [navigate]);
 
-  const handleLogin = useCallback(() => {
+  const handleLogin = useCallback(async () => {
     const redirectUri = `${window.location.origin}/admin/auth/callback`;
-    const authUrl = getGoogleOAuthUrl(redirectUri);
+    const authUrl = await getGoogleOAuthUrl({data: {redirectUri}});
     window.location.href = authUrl;
   }, []);
 

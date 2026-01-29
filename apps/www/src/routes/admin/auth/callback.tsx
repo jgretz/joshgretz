@@ -1,8 +1,8 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
-import {exchangeCodeForUser} from '../../../services/auth/auth-server';
-import {setUserSession} from '../../../services/auth';
 import {PageWrapper} from '../../../components/layout/page-wrapper';
+import {setUserSession} from '../../../services/auth';
+import {exchangeCodeForUser} from '../../../services/auth/auth-server';
 
 export const Route = createFileRoute('/admin/auth/callback')({
   component: AuthCallback,

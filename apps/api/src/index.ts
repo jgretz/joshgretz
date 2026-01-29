@@ -6,6 +6,9 @@ import health from './routes/health';
 import users from './routes/users';
 import running from './routes/running';
 import strava from './routes/strava';
+import stravaWebhook from './routes/strava-webhook';
+import jobs from './routes/jobs';
+import personalRecords from './routes/personal-records';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
@@ -17,6 +20,8 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
   HELMET: z.string(),
   GEOAPIFY_API_KEY: z.string(),
+  STRAVA_WEBHOOK_VERIFY_TOKEN: z.string().optional(),
+  TASK_API_KEY: z.string().optional(),
 });
 const env = parseEnv(envSchema);
 
@@ -29,17 +34,18 @@ setupGeoapifyContainer({apiKey: env.GEOAPIFY_API_KEY});
 const root = new Elysia()
   .use(health)
   .use(cors())
+  .use(stravaWebhook)
   .use(bearer())
   .guard(
     {
       beforeHandle({set, bearer}) {
-        if (bearer !== env.HELMET) {
+        if (bearer !== env.HELMET && bearer !== env.TASK_API_KEY) {
           set.status = 401;
           return 'Unauthorized';
         }
       },
     },
-    (app) => app.use(users).use(running).use(strava),
+    (app) => app.use(users).use(running).use(strava).use(jobs).use(personalRecords),
   )
   .listen(env.PORT);
 

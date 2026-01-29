@@ -2,7 +2,7 @@
   "name": "database",
   "scripts": {
     "generate": "drizzle-kit generate",
-    "push": "drizzle-kit push"
+    "migrate": "bun drizzle-kit migrate"
   },
   "devDependencies": {
     "@types/bun": "latest",
