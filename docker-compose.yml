@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: pgboss
       POSTGRES_DB: pgboss
     ports:
-      - '5433:5432'
+      - '5434:5432'
     volumes:
       - pgboss_data:/var/lib/postgresql/data
 

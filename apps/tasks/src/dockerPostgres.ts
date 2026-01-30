@@ -10,7 +10,7 @@ interface DockerConfig {
 
 const getConfig = (): DockerConfig => ({
   containerName: process.env.PGBOSS_CONTAINER_NAME || 'joshgretz-pgboss',
-  port: parseInt(process.env.PGBOSS_DB_PORT || '5433', 10),
+  port: parseInt(process.env.PGBOSS_DB_PORT || '5434', 10),
   password: process.env.PGBOSS_DB_PASSWORD || 'pgboss_local_dev',
   database: 'pgboss',
   image: 'postgres:16-alpine',
