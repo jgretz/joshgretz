@@ -10,6 +10,7 @@ import strava from './routes/strava';
 import stravaWebhook from './routes/strava-webhook';
 import jobs from './routes/jobs';
 import personalRecords from './routes/personal-records';
+import futureRaces from './routes/future-races';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
@@ -47,7 +48,7 @@ const root = new Elysia()
         }
       },
     },
-    (app) => app.use(users).use(running).use(strava).use(jobs).use(personalRecords),
+    (app) => app.use(users).use(running).use(strava).use(jobs).use(personalRecords).use(futureRaces),
   )
   .listen(env.PORT);
 

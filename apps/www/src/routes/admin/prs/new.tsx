@@ -1,4 +1,4 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router';
+import {createFileRoute, useNavigate, useRouter} from '@tanstack/react-router';
 import {useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
@@ -16,6 +16,7 @@ export const Route = createFileRoute('/admin/prs/new')({
 
 function NewPersonalRecord() {
   const navigate = useNavigate();
+  const router = useRouter();
   const {user} = Route.useRouteContext();
   const [prTitle, setPrTitle] = useState('');
   const [minutes, setMinutes] = useState('');
@@ -61,6 +62,7 @@ function NewPersonalRecord() {
             activityId: activityId ? parseInt(activityId, 10) : null,
           },
         });
+        await router.invalidate();
         navigate({to: '/admin/prs'});
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to create personal record');
@@ -68,7 +70,7 @@ function NewPersonalRecord() {
         setLoading(false);
       }
     },
-    [user, prTitle, hours, minutes, seconds, activityId, navigate],
+    [user, prTitle, hours, minutes, seconds, activityId, navigate, router],
   );
 
   return (

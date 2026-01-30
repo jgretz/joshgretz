@@ -1,4 +1,4 @@
-import {Link, createFileRoute, useNavigate} from '@tanstack/react-router';
+import {Link, createFileRoute, useNavigate, useRouter} from '@tanstack/react-router';
 import {useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
@@ -23,6 +23,7 @@ export const Route = createFileRoute('/admin/prs/$id/edit')({
 
 function EditPersonalRecord() {
   const navigate = useNavigate();
+  const router = useRouter();
   const {record} = Route.useLoaderData();
   const {id} = Route.useParams();
 
@@ -71,6 +72,7 @@ function EditPersonalRecord() {
             activityId: activityId ? parseInt(activityId, 10) : null,
           },
         });
+        await router.invalidate();
         navigate({to: '/admin/prs'});
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to update personal record');
@@ -78,7 +80,7 @@ function EditPersonalRecord() {
         setLoading(false);
       }
     },
-    [id, prTitle, hours, minutes, seconds, activityId, navigate],
+    [id, prTitle, hours, minutes, seconds, activityId, navigate, router],
   );
 
   if (!record) {

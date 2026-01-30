@@ -12,6 +12,11 @@ export {createPersonalRecord} from './command/createPersonalRecord';
 export {updatePersonalRecord} from './command/updatePersonalRecord';
 export {deletePersonalRecord} from './command/deletePersonalRecord';
 export {searchActivities} from './query/searchActivities';
+export {findFutureRacesByUserId} from './query/findFutureRacesByUserId';
+export {findFutureRaceById} from './query/findFutureRaceById';
+export {createFutureRace} from './command/createFutureRace';
+export {updateFutureRace} from './command/updateFutureRace';
+export {deleteFutureRace} from './command/deleteFutureRace';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

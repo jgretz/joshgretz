@@ -36,6 +36,13 @@
       "when": 1769699768262,
       "tag": "0004_orange_magdalene",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1769788236013,
+      "tag": "0005_future_races",
+      "breakpoints": true
     }
   ]
 }

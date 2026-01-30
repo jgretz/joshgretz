@@ -93,3 +93,23 @@ export const personalRecords = pgTable(
     };
   },
 );
+
+export const futureRaces = pgTable(
+  'future_races',
+  {
+    id: serial('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    title: varchar('title', {length: 200}).notNull(),
+    location: varchar('location', {length: 300}),
+    distance: varchar('distance', {length: 100}),
+    url: varchar('url', {length: 500}),
+    race_date: timestamp('race_date', {mode: 'string'}),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+  },
+  (race) => {
+    return {
+      userIdIdx: index('future_race_user_id_idx').on(race.user_id),
+    };
+  },
+);

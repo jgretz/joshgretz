@@ -84,6 +84,12 @@ This is a Bun monorepo for joshgretz.com with workspaces in `apps/*` and `packag
 - **ping** - Simple health check endpoint.
 - **geoapify** - Geolocation API client for reverse geocoding.
 
+### TanStack Router (www)
+
+- File-based routing: routes in `apps/www/src/routes/` auto-generate `routeTree.gen.ts`
+- After adding/removing route files, run `bun run dev:www` to regenerate the route tree
+- Do NOT manually edit `routeTree.gen.ts`
+
 ### Key Patterns
 
 - **Dependency Injection**: Packages use `injectx` for DI. Call `setupXContainer()` at app startup to bind dependencies.

@@ -35,9 +35,11 @@ const formatTime = (seconds: number): string => {
 };
 
 function PersonalRecordsList() {
-  const {records: initialRecords} = Route.useLoaderData();
-  const [records, setRecords] = useState(initialRecords);
+  const {records: loaderRecords} = Route.useLoaderData();
+  const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
   const [deleting, setDeleting] = useState<number | null>(null);
+
+  const records = loaderRecords.filter((r) => !deletedIds.has(r.id));
 
   const handleDelete = useCallback(async (id: number) => {
     if (!confirm('Delete this personal record?')) return;
@@ -45,7 +47,7 @@ function PersonalRecordsList() {
     setDeleting(id);
     try {
       await deletePersonalRecord({data: {id}});
-      setRecords((prev) => prev.filter((r) => r.id !== id));
+      setDeletedIds((prev) => new Set(prev).add(id));
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to delete');
     } finally {
