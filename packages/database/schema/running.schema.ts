@@ -113,3 +113,22 @@ export const futureRaces = pgTable(
     };
   },
 );
+
+export const streaks = pgTable(
+  'streaks',
+  {
+    id: serial('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    start_date: timestamp('start_date', {mode: 'string'}),
+    total_runs: integer('total_runs'),
+    total_miles: numeric('total_miles'),
+    total_vert: integer('total_vert'),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+  },
+  (streak) => {
+    return {
+      userIdIdx: uniqueIndex('streak_user_id_idx').on(streak.user_id),
+    };
+  },
+);

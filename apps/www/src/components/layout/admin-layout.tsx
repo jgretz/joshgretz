@@ -21,6 +21,7 @@ const navItems: NavItem[] = [
   },
   {label: 'Personal Records', to: '/admin/prs'},
   {label: 'Future Races', to: '/admin/races'},
+  {label: 'Streak', to: '/admin/streak'},
   {label: 'Activities', to: '/admin/activities'},
   {label: 'Jobs', to: '/admin/jobs'},
 ];

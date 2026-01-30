@@ -16,6 +16,7 @@ import { Route as HealthcheckRouteImport } from './routes/healthcheck'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminStreakRouteImport } from './routes/admin/streak'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/index'
 import { Route as AdminRacesIndexRouteImport } from './routes/admin/races/index'
@@ -64,6 +65,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminStreakRoute = AdminStreakRouteImport.update({
+  id: '/streak',
+  path: '/streak',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/streak': typeof AdminStreakRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
   '/admin/prs/new': typeof AdminPrsNewRoute
@@ -167,6 +174,7 @@ export interface FileRoutesByTo {
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/streak': typeof AdminStreakRoute
   '/admin': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
   '/admin/prs/new': typeof AdminPrsNewRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/streak': typeof AdminStreakRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
   '/admin/prs/new': typeof AdminPrsNewRoute
@@ -216,6 +225,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/running'
     | '/admin/login'
+    | '/admin/streak'
     | '/admin/'
     | '/admin/auth/callback'
     | '/admin/prs/new'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/running'
     | '/admin/login'
+    | '/admin/streak'
     | '/admin'
     | '/admin/auth/callback'
     | '/admin/prs/new'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/running'
     | '/admin/login'
+    | '/admin/streak'
     | '/admin/'
     | '/admin/auth/callback'
     | '/admin/prs/new'
@@ -335,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/streak': {
+      id: '/admin/streak'
+      path: '/streak'
+      fullPath: '/admin/streak'
+      preLoaderRoute: typeof AdminStreakRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/login': {
@@ -440,6 +459,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminStreakRoute: typeof AdminStreakRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminAuthCallbackRoute: typeof AdminAuthCallbackRoute
   AdminPrsNewRoute: typeof AdminPrsNewRoute
@@ -458,6 +478,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
+  AdminStreakRoute: AdminStreakRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminAuthCallbackRoute: AdminAuthCallbackRoute,
   AdminPrsNewRoute: AdminPrsNewRoute,

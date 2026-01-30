@@ -43,6 +43,13 @@
       "when": 1769788236013,
       "tag": "0005_future_races",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1769789418689,
+      "tag": "0006_add-streaks-table",
+      "breakpoints": true
     }
   ]
 }

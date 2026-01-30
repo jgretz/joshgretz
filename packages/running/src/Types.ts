@@ -59,3 +59,22 @@ export type UpdateFutureRaceInput = {
   url?: string | null;
   race_date?: string | null;
 };
+
+export type Streak = {
+  id: number;
+  user_id: number;
+  start_date: string | null;
+  total_runs: number | null;
+  total_miles: string | null;
+  total_vert: number | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+};
+
+export type UpsertStreakInput = {
+  user_id: number;
+  start_date?: string | null;
+  total_runs?: number | null;
+  total_miles?: string | null;
+  total_vert?: number | null;
+};

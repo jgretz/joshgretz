@@ -17,6 +17,8 @@ export {findFutureRaceById} from './query/findFutureRaceById';
 export {createFutureRace} from './command/createFutureRace';
 export {updateFutureRace} from './command/updateFutureRace';
 export {deleteFutureRace} from './command/deleteFutureRace';
+export {findStreakByUserId} from './query/findStreakByUserId';
+export {upsertStreak} from './command/upsertStreak';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});
