@@ -7,6 +7,9 @@ type StateStat = {
   state: string;
   run_count: number | null;
   marathon_count: number | null;
+  first_marathon_name: string | null;
+  first_marathon_date: string | null;
+  first_marathon_strava_id: string | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -23,10 +26,7 @@ const COLORS = {
 
 type StateStatus = 'marathon' | 'runOnly' | 'none';
 
-const getStateStatus = (
-  abbr: string,
-  statsMap: Map<string, StateStat>,
-): StateStatus => {
+const getStateStatus = (abbr: string, statsMap: Map<string, StateStat>): StateStatus => {
   const stat = statsMap.get(abbr);
   if (!stat) return 'none';
   if ((stat.marathon_count ?? 0) > 0) return 'marathon';
@@ -34,12 +34,17 @@ const getStateStatus = (
   return 'none';
 };
 
+const formatMarathonDate = (dateStr: string): string => {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', {month: 'short', year: 'numeric'});
+};
+
 const statusLabel = (status: StateStatus) => {
   switch (status) {
     case 'marathon':
       return 'Marathon raced';
     case 'runOnly':
-      return 'Run in';
+      return 'Run';
     case 'none':
       return 'Not yet';
   }
@@ -49,6 +54,7 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
   const [tooltip, setTooltip] = useState<{
     name: string;
     status: string;
+    raceLine: string | null;
     x: number;
     y: number;
   } | null>(null);
@@ -64,14 +70,20 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
   const handleMouseEnter = useCallback(
     (abbr: string, status: StateStatus, e: React.MouseEvent<SVGPathElement>) => {
       const rect = e.currentTarget.getBoundingClientRect();
+      const stat = statsMap.get(abbr);
+      const raceLine =
+        stat?.first_marathon_name && stat?.first_marathon_date
+          ? `${stat.first_marathon_name} (${formatMarathonDate(stat.first_marathon_date)})`
+          : null;
       setTooltip({
         name: STATE_NAMES[abbr] ?? abbr,
         status: statusLabel(status),
+        raceLine,
         x: rect.left + rect.width / 2,
         y: rect.top,
       });
     },
-    [],
+    [statsMap],
   );
 
   const handleMouseLeave = useCallback(() => setTooltip(null), []);
@@ -114,11 +126,14 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
               className="pointer-events-none fixed z-50 rounded bg-warm-800 px-2 py-1 font-sans text-xs text-white shadow-lg"
               style={{
                 left: tooltip.x,
-                top: tooltip.y - 32,
+                top: tooltip.y - (tooltip.raceLine ? 48 : 32),
                 transform: 'translateX(-50%)',
               }}
             >
-              {tooltip.name} — {tooltip.status}
+              <div>
+                {tooltip.name} — {tooltip.status}
+              </div>
+              {tooltip.raceLine && <div className="mt-0.5 text-warm-300">{tooltip.raceLine}</div>}
             </div>
           )}
         </div>

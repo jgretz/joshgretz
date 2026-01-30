@@ -8,6 +8,7 @@ import {
   timestamp,
   date,
   index,
+  boolean,
 } from 'drizzle-orm/pg-core';
 
 export const activities = pgTable(
@@ -45,6 +46,7 @@ export const activities = pgTable(
     elev_high: numeric('elev_high'),
     elev_low: numeric('elev_low'),
     suffer_score: numeric('suffer_score'),
+    featured_marathon: boolean('featured_marathon').default(false),
   },
   (activities) => {
     return {
@@ -129,6 +131,9 @@ export const stateStats = pgTable(
     state: varchar('state', {length: 2}).notNull(),
     run_count: integer('run_count').default(0),
     marathon_count: integer('marathon_count').default(0),
+    first_marathon_name: varchar('first_marathon_name', {length: 300}),
+    first_marathon_date: timestamp('first_marathon_date', {mode: 'string'}),
+    first_marathon_strava_id: varchar('first_marathon_strava_id', {length: 50}),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
   },

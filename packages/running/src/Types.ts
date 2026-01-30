@@ -103,6 +103,9 @@ export type StateStats = {
   state: string;
   run_count: number | null;
   marathon_count: number | null;
+  first_marathon_name: string | null;
+  first_marathon_date: string | null;
+  first_marathon_strava_id: string | null;
   created_at: Date | null;
   updated_at: Date | null;
 };
@@ -112,6 +115,9 @@ export type UpsertStateStatsInput = {
   state: string;
   run_count?: number | null;
   marathon_count?: number | null;
+  first_marathon_name?: string | null;
+  first_marathon_date?: string | null;
+  first_marathon_strava_id?: string | null;
 };
 
 export type DailyStats = {

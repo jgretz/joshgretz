@@ -6,6 +6,9 @@ type StateStat = {
   state: string;
   run_count: number | null;
   marathon_count: number | null;
+  first_marathon_name: string | null;
+  first_marathon_date: string | null;
+  first_marathon_strava_id: string | null;
   created_at: string | null;
   updated_at: string | null;
 };

@@ -26,6 +26,7 @@ export {findStateStatsByUserId} from './query/findStateStatsByUserId';
 export {upsertStateStats} from './command/upsertStateStats';
 export {aggregateStatsByState} from './query/aggregateStatsByState';
 export {recalculateStateStats} from './services/recalculateStateStats';
+export {findFirstMarathonsByState} from './query/findFirstMarathonsByState';
 export {US_STATES, STATE_NAME_TO_ABBR, stateNameToAbbr} from './constants/us-states';
 export {findDailyStatsByUserIdAndYear} from './query/findDailyStatsByUserIdAndYear';
 export {upsertDailyStats} from './command/upsertDailyStats';

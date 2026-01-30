@@ -106,7 +106,12 @@ export const recalculateStateStats = async (userId: number): Promise<void> => {
     headers: headers(),
     body: JSON.stringify({user_id: userId}),
   });
-  if (!response.ok) throw new Error(`Failed to recalculate state stats for user ${userId}: ${response.status}`);
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(
+      `Failed to recalculate state stats for user ${userId}: ${response.status} ${body}`,
+    );
+  }
 };
 
 export const recalculateDailyStats = async (userId: number, dates?: string[]): Promise<void> => {
