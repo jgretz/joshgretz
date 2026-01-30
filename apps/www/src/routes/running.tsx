@@ -6,6 +6,7 @@ import {HeatmapSection} from '../components/running/heatmap-section';
 import {USMapSection} from '../components/running/us-map-section';
 import {PersonalRecordsSection} from '../components/running/personal-records-section';
 import {UpcomingRacesSection} from '../components/running/upcoming-races-section';
+import {StravaCTASection} from '../components/running/strava-cta-section';
 import {title} from '../config.shared';
 import {getStreak} from '../services/streak/streak-server';
 import {getStateStats} from '../services/state-stats/state-stats-server';
@@ -69,6 +70,7 @@ function Running() {
         <USMapSection stateStats={stateStats} />
         <PersonalRecordsSection records={personalRecords} />
         <UpcomingRacesSection races={futureRaces} />
+        <StravaCTASection />
       </div>
     </PageWrapper>
   );
