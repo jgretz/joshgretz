@@ -50,6 +50,13 @@
       "when": 1769789418689,
       "tag": "0006_add-streaks-table",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1769796298507,
+      "tag": "0007_state_stats",
+      "breakpoints": true
     }
   ]
 }

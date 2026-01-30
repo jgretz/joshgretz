@@ -21,6 +21,11 @@ export {findStreakByUserId} from './query/findStreakByUserId';
 export {upsertStreak} from './command/upsertStreak';
 export {aggregateStreakStats} from './query/aggregateStreakStats';
 export {recalculateStreak} from './services/recalculateStreak';
+export {findStateStatsByUserId} from './query/findStateStatsByUserId';
+export {upsertStateStats} from './command/upsertStateStats';
+export {aggregateStatsByState} from './query/aggregateStatsByState';
+export {recalculateStateStats} from './services/recalculateStateStats';
+export {US_STATES, STATE_NAME_TO_ABBR, stateNameToAbbr} from './constants/us-states';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

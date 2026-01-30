@@ -7,6 +7,7 @@ type PostImportJob = {
 
 const POST_IMPORT_JOBS: PostImportJob[] = [
   {type: 'streak-update', buildPayload: (userId) => ({user_id: userId})},
+  {type: 'state-stats-update', buildPayload: (userId) => ({user_id: userId})},
 ];
 
 export const schedulePostImportJobs = async (userId: number) => {

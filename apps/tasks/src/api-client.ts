@@ -100,6 +100,15 @@ export const recalculateStreak = async (userId: number): Promise<void> => {
   if (!response.ok) throw new Error(`Failed to recalculate streak for user ${userId}: ${response.status}`);
 };
 
+export const recalculateStateStats = async (userId: number): Promise<void> => {
+  const response = await fetch(`${config.API_URL}/state-stats/recalculate`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify({user_id: userId}),
+  });
+  if (!response.ok) throw new Error(`Failed to recalculate state stats for user ${userId}: ${response.status}`);
+};
+
 export const storeActivity = async (userId: number, activity: StravaActivity): Promise<void> => {
   const response = await fetch(`${config.API_URL}/running/activities`, {
     method: 'POST',

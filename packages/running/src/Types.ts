@@ -78,3 +78,20 @@ export type UpsertStreakInput = {
   total_miles?: string | null;
   total_vert?: number | null;
 };
+
+export type StateStats = {
+  id: number;
+  user_id: number;
+  state: string;
+  run_count: number | null;
+  marathon_count: number | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+};
+
+export type UpsertStateStatsInput = {
+  user_id: number;
+  state: string;
+  run_count?: number | null;
+  marathon_count?: number | null;
+};

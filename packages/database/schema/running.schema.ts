@@ -114,6 +114,28 @@ export const futureRaces = pgTable(
   },
 );
 
+export const stateStats = pgTable(
+  'state_stats',
+  {
+    id: serial('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    state: varchar('state', {length: 2}).notNull(),
+    run_count: integer('run_count').default(0),
+    marathon_count: integer('marathon_count').default(0),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+  },
+  (stateStats) => {
+    return {
+      userIdIdx: index('state_stats_user_id_idx').on(stateStats.user_id),
+      userStateIdx: uniqueIndex('state_stats_user_state_idx').on(
+        stateStats.user_id,
+        stateStats.state,
+      ),
+    };
+  },
+);
+
 export const streaks = pgTable(
   'streaks',
   {
