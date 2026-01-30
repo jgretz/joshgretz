@@ -51,7 +51,8 @@ export const handleMassImport = async (payload: MassImportPayload) => {
     );
   }
 
-  await schedulePostImportJobs(user_id);
+  const dates = [...new Set(runs.map((a) => a.start_date_local.split('T')[0]))];
+  await schedulePostImportJobs(user_id, dates);
 
   return {imported, total: activities.length};
 };

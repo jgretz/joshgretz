@@ -13,6 +13,7 @@ import personalRecords from './routes/personal-records';
 import futureRaces from './routes/future-races';
 import streak from './routes/streak';
 import stateStats from './routes/state-stats';
+import dailyStats from './routes/daily-stats';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
@@ -50,7 +51,7 @@ const root = new Elysia()
         }
       },
     },
-    (app) => app.use(users).use(running).use(strava).use(jobs).use(personalRecords).use(futureRaces).use(streak).use(stateStats),
+    (app) => app.use(users).use(running).use(strava).use(jobs).use(personalRecords).use(futureRaces).use(streak).use(stateStats).use(dailyStats),
   )
   .listen(env.PORT);
 

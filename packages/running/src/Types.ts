@@ -14,6 +14,12 @@ export type PersonalRecord = {
   title: string;
   time_seconds: number;
   activity_id: number | null;
+  distance: string | null;
+  pace_seconds: number | null;
+  race_name: string | null;
+  race_location: string | null;
+  strava_id: string | null;
+  race_date: string | null;
   created_at: Date | null;
   updated_at: Date | null;
 };
@@ -23,12 +29,24 @@ export type CreatePersonalRecordInput = {
   title: string;
   time_seconds: number;
   activity_id?: number | null;
+  distance?: string | null;
+  pace_seconds?: number | null;
+  race_name?: string | null;
+  race_location?: string | null;
+  strava_id?: string | null;
+  race_date?: string | null;
 };
 
 export type UpdatePersonalRecordInput = {
   title?: string;
   time_seconds?: number;
   activity_id?: number | null;
+  distance?: string | null;
+  pace_seconds?: number | null;
+  race_name?: string | null;
+  race_location?: string | null;
+  strava_id?: string | null;
+  race_date?: string | null;
 };
 
 export type FutureRace = {
@@ -94,4 +112,21 @@ export type UpsertStateStatsInput = {
   state: string;
   run_count?: number | null;
   marathon_count?: number | null;
+};
+
+export type DailyStats = {
+  id: number;
+  user_id: number;
+  date: string;
+  total_miles: string | null;
+  run_count: number | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+};
+
+export type UpsertDailyStatsInput = {
+  user_id: number;
+  date: string;
+  total_miles?: string | null;
+  run_count?: number | null;
 };

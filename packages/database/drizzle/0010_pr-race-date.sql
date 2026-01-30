@@ -1,0 +1,1 @@
+ALTER TABLE "personal_records" ADD COLUMN "race_date" timestamp;

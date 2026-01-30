@@ -4,6 +4,7 @@ import {createDatabase} from 'database';
 
 export * from './Types';
 export * from './services';
+export {findActivityById} from './query/findActivityById';
 export {findActivityByStravaId} from './query/findActivityByStravaId';
 export {findFirstActivityByLatLon} from './query/findFirstActivityByLatLon';
 export {findPersonalRecordsByUserId} from './query/findPersonalRecordsByUserId';
@@ -26,6 +27,10 @@ export {upsertStateStats} from './command/upsertStateStats';
 export {aggregateStatsByState} from './query/aggregateStatsByState';
 export {recalculateStateStats} from './services/recalculateStateStats';
 export {US_STATES, STATE_NAME_TO_ABBR, stateNameToAbbr} from './constants/us-states';
+export {findDailyStatsByUserIdAndYear} from './query/findDailyStatsByUserIdAndYear';
+export {upsertDailyStats} from './command/upsertDailyStats';
+export {aggregateDailyStats} from './query/aggregateDailyStats';
+export {recalculateDailyStats} from './services/recalculateDailyStats';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

@@ -6,6 +6,12 @@ type PersonalRecord = {
   title: string;
   time_seconds: number;
   activity_id: number | null;
+  distance: string | null;
+  pace_seconds: number | null;
+  race_name: string | null;
+  race_location: string | null;
+  strava_id: string | null;
+  race_date: string | null;
   created_at: string | null;
   updated_at: string | null;
 };

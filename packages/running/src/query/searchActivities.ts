@@ -28,6 +28,7 @@ const search = ({database}: RunningContainer) => {
         strava_id: Schema.activities.strava_id,
         start_date_local: Schema.activities.start_date_local,
         distance: Schema.activities.distance,
+        moving_time: Schema.activities.moving_time,
       })
       .from(Schema.activities)
       .where(and(...conditions));

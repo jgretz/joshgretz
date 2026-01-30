@@ -28,9 +28,10 @@ export const handleActivityImport = async (payload: ActivityImportPayload): Prom
   const activity = await getActivity(activity_id);
   await storeActivity(user_id, activity);
 
+  const date = activity.start_date_local.split('T')[0];
   console.log(`Successfully imported activity ${activity_id}`);
 
-  await schedulePostImportJobs(user_id);
+  await schedulePostImportJobs(user_id, [date]);
 
   return {success: true};
 };

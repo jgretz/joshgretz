@@ -4,3 +4,4 @@ export {mapStravaActivityToRunningActivity} from './mapStravaActivityToRunningAc
 export {lookupLocationForActivity} from './lookupLocationForActivity';
 export {recalculateStreak} from './recalculateStreak';
 export {recalculateStateStats} from './recalculateStateStats';
+export {recalculateDailyStats} from './recalculateDailyStats';

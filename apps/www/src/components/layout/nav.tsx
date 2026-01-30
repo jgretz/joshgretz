@@ -4,7 +4,7 @@ import {cn} from '../../lib/styles';
 const navItems = [
   {label: 'About', href: '/'},
   {label: 'Resume', href: '/resume'},
-  // {label: 'Running', href: '/running'},
+  {label: 'Running', href: '/running'},
 ];
 
 export const Nav = () => {

@@ -6,6 +6,7 @@ type Activity = {
   strava_id: string;
   start_date_local: string | null;
   distance: string | null;
+  moving_time: string | null;
 };
 
 const getEnv = () => ({

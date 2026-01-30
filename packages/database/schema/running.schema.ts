@@ -6,6 +6,7 @@ import {
   numeric,
   uniqueIndex,
   timestamp,
+  date,
   index,
 } from 'drizzle-orm/pg-core';
 
@@ -83,6 +84,12 @@ export const personalRecords = pgTable(
     title: varchar('title', {length: 200}).notNull(),
     time_seconds: integer('time_seconds').notNull(),
     activity_id: integer('activity_id'),
+    distance: varchar('distance', {length: 50}),
+    pace_seconds: integer('pace_seconds'),
+    race_name: varchar('race_name', {length: 300}),
+    race_location: varchar('race_location', {length: 300}),
+    strava_id: varchar('strava_id', {length: 50}),
+    race_date: timestamp('race_date', {mode: 'string'}),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
   },
@@ -151,6 +158,28 @@ export const streaks = pgTable(
   (streak) => {
     return {
       userIdIdx: uniqueIndex('streak_user_id_idx').on(streak.user_id),
+    };
+  },
+);
+
+export const dailyStats = pgTable(
+  'daily_stats',
+  {
+    id: serial('id').primaryKey(),
+    user_id: integer('user_id').notNull(),
+    date: date('date', {mode: 'string'}).notNull(),
+    total_miles: numeric('total_miles'),
+    run_count: integer('run_count').default(0),
+    created_at: timestamp('created_at').defaultNow(),
+    updated_at: timestamp('updated_at').defaultNow(),
+  },
+  (dailyStats) => {
+    return {
+      userIdIdx: index('daily_stats_user_id_idx').on(dailyStats.user_id),
+      userDateIdx: uniqueIndex('daily_stats_user_date_idx').on(
+        dailyStats.user_id,
+        dailyStats.date,
+      ),
     };
   },
 );

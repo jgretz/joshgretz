@@ -3,7 +3,9 @@
     "allow": [
       "Bash(done)",
       "Bash(npm view:*)",
-      "Bash(bun run typecheck:www:*)"
+      "Bash(bun run typecheck:www:*)",
+      "Bash(node:*)",
+      "Bash(bun run typecheck:*)"
     ]
   }
 }

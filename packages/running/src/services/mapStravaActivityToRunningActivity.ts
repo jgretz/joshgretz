@@ -21,8 +21,8 @@ const shouldUpdateLocation = (
   }
 
   if (
-    activity.start_latlng[0]?.toString() !== existingActivity.start_lat ||
-    activity.start_latlng[1]?.toString() !== existingActivity.start_lng
+    activity.start_latlng?.[0]?.toString() !== existingActivity.start_lat ||
+    activity.start_latlng?.[1]?.toString() !== existingActivity.start_lng
   ) {
     return true;
   }
@@ -59,10 +59,10 @@ export const mapStravaActivityToRunningActivity = async (
     start_date_local: activity.start_date_local,
     timezone: activity.timezone,
     utc_offset: activity.utc_offset,
-    start_lat: activity.start_latlng[0]?.toString(),
-    start_lng: activity.start_latlng[1]?.toString(),
-    stop_lat: activity.end_latlng[0]?.toString(),
-    stop_lng: activity.end_latlng[1]?.toString(),
+    start_lat: activity.start_latlng?.[0]?.toString(),
+    start_lng: activity.start_latlng?.[1]?.toString(),
+    stop_lat: activity.end_latlng?.[0]?.toString(),
+    stop_lng: activity.end_latlng?.[1]?.toString(),
     location_city: location?.city,
     location_state: location?.state,
     location_country: location?.country,

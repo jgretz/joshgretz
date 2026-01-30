@@ -55,8 +55,8 @@ cd apps/www && bun run typecheck
 
 # Database (from packages/database)
 cd packages/database
-bun run generate  # drizzle-kit generate
-bun run push      # drizzle-kit push
+bun run generate --name <descriptive-name>  # drizzle-kit generate (always use --name)
+bun run migrate                             # drizzle-kit migrate
 
 # Deploy to Fly.io
 bun run deploy:api

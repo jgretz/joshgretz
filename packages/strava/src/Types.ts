@@ -2,7 +2,7 @@ export type Location = number[];
 
 export interface Athlete {
   id: number;
-  shoes: Gear[];
+  shoes?: Gear[];
 }
 
 export interface Gear {
@@ -25,28 +25,28 @@ export interface Activity {
   total_elevation_gain: number;
   type: string;
   sport_type: string;
-  workout_type: string;
+  workout_type?: string | number | null;
   id: number;
   start_date: string;
   start_date_local: string;
   timezone: string;
   utc_offset: number;
-  start_latlng: Location;
-  end_latlng: Location;
-  location_city: string;
-  location_state: string;
-  location_country: string;
-  gear_id: string;
+  start_latlng: Location | null;
+  end_latlng: Location | null;
+  location_city: string | null;
+  location_state: string | null;
+  location_country: string | null;
+  gear_id: string | null;
   average_speed: number;
   max_speed: number;
-  average_cadence: number;
-  average_watts: number;
-  max_watts: number;
-  average_heartrate: number;
-  max_heartrate: number;
-  elev_high: number;
-  elev_low: number;
-  suffer_score: number;
+  average_cadence?: number | null;
+  average_watts?: number | null;
+  max_watts?: number | null;
+  average_heartrate?: number | null;
+  max_heartrate?: number | null;
+  elev_high?: number | null;
+  elev_low?: number | null;
+  suffer_score?: number | null;
 }
 
 export interface StravaConfig {

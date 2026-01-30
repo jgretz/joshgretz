@@ -12,6 +12,7 @@ type Activity = {
   strava_id: string;
   start_date_local: string | null;
   distance: string | null;
+  moving_time: string | null;
 };
 
 type SearchMode = 'title' | 'strava_id';
@@ -28,6 +29,18 @@ const formatDistance = (meters: string | null): string => {
   if (!meters) return '-';
   const mi = parseFloat(meters) / 1609.34;
   return `${mi.toFixed(2)} mi`;
+};
+
+const formatTime = (seconds: string | null): string => {
+  if (!seconds) return '-';
+  const total = Math.round(parseFloat(seconds));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  if (h > 0) {
+    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+  return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
 const formatDate = (date: string | null): string => {
@@ -124,6 +137,7 @@ function ActivityLookup() {
                 <th className="px-4 py-3 font-medium text-warm-700">Title</th>
                 <th className="px-4 py-3 font-medium text-warm-700">Date</th>
                 <th className="px-4 py-3 font-medium text-warm-700">Distance</th>
+                <th className="px-4 py-3 font-medium text-warm-700">Time</th>
                 <th className="px-4 py-3 font-medium text-warm-700">Strava ID</th>
               </tr>
             </thead>
@@ -136,6 +150,7 @@ function ActivityLookup() {
                     {formatDate(activity.start_date_local)}
                   </td>
                   <td className="px-4 py-3 text-warm-600">{formatDistance(activity.distance)}</td>
+                  <td className="px-4 py-3 text-warm-600">{formatTime(activity.moving_time)}</td>
                   <td className="px-4 py-3">
                     <a
                       href={`https://www.strava.com/activities/${activity.strava_id}`}
