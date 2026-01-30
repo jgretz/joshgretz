@@ -1,7 +1,19 @@
 import {Elysia, t} from 'elysia';
-import {findStreakByUserId, upsertStreak} from 'running';
+import {findStreakByUserId, upsertStreak, recalculateStreak} from 'running';
 
 export default new Elysia({prefix: '/streak'})
+  .post(
+    '/recalculate',
+    async ({body: {user_id}}) => {
+      const result = await recalculateStreak(user_id);
+      return result ?? {skipped: true};
+    },
+    {
+      body: t.Object({
+        user_id: t.Number(),
+      }),
+    },
+  )
   .get(
     '/',
     async ({query: {user_id}}) => {

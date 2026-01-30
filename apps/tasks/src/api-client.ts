@@ -81,6 +81,25 @@ export const setThirdPartyAccess = async (
   if (!response.ok) throw new Error(`Failed to set third-party access: ${response.status}`);
 };
 
+export const createJob = async (type: string, payload: unknown): Promise<{id: number}> => {
+  const response = await fetch(`${config.API_URL}/jobs/`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify({type, payload}),
+  });
+  if (!response.ok) throw new Error(`Failed to create job type=${type}: ${response.status}`);
+  return response.json();
+};
+
+export const recalculateStreak = async (userId: number): Promise<void> => {
+  const response = await fetch(`${config.API_URL}/streak/recalculate`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify({user_id: userId}),
+  });
+  if (!response.ok) throw new Error(`Failed to recalculate streak for user ${userId}: ${response.status}`);
+};
+
 export const storeActivity = async (userId: number, activity: StravaActivity): Promise<void> => {
   const response = await fetch(`${config.API_URL}/running/activities`, {
     method: 'POST',

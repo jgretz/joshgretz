@@ -1,5 +1,6 @@
 import {getActivities, setupStravaContainer} from 'strava';
 import {storeActivity} from '../api-client';
+import {schedulePostImportJobs} from '../services/post-import-jobs';
 import {getValidAccessToken} from '../services/strava-token';
 
 export interface MassImportPayload {
@@ -49,6 +50,8 @@ export const handleMassImport = async (payload: MassImportPayload) => {
       `Imported ${imported}/${activities.length}. Failed: ${errors.map((e) => `${e.strava_id} (${e.type}): ${e.error}`).join('; ')}`,
     );
   }
+
+  await schedulePostImportJobs(user_id);
 
   return {imported, total: activities.length};
 };

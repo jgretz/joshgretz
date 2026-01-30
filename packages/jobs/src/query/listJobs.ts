@@ -1,5 +1,5 @@
 import {Schema} from 'database';
-import {desc, count, sql} from 'drizzle-orm';
+import {desc, count} from 'drizzle-orm';
 import type {JobsContainer} from '../Types';
 import {InjectIn} from 'injectx';
 

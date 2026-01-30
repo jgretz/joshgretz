@@ -1,5 +1,6 @@
 import {getActivity, setupStravaContainer} from 'strava';
 import {storeActivity} from '../api-client';
+import {schedulePostImportJobs} from '../services/post-import-jobs';
 import {getValidAccessToken} from '../services/strava-token';
 
 export interface ActivityImportPayload {
@@ -28,6 +29,8 @@ export const handleActivityImport = async (payload: ActivityImportPayload): Prom
   await storeActivity(user_id, activity);
 
   console.log(`Successfully imported activity ${activity_id}`);
+
+  await schedulePostImportJobs(user_id);
 
   return {success: true};
 };
