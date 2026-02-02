@@ -7,6 +7,7 @@ type Streak = {
   total_runs: number | null;
   total_miles: string | null;
   total_vert: number | null;
+  last_run_date: string | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -47,6 +48,7 @@ export const upsertStreak = createServerFn({
       totalRuns?: number | null;
       totalMiles?: string | null;
       totalVert?: number | null;
+      lastRunDate?: string | null;
     }) => data,
   )
   .handler(async ({data}): Promise<Streak> => {
@@ -64,6 +66,7 @@ export const upsertStreak = createServerFn({
         total_runs: data.totalRuns ?? null,
         total_miles: data.totalMiles ?? null,
         total_vert: data.totalVert ?? null,
+        last_run_date: data.lastRunDate ?? null,
       }),
     });
 

@@ -92,6 +92,13 @@
       "when": 1769811102938,
       "tag": "0012_featured-marathon-flag",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1770044611921,
+      "tag": "0013_add-streak-last-run-date",
+      "breakpoints": true
     }
   ]
 }

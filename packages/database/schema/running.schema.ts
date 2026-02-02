@@ -157,6 +157,7 @@ export const streaks = pgTable(
     total_runs: integer('total_runs'),
     total_miles: numeric('total_miles'),
     total_vert: integer('total_vert'),
+    last_run_date: timestamp('last_run_date', {mode: 'string'}),
     created_at: timestamp('created_at').defaultNow(),
     updated_at: timestamp('updated_at').defaultNow(),
   },

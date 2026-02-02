@@ -12,6 +12,7 @@ const command = ({database}: RunningContainer) => {
         total_runs: input.total_runs ?? null,
         total_miles: input.total_miles ?? null,
         total_vert: input.total_vert ?? null,
+        last_run_date: input.last_run_date ?? null,
       })
       .onConflictDoUpdate({
         target: Schema.streaks.user_id,
@@ -20,6 +21,7 @@ const command = ({database}: RunningContainer) => {
           total_runs: input.total_runs ?? null,
           total_miles: input.total_miles ?? null,
           total_vert: input.total_vert ?? null,
+          last_run_date: input.last_run_date ?? null,
           updated_at: new Date(),
         },
       })

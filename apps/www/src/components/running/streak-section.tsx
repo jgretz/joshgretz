@@ -7,6 +7,7 @@ type Streak = {
   total_runs: number | null;
   total_miles: string | null;
   total_vert: number | null;
+  last_run_date: string | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -15,10 +16,10 @@ type StreakSectionProps = {
   streak: Streak | null;
 };
 
-const daysSince = (dateStr: string) => {
-  const start = new Date(dateStr);
-  const now = new Date();
-  return Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+const daysBetween = (startStr: string, endStr: string | null) => {
+  const start = new Date(startStr);
+  const end = endStr ? new Date(endStr) : new Date();
+  return Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 };
 
 const formatDate = (dateStr: string) =>
@@ -38,7 +39,7 @@ const formatVert = (ft: number) => {
 export const StreakSection = ({streak}: StreakSectionProps) => {
   if (!streak?.start_date) return null;
 
-  const days = daysSince(streak.start_date);
+  const days = daysBetween(streak.start_date, streak.last_run_date);
   const totalMiles = parseFloat(streak.total_miles ?? '0');
   const totalVert = streak.total_vert ?? 0;
   const avgMilesPerDay = days > 0 ? (totalMiles / days).toFixed(1) : '0';

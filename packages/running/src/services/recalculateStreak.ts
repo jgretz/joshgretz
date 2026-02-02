@@ -14,5 +14,6 @@ export const recalculateStreak = async (userId: number) => {
     total_runs: stats.total_runs,
     total_miles: stats.total_miles,
     total_vert: stats.total_vert,
+    last_run_date: stats.last_run_date,
   });
 };

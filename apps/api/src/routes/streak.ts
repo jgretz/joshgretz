@@ -38,6 +38,7 @@ export default new Elysia({prefix: '/streak'})
         total_runs: t.Optional(t.Nullable(t.Number())),
         total_miles: t.Optional(t.Nullable(t.String())),
         total_vert: t.Optional(t.Nullable(t.Number())),
+        last_run_date: t.Optional(t.Nullable(t.String())),
       }),
     },
   );

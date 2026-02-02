@@ -85,6 +85,7 @@ export type Streak = {
   total_runs: number | null;
   total_miles: string | null;
   total_vert: number | null;
+  last_run_date: string | null;
   created_at: Date | null;
   updated_at: Date | null;
 };
@@ -95,6 +96,7 @@ export type UpsertStreakInput = {
   total_runs?: number | null;
   total_miles?: string | null;
   total_vert?: number | null;
+  last_run_date?: string | null;
 };
 
 export type StateStats = {

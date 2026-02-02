@@ -1,0 +1,1 @@
+ALTER TABLE "streaks" ADD COLUMN "last_run_date" timestamp;
