@@ -26,11 +26,17 @@ const headers = () => ({
   Authorization: `Bearer ${config.TASK_API_KEY}`,
 });
 
+const assertOk = async (response: Response, context: string): Promise<void> => {
+  if (response.ok) return;
+  const body = await response.text().catch(() => '');
+  throw new Error(`${context}: ${response.status} ${body}`.trim());
+};
+
 export const fetchPendingJobs = async (): Promise<Job[]> => {
   const response = await fetch(`${config.API_URL}/jobs/pending`, {
     headers: headers(),
   });
-  if (!response.ok) throw new Error(`Failed to fetch pending jobs: ${response.status}`);
+  await assertOk(response, 'Failed to fetch pending jobs');
   return response.json();
 };
 
@@ -39,7 +45,7 @@ export const markJobStarted = async (jobId: number): Promise<void> => {
     method: 'POST',
     headers: headers(),
   });
-  if (!response.ok) throw new Error(`Failed to mark job ${jobId} as started: ${response.status}`);
+  await assertOk(response, `Failed to mark job ${jobId} as started`);
 };
 
 export const markJobCompleted = async (jobId: number, result?: unknown): Promise<void> => {
@@ -48,7 +54,7 @@ export const markJobCompleted = async (jobId: number, result?: unknown): Promise
     headers: headers(),
     body: JSON.stringify({result}),
   });
-  if (!response.ok) throw new Error(`Failed to mark job ${jobId} as completed: ${response.status}`);
+  await assertOk(response, `Failed to mark job ${jobId} as completed`);
 };
 
 export const markJobFailed = async (jobId: number, errorMessage: string): Promise<void> => {
@@ -57,14 +63,14 @@ export const markJobFailed = async (jobId: number, errorMessage: string): Promis
     headers: headers(),
     body: JSON.stringify({error_message: errorMessage}),
   });
-  if (!response.ok) throw new Error(`Failed to mark job ${jobId} as failed: ${response.status}`);
+  await assertOk(response, `Failed to mark job ${jobId} as failed`);
 };
 
 export const getThirdPartyAccess = async (userId: number): Promise<ThirdPartyAccess | undefined> => {
   const response = await fetch(`${config.API_URL}/users/third-party-access?user_id=${userId}`, {
     headers: headers(),
   });
-  if (!response.ok) throw new Error(`Failed to get third-party access: ${response.status}`);
+  await assertOk(response, 'Failed to get third-party access');
   const data = await response.json();
   return data || undefined;
 };
@@ -78,7 +84,7 @@ export const setThirdPartyAccess = async (
     headers: headers(),
     body: JSON.stringify({user_id: userId, ...access}),
   });
-  if (!response.ok) throw new Error(`Failed to set third-party access: ${response.status}`);
+  await assertOk(response, 'Failed to set third-party access');
 };
 
 export const createJob = async (type: string, payload: unknown): Promise<{id: number}> => {
@@ -87,7 +93,7 @@ export const createJob = async (type: string, payload: unknown): Promise<{id: nu
     headers: headers(),
     body: JSON.stringify({type, payload}),
   });
-  if (!response.ok) throw new Error(`Failed to create job type=${type}: ${response.status}`);
+  await assertOk(response, `Failed to create job type=${type}`);
   return response.json();
 };
 
@@ -97,7 +103,7 @@ export const recalculateStreak = async (userId: number): Promise<void> => {
     headers: headers(),
     body: JSON.stringify({user_id: userId}),
   });
-  if (!response.ok) throw new Error(`Failed to recalculate streak for user ${userId}: ${response.status}`);
+  await assertOk(response, `Failed to recalculate streak for user ${userId}`);
 };
 
 export const recalculateStateStats = async (userId: number): Promise<void> => {
@@ -106,12 +112,7 @@ export const recalculateStateStats = async (userId: number): Promise<void> => {
     headers: headers(),
     body: JSON.stringify({user_id: userId}),
   });
-  if (!response.ok) {
-    const body = await response.text().catch(() => '');
-    throw new Error(
-      `Failed to recalculate state stats for user ${userId}: ${response.status} ${body}`,
-    );
-  }
+  await assertOk(response, `Failed to recalculate state stats for user ${userId}`);
 };
 
 export const recalculateDailyStats = async (userId: number, dates?: string[]): Promise<void> => {
@@ -120,7 +121,7 @@ export const recalculateDailyStats = async (userId: number, dates?: string[]): P
     headers: headers(),
     body: JSON.stringify({user_id: userId, dates}),
   });
-  if (!response.ok) throw new Error(`Failed to recalculate daily stats for user ${userId}: ${response.status}`);
+  await assertOk(response, `Failed to recalculate daily stats for user ${userId}`);
 };
 
 export const storeActivity = async (userId: number, activity: StravaActivity): Promise<void> => {
@@ -129,10 +130,5 @@ export const storeActivity = async (userId: number, activity: StravaActivity): P
     headers: headers(),
     body: JSON.stringify({user_id: userId, activity}),
   });
-  if (!response.ok) {
-    const body = await response.text().catch(() => '');
-    throw new Error(
-      `Failed to store activity strava_id=${activity.id} type=${activity.type}: ${response.status} ${body}`,
-    );
-  }
+  await assertOk(response, `Failed to store activity strava_id=${activity.id} type=${activity.type}`);
 };

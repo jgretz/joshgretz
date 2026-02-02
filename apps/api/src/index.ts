@@ -38,6 +38,12 @@ setupJobsContainer({databaseUrl: env.DATABASE_URL});
 
 // run
 const root = new Elysia()
+  .onError(({error, set}) => {
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    console.error('API error:', error);
+    set.status = set.status && set.status >= 400 ? set.status : 500;
+    return {error: message};
+  })
   .use(health)
   .use(cors())
   .use(stravaWebhook)

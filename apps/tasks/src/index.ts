@@ -23,7 +23,8 @@ const pollForJobs = async () => {
       }
     }
   } catch (error) {
-    console.error('Error polling for jobs:', error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Error polling for jobs:', message);
   }
 };
 
