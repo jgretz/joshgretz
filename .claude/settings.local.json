@@ -5,7 +5,12 @@
       "Bash(npm view:*)",
       "Bash(bun run typecheck:www:*)",
       "Bash(node:*)",
-      "Bash(bun run typecheck:*)"
+      "Bash(bun run typecheck:*)",
+      "Bash(grep:*)",
+      "WebSearch",
+      "WebFetch(domain:developers.strava.com)",
+      "WebFetch(domain:groups.google.com)",
+      "WebFetch(domain:communityhub.strava.com)"
     ]
   }
 }

@@ -12,6 +12,23 @@
  *   STRAVA_WEBHOOK_VERIFY_TOKEN
  */
 
+import {readFileSync, existsSync} from 'fs';
+import {join} from 'path';
+
+// Load .env from scripts directory
+const envPath = join(import.meta.dir, '.env');
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, 'utf-8').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx === -1) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    const val = trimmed.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, '');
+    process.env[key] = val;
+  }
+}
+
 const STRAVA_API_BASE = 'https://www.strava.com/api/v3';
 
 const clientId = process.env.STRAVA_CLIENT_ID;

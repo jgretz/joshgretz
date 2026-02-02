@@ -25,7 +25,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
   HELMET: z.string(),
   GEOAPIFY_API_KEY: z.string(),
-  STRAVA_WEBHOOK_VERIFY_TOKEN: z.string().optional(),
+  STRAVA_WEBHOOK_VERIFY_TOKEN: z.string(),
   TASK_API_KEY: z.string().optional(),
 });
 const env = parseEnv(envSchema);
@@ -41,7 +41,7 @@ const root = new Elysia()
   .onError(({error, set}) => {
     const message = error instanceof Error ? error.message : 'Internal server error';
     console.error('API error:', error);
-    set.status = set.status && set.status >= 400 ? set.status : 500;
+    set.status = set.status && Number(set.status) >= 400 ? set.status : 500;
     return {error: message};
   })
   .use(health)
@@ -57,7 +57,17 @@ const root = new Elysia()
         }
       },
     },
-    (app) => app.use(users).use(running).use(strava).use(jobs).use(personalRecords).use(futureRaces).use(streak).use(stateStats).use(dailyStats),
+    (app) =>
+      app
+        .use(users)
+        .use(running)
+        .use(strava)
+        .use(jobs)
+        .use(personalRecords)
+        .use(futureRaces)
+        .use(streak)
+        .use(stateStats)
+        .use(dailyStats),
   )
   .listen(env.PORT);
 

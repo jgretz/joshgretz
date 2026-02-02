@@ -29,9 +29,11 @@ export default new Elysia({prefix: '/strava/webhook'})
     ({query, set}) => {
       const verifyToken = process.env.STRAVA_WEBHOOK_VERIFY_TOKEN;
       if (query['hub.verify_token'] !== verifyToken) {
+        console.log('Strava webhook validation failed: invalid verify token');
         set.status = 403;
         return 'Invalid verify token';
       }
+      console.log('Strava webhook validation succeeded');
       return {'hub.challenge': query['hub.challenge']};
     },
     verifySchema,
@@ -40,6 +42,7 @@ export default new Elysia({prefix: '/strava/webhook'})
     '/',
     async ({database, body}) => {
       const {object_type, object_id, aspect_type, owner_id} = body;
+      console.log(`Strava webhook event: ${object_type} ${object_id} ${aspect_type} owner=${owner_id}`);
 
       // Only handle activity events
       if (object_type !== 'activity') {
