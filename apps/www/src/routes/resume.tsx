@@ -46,7 +46,7 @@ function Resume() {
 
         <div className="flex-1">
           <h1 className="mb-1 font-serif text-4xl font-normal text-warm-800">Josh Gretz</h1>
-          <p className="mb-4 font-sans text-lg text-warm-600">Technical Leader & Fractional CTO</p>
+          <p className="mb-4 font-sans text-lg text-warm-600">CTO | Builder | Catalyst</p>
           <p className="max-w-[600px] font-sans text-[0.95rem] leading-relaxed text-warm-700">
             I believe highly functioning software teams make the world better. I'm a builder - of
             software, of teams, of organizations. Developer, architect, leader, executive: I've
