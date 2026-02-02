@@ -12,6 +12,7 @@ export {findPersonalRecordById} from './query/findPersonalRecordById';
 export {createPersonalRecord} from './command/createPersonalRecord';
 export {updatePersonalRecord} from './command/updatePersonalRecord';
 export {deletePersonalRecord} from './command/deletePersonalRecord';
+export {deleteActivityByStravaId} from './command/deleteActivityByStravaId';
 export {searchActivities} from './query/searchActivities';
 export {findFutureRacesByUserId} from './query/findFutureRacesByUserId';
 export {findFutureRaceById} from './query/findFutureRaceById';

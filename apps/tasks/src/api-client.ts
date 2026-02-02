@@ -124,6 +124,18 @@ export const recalculateDailyStats = async (userId: number, dates?: string[]): P
   await assertOk(response, `Failed to recalculate daily stats for user ${userId}`);
 };
 
+export const deleteActivity = async (
+  stravaId: number,
+): Promise<{success: boolean; start_date: string} | null> => {
+  const response = await fetch(`${config.API_URL}/running/activities/by-strava-id/${stravaId}`, {
+    method: 'DELETE',
+    headers: headers(),
+  });
+  if (response.status === 404) return null;
+  await assertOk(response, `Failed to delete activity strava_id=${stravaId}`);
+  return response.json();
+};
+
 export const storeActivity = async (userId: number, activity: StravaActivity): Promise<void> => {
   const response = await fetch(`${config.API_URL}/running/activities`, {
     method: 'POST',

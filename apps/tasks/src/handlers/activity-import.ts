@@ -1,5 +1,5 @@
 import {getActivity, setupStravaContainer} from 'strava';
-import {storeActivity} from '../api-client';
+import {storeActivity, deleteActivity} from '../api-client';
 import {schedulePostImportJobs} from '../services/post-import-jobs';
 import {getValidAccessToken} from '../services/strava-token';
 
@@ -12,7 +12,19 @@ export interface ActivityImportPayload {
 export const handleActivityImport = async (payload: ActivityImportPayload): Promise<{success: boolean}> => {
   const {user_id, activity_id, aspect_type} = payload;
 
-  // Only handle create events for now
+  if (aspect_type === 'delete') {
+    console.log(`Deleting activity ${activity_id} for user ${user_id}`);
+    const result = await deleteActivity(activity_id);
+    if (result?.start_date) {
+      const date = result.start_date.split('T')[0];
+      console.log(`Deleted activity ${activity_id}, recalculating stats for ${date}`);
+      await schedulePostImportJobs(user_id, [date]);
+    } else {
+      console.log(`Activity ${activity_id} not found in DB, nothing to delete`);
+    }
+    return {success: true};
+  }
+
   if (aspect_type !== 'create') {
     console.log(`Skipping activity ${activity_id} - aspect_type: ${aspect_type}`);
     return {success: true};
