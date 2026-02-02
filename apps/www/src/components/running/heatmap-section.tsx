@@ -19,7 +19,7 @@ type HeatmapSectionProps = {
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEARS = Array.from({length: CURRENT_YEAR - 2020 + 1}, (_, i) => CURRENT_YEAR - i);
-const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MONTH_LABELS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
@@ -45,15 +45,17 @@ const buildGrid = (year: number, statsMap: Map<string, number>): CellData[] => {
   const cells: CellData[] = [];
   const jan1 = new Date(year, 0, 1);
   const dec31 = new Date(year, 11, 31);
-  const startDay = jan1.getDay();
+  const startDay = (jan1.getDay() + 6) % 7;
 
   const current = new Date(jan1);
   while (current <= dec31) {
     const dateStr = current.toISOString().split('T')[0];
     const dayOfYear = Math.floor(
-      (current.getTime() - jan1.getTime()) / (1000 * 60 * 60 * 24),
+      (Date.UTC(current.getFullYear(), current.getMonth(), current.getDate()) -
+        Date.UTC(year, 0, 1)) /
+        (1000 * 60 * 60 * 24),
     );
-    const dayOfWeek = current.getDay();
+    const dayOfWeek = (current.getDay() + 6) % 7;
     const week = Math.floor((dayOfYear + startDay) / 7);
 
     cells.push({
@@ -71,12 +73,13 @@ const buildGrid = (year: number, statsMap: Map<string, number>): CellData[] => {
 
 const getMonthPositions = (year: number) => {
   const jan1 = new Date(year, 0, 1);
-  const startDay = jan1.getDay();
+  const startDay = (jan1.getDay() + 6) % 7;
 
   return MONTH_LABELS.map((label, month) => {
     const firstOfMonth = new Date(year, month, 1);
     const dayOfYear = Math.floor(
-      (firstOfMonth.getTime() - jan1.getTime()) / (1000 * 60 * 60 * 24),
+      (Date.UTC(year, month, 1) - Date.UTC(year, 0, 1)) /
+        (1000 * 60 * 60 * 24),
     );
     const week = Math.floor((dayOfYear + startDay) / 7);
     return {label, week};
