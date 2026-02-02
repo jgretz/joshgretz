@@ -42,7 +42,7 @@ const formatMarathonDate = (dateStr: string): string => {
 const statusLabel = (status: StateStatus) => {
   switch (status) {
     case 'marathon':
-      return 'Marathon raced';
+      return 'Race';
     case 'runOnly':
       return 'Run';
     case 'none':
