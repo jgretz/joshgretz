@@ -86,7 +86,6 @@ const getMonthPositions = (year: number) => {
   const startDay = (jan1.getDay() + 6) % 7;
 
   return MONTH_LABELS.map((label, month) => {
-    const firstOfMonth = new Date(year, month, 1);
     const dayOfYear = Math.floor(
       (Date.UTC(year, month, 1) - Date.UTC(year, 0, 1)) / (1000 * 60 * 60 * 24),
     );

@@ -35,12 +35,11 @@ function Resume() {
       {/* Header */}
       <header className="relative mb-12 flex flex-col gap-6 border-b border-warm-700/15 pb-8 sm:flex-row sm:items-start">
         <a
-          href="/print-resume"
-          target="_blank"
-          rel="noreferrer"
+          href="/josh-gretz-resume.pdf"
+          download
           className="no-print absolute right-0 top-0 flex items-center gap-1.5 rounded-md border border-warm-700/20 px-3 py-2 font-sans text-xs text-warm-600 hover:bg-warm-700/5"
         >
-          Print version
+          Download Resume
         </a>
 
         <Avatar src={joshAvatar} alt="Josh Gretz" size="md" className="shrink-0 border-[3px]" />
@@ -136,9 +135,8 @@ function Resume() {
               <br />
               <br />
               <a
-                href="/print-resume"
-                target="_blank"
-                rel="noreferrer"
+                href="/josh-gretz-resume.pdf"
+                download
                 className="text-warm-600 underline hover:text-warm-800"
               >
                 Full history
