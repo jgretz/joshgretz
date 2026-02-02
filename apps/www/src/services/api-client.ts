@@ -57,7 +57,7 @@ export class ApiClient {
       const error = new Error(
         errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`,
       );
-      (error as any).status = response.status;
+      (error as unknown as {status: number}).status = response.status;
       throw error;
     }
 
@@ -68,7 +68,7 @@ export class ApiClient {
     return this.request<T>(endpoint, {method: 'GET'});
   }
 
-  async post<T>(endpoint: string, data?: any): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,

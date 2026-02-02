@@ -4,10 +4,7 @@ import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
 import {requireAuth} from '../../../services/auth/requireAuth';
-import {
-  deleteFutureRace,
-  getFutureRaces,
-} from '../../../services/future-races/future-races-server';
+import {deleteFutureRace, getFutureRaces} from '../../../services/future-races/future-races-server';
 
 export const Route = createFileRoute('/admin/races/')({
   component: FutureRacesList,

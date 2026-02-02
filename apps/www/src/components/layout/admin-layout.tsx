@@ -73,7 +73,7 @@ export const AdminLayout = ({title, children}: AdminLayoutProps) => {
                   </Link>
                   {expanded && (
                     <ul className="ml-3 mt-1 space-y-1 border-l border-warm-200 pl-3">
-                      {item.children!.map((child) => (
+                      {item.children?.map((child) => (
                         <li key={child.to}>
                           <Link
                             to={child.to}

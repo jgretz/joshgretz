@@ -1,4 +1,4 @@
-import {useState, useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {cn} from '../../lib/styles';
 
 type DailyStat = {
@@ -21,8 +21,18 @@ const CURRENT_YEAR = new Date().getFullYear();
 const YEARS = Array.from({length: CURRENT_YEAR - 2020 + 1}, (_, i) => CURRENT_YEAR - i);
 const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MONTH_LABELS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 
 const getColor = (miles: number) => {
@@ -78,8 +88,7 @@ const getMonthPositions = (year: number) => {
   return MONTH_LABELS.map((label, month) => {
     const firstOfMonth = new Date(year, month, 1);
     const dayOfYear = Math.floor(
-      (Date.UTC(year, month, 1) - Date.UTC(year, 0, 1)) /
-        (1000 * 60 * 60 * 24),
+      (Date.UTC(year, month, 1) - Date.UTC(year, 0, 1)) / (1000 * 60 * 60 * 24),
     );
     const week = Math.floor((dayOfYear + startDay) / 7);
     return {label, week};
@@ -111,28 +120,26 @@ export const HeatmapSection = ({dailyStats, selectedYear, onYearChange}: Heatmap
   const svgWidth = labelWidth + totalWeeks * cellStep;
   const svgHeight = topOffset + 7 * cellStep;
 
-  const handleMouseEnter = useCallback(
-    (cell: CellData, e: React.MouseEvent<SVGRectElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      setTooltip({
-        date: cell.date,
-        miles: cell.miles,
-        x: rect.left + rect.width / 2,
-        y: rect.top,
-      });
-    },
-    [],
-  );
+  const handleMouseEnter = useCallback((cell: CellData, e: React.MouseEvent<SVGRectElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltip({
+      date: cell.date,
+      miles: cell.miles,
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    });
+  }, []);
 
   const handleMouseLeave = useCallback(() => setTooltip(null), []);
 
   return (
     <section className="text-center">
-      <h2 className="font-serif text-5xl text-warm-700">Year in Miles</h2>
+      <h2 className="font-serif text-3xl sm:text-5xl text-warm-700">Year in Miles</h2>
       <p className="mt-3 font-serif text-lg italic text-warm-400">every run, every day</p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
         {YEARS.map((year) => (
           <button
+            type="button"
             key={year}
             onClick={() => onYearChange(year)}
             className={cn(
@@ -146,9 +153,9 @@ export const HeatmapSection = ({dailyStats, selectedYear, onYearChange}: Heatmap
           </button>
         ))}
       </div>
-      <div className="mt-6 rounded-2xl border border-warm-200 bg-white/60 p-6">
-        <div className="relative">
-          <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="block w-full">
+      <div className="mt-6 rounded-2xl border border-warm-200 bg-white/60 p-3 sm:p-6">
+        <div className="relative overflow-x-auto">
+          <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="block w-full" aria-hidden="true">
             {monthPositions.map(({label, week}) => (
               <text
                 key={label}
@@ -162,7 +169,7 @@ export const HeatmapSection = ({dailyStats, selectedYear, onYearChange}: Heatmap
             ))}
             {DAY_LABELS.map((label, i) => (
               <text
-                key={i}
+                key={label}
                 x={0}
                 y={topOffset + i * cellStep + cellSize - 1}
                 className="fill-warm-400 font-sans"

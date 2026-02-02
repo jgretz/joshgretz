@@ -3,8 +3,8 @@ import {type FormEvent, useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {requireAuth} from '../../../services/auth/requireAuth';
 import {searchActivities} from '../../../services/activities/activities-server';
+import {requireAuth} from '../../../services/auth/requireAuth';
 
 type Activity = {
   id: number;

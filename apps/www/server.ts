@@ -380,29 +380,25 @@ const initializeStaticRoutes = async (clientDirectory: string): Promise<PreloadR
       if (loaded.length > 0) {
         console.log('\n📁 Preloaded into memory:');
         console.log('Path                                          │    Size │ Gzip Size');
-        loaded
-          .sort((a, b) => a.route.localeCompare(b.route))
-          .forEach((file) => {
-            const {size, gzip} = formatFileSize(file.size);
-            const paddedPath = file.route.padEnd(maxPathLength);
-            const sizeStr = `${size.padStart(7)} kB`;
-            const gzipStr = `${gzip.padStart(7)} kB`;
-            console.log(`${paddedPath} │ ${sizeStr} │  ${gzipStr}`);
-          });
+        for (const file of loaded.sort((a, b) => a.route.localeCompare(b.route))) {
+          const {size, gzip} = formatFileSize(file.size);
+          const paddedPath = file.route.padEnd(maxPathLength);
+          const sizeStr = `${size.padStart(7)} kB`;
+          const gzipStr = `${gzip.padStart(7)} kB`;
+          console.log(`${paddedPath} │ ${sizeStr} │  ${gzipStr}`);
+        }
       }
 
       if (skipped.length > 0) {
         console.log('\n💾 Served on-demand:');
         console.log('Path                                          │    Size │ Gzip Size');
-        skipped
-          .sort((a, b) => a.route.localeCompare(b.route))
-          .forEach((file) => {
-            const {size, gzip} = formatFileSize(file.size);
-            const paddedPath = file.route.padEnd(maxPathLength);
-            const sizeStr = `${size.padStart(7)} kB`;
-            const gzipStr = `${gzip.padStart(7)} kB`;
-            console.log(`${paddedPath} │ ${sizeStr} │  ${gzipStr}`);
-          });
+        for (const file of skipped.sort((a, b) => a.route.localeCompare(b.route))) {
+          const {size, gzip} = formatFileSize(file.size);
+          const paddedPath = file.route.padEnd(maxPathLength);
+          const sizeStr = `${size.padStart(7)} kB`;
+          const gzipStr = `${gzip.padStart(7)} kB`;
+          console.log(`${paddedPath} │ ${sizeStr} │  ${gzipStr}`);
+        }
       }
     }
 
@@ -414,7 +410,7 @@ const initializeStaticRoutes = async (clientDirectory: string): Promise<PreloadR
         console.log(
           'Status       │ Path                            │ MIME Type                    │ Reason',
         );
-        allFiles.forEach((file) => {
+        for (const file of allFiles) {
           const isPreloaded = loaded.includes(file);
           const status = isPreloaded ? 'MEMORY' : 'ON-DEMAND';
           const reason =
@@ -423,13 +419,13 @@ const initializeStaticRoutes = async (clientDirectory: string): Promise<PreloadR
               : !isPreloaded
                 ? 'filtered'
                 : 'preloaded';
-          const route = file.route.length > 30 ? file.route.substring(0, 27) + '...' : file.route;
+          const route = file.route.length > 30 ? `${file.route.substring(0, 27)}...` : file.route;
           console.log(
             `${status.padEnd(12)} │ ${route.padEnd(30)} │ ${file.type.padEnd(28)} │ ${reason.padEnd(
               10,
             )}`,
           );
-        });
+        }
       } else {
         console.log('\n📊 No files found to display');
       }

@@ -225,7 +225,9 @@ export const handleStravaCallback = createServerFn({
     const env = getEnv();
 
     const response = await fetch(
-      `${env.apiUrl}/strava/oauth/callback?code=${encodeURIComponent(data.code)}&user_id=${data.userId}`,
+      `${env.apiUrl}/strava/oauth/callback?code=${encodeURIComponent(data.code)}&user_id=${
+        data.userId
+      }`,
       {
         headers: {Authorization: `Bearer ${env.apiToken}`},
       },

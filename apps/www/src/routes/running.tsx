@@ -1,18 +1,18 @@
 import {createFileRoute} from '@tanstack/react-router';
-import {useState, useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {PageWrapper} from '../components/layout/page-wrapper';
-import {StreakSection} from '../components/running/streak-section';
 import {HeatmapSection} from '../components/running/heatmap-section';
-import {USMapSection} from '../components/running/us-map-section';
 import {PersonalRecordsSection} from '../components/running/personal-records-section';
-import {UpcomingRacesSection} from '../components/running/upcoming-races-section';
 import {StravaCTASection} from '../components/running/strava-cta-section';
+import {StreakSection} from '../components/running/streak-section';
+import {UpcomingRacesSection} from '../components/running/upcoming-races-section';
+import {USMapSection} from '../components/running/us-map-section';
 import {title} from '../config.shared';
-import {getStreak} from '../services/streak/streak-server';
-import {getStateStats} from '../services/state-stats/state-stats-server';
 import {getDailyStats} from '../services/daily-stats/daily-stats-server';
-import {getPersonalRecords} from '../services/personal-records/personal-records-server';
 import {getFutureRaces} from '../services/future-races/future-races-server';
+import {getPersonalRecords} from '../services/personal-records/personal-records-server';
+import {getStateStats} from '../services/state-stats/state-stats-server';
+import {getStreak} from '../services/streak/streak-server';
 
 const JOSH_USER_ID = 1;
 const CURRENT_YEAR = new Date().getFullYear();
@@ -35,8 +35,13 @@ export const Route = createFileRoute('/running')({
 });
 
 function Running() {
-  const {streak, stateStats, dailyStats: initialDailyStats, personalRecords, futureRaces} =
-    Route.useLoaderData();
+  const {
+    streak,
+    stateStats,
+    dailyStats: initialDailyStats,
+    personalRecords,
+    futureRaces,
+  } = Route.useLoaderData();
   const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR);
   const [dailyStats, setDailyStats] = useState(initialDailyStats);
   const [loading, setLoading] = useState(false);

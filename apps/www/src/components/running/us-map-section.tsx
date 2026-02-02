@@ -1,5 +1,5 @@
-import {useState, useCallback} from 'react';
-import {US_STATE_PATHS, STATE_NAMES} from '../../data/us-map-paths';
+import {useCallback, useState} from 'react';
+import {STATE_NAMES, US_STATE_PATHS} from '../../data/us-map-paths';
 
 type StateStat = {
   id: number;
@@ -90,9 +90,9 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
 
   return (
     <section className="text-center">
-      <h2 className="font-serif text-5xl text-warm-700">50 States Journey</h2>
+      <h2 className="font-serif text-3xl sm:text-5xl text-warm-700">50 States Journey</h2>
       <p className="mt-3 font-serif text-lg italic text-warm-400">running across America</p>
-      <div className="mt-6 flex justify-center gap-12">
+      <div className="mt-6 flex justify-center gap-6 sm:gap-12">
         <div>
           <div className="font-serif text-3xl text-warm-700">{statesRun}/50</div>
           <div className="font-sans text-sm text-warm-400">states run</div>
@@ -102,9 +102,10 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
           <div className="font-sans text-sm text-warm-400">marathon states</div>
         </div>
       </div>
-      <div className="mt-6 rounded-2xl border border-warm-200 bg-white/60 p-6">
+      <div className="mt-6 rounded-2xl border border-warm-200 bg-white/60 p-3 sm:p-6">
         <div className="relative">
           <svg viewBox="0 0 960 600" className="mx-auto w-full max-w-3xl">
+            <title>US map showing states run and raced in</title>
             {Object.entries(US_STATE_PATHS).map(([abbr, path]) => {
               const status = getStateStatus(abbr, statsMap);
               return (
@@ -137,7 +138,7 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
             </div>
           )}
         </div>
-        <div className="mt-3 flex items-center justify-end gap-4 font-sans text-xs text-warm-500">
+        <div className="mt-3 flex items-center justify-end gap-2 sm:gap-4 font-sans text-xs text-warm-500">
           <span className="flex items-center gap-1">
             <span
               className="inline-block h-3 w-3 rounded-sm"

@@ -27,11 +27,11 @@ export const UpcomingRacesSection = ({races}: UpcomingRacesSectionProps) => {
 
   return (
     <section className="text-center">
-      <h2 className="font-serif text-5xl text-warm-700">What&apos;s Next</h2>
+      <h2 className="font-serif text-3xl sm:text-5xl text-warm-700">What&apos;s Next</h2>
       <p className="mt-3 font-serif text-lg italic text-warm-400">
         always chasing the next finish line
       </p>
-      <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+      <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
         {races.map((race) => {
           const date = race.race_date ? parseRaceDate(race.race_date) : null;
 
