@@ -191,7 +191,22 @@ export const education: Education[] = [
 ];
 
 export const skills = {
-  Engineering: ['TypeScript', 'Node.js', 'React', 'React Native', 'PostgreSQL', 'AWS'],
+  Engineering: [
+    'TypeScript',
+    'JavaScript',
+    'Node.js',
+    'React',
+    'React Native',
+    'C# / .NET',
+    'Python',
+    'Swift',
+    'Objective-C',
+    'Go',
+    'Kotlin',
+    'PostgreSQL',
+    'AWS',
+    'Azure',
+  ],
   Architecture: [
     'System Design',
     'API Design',
