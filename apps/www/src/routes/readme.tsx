@@ -13,6 +13,77 @@ export const Route = createFileRoute('/readme')({
   component: ReadmePage,
 });
 
+const books = [
+  {
+    title: 'Deep Work',
+    author: 'Newport',
+    href: 'https://www.amazon.com/Deep-Work-Focused-Success-Distracted/dp/1455586692',
+  },
+  {
+    title: 'The Pragmatic Programmer',
+    author: 'Hunt & Thomas',
+    href: 'https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary-dp-0135957052/dp/0135957052',
+  },
+  {
+    title: 'The Essence of Software',
+    author: 'Jackson',
+    href: 'https://www.amazon.com/Essence-Software-Concepts-Matter-Design/dp/0691225389',
+  },
+  {
+    title: 'Zen and the Art of Motorcycle Maintenance',
+    author: 'Pirsig',
+    href: 'https://www.amazon.com/Zen-Art-Motorcycle-Maintenance-Inquiry/dp/0061673730',
+  },
+  {
+    title: 'Atomic Habits',
+    author: 'Clear',
+    href: 'https://www.amazon.com/Atomic-Habits-Proven-Build-Break/dp/0735211299',
+  },
+  {
+    title: 'Good to Great',
+    author: 'Collins',
+    href: 'https://www.amazon.com/Good-Great-Some-Companies-Others/dp/0066620996',
+  },
+  {
+    title: 'Crucial Conversations',
+    author: 'Grenny & Switzler',
+    href: 'https://www.amazon.com/Crucial-Conversations-Talking-Stakes-Second/dp/0071771328',
+  },
+  {
+    title: 'The Goal',
+    author: 'Goldratt',
+    href: 'https://www.amazon.com/Goal-Process-Ongoing-Improvement/dp/0884271951',
+  },
+  {
+    title: 'Sondheim, Seurat, Software: Finding Art in Code',
+    author: 'Jon Skeet',
+    href: 'https://www.youtube.com/watch?v=FsPkHGt1p2c',
+    video: true,
+  },
+  {
+    title: 'Inventing on Principle',
+    author: 'Bret Victor',
+    href: 'https://www.youtube.com/watch?v=EGqwXt90ZqA',
+    video: true,
+  },
+  {
+    title: 'We Are The Art',
+    author: 'Brandon Sanderson',
+    href: 'https://www.youtube.com/watch?v=mb3uK-_QkOo',
+    video: true,
+  },
+  {
+    title: 'Propositions As Types',
+    author: 'Philip Wadler',
+    href: 'https://homepages.inf.ed.ac.uk/wadler/papers/propositions-as-types/propositions-as-types.pdf',
+  },
+  {
+    title: 'The Cathedral and the Bazaar',
+    author: 'Eric S. Raymond',
+    href: 'https://www.catb.org/~esr/writings/cathedral-bazaar/cathedral-bazaar/',
+  },
+] as const;
+
 const cliftonStrengths = [
   'Input',
   'Strategic',
@@ -335,47 +406,9 @@ function ReadmePage() {
       {/* Books & Ideas */}
       <Section title="Books & Ideas That Shape My Thinking">
         <div className="space-y-3">
-          <BookLink
-            title="Deep Work"
-            author="Cal Newport"
-            href="https://www.amazon.com/Deep-Work-Focused-Success-Distracted/dp/1455586692"
-          />
-          <BookLink
-            title="The Pragmatic Programmer"
-            author="Hunt & Thomas"
-            href="https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary-dp-0135957052/dp/0135957052"
-          />
-          <BookLink
-            title="The Essence of Software"
-            author="Jackson"
-            href="https://www.amazon.com/Essence-Software-Concepts-Matter-Design/dp/0691225389"
-          />
-          <BookLink
-            title="Zen and the Art of Motorcycle Maintenance"
-            author="Pirsig"
-            href="https://www.amazon.com/Zen-Art-Motorcycle-Maintenance-Inquiry/dp/0061673730"
-          />
-          <BookLink
-            title="Good to Great"
-            author="Collins"
-            href="https://www.amazon.com/Good-Great-Some-Companies-Others/dp/0066620996"
-          />
-          <BookLink
-            title="Crucial Conversations"
-            author="Grenny & Switzler"
-            href="https://www.amazon.com/Crucial-Conversations-Talking-Stakes-Second/dp/0071771328"
-          />
-          <BookLink
-            title="The Goal"
-            author="Goldratt"
-            href="https://www.amazon.com/Goal-Process-Ongoing-Improvement/dp/0884271951"
-          />
-          <BookLink
-            title="Sondheim, Seurat, Software: Finding Art in Code"
-            author="Jon Skeet"
-            href="https://www.youtube.com/watch?v=FsPkHGt1p2c"
-            video
-          />
+          {books.map((book) => (
+            <BookLink key={book.title} {...book} />
+          ))}
         </div>
       </Section>
 
