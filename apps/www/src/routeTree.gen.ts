@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RunningRouteImport } from './routes/running'
 import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as ReadmeRouteImport } from './routes/readme'
 import { Route as PrintResumeRouteImport } from './routes/print-resume'
 import { Route as HealthcheckRouteImport } from './routes/healthcheck'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
@@ -40,6 +41,11 @@ const RunningRoute = RunningRouteImport.update({
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadmeRoute = ReadmeRouteImport.update({
+  id: '/readme',
+  path: '/readme',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrintResumeRoute = PrintResumeRouteImport.update({
@@ -148,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/healthcheck': typeof HealthcheckRoute
   '/print-resume': typeof PrintResumeRoute
+  '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/healthcheck': typeof HealthcheckRoute
   '/print-resume': typeof PrintResumeRoute
+  '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/healthcheck': typeof HealthcheckRoute
   '/print-resume': typeof PrintResumeRoute
+  '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/healthcheck'
     | '/print-resume'
+    | '/readme'
     | '/resume'
     | '/running'
     | '/admin/login'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/'
     | '/healthcheck'
     | '/print-resume'
+    | '/readme'
     | '/resume'
     | '/running'
     | '/admin/login'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/healthcheck'
     | '/print-resume'
+    | '/readme'
     | '/resume'
     | '/running'
     | '/admin/login'
@@ -294,6 +306,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   HealthcheckRoute: typeof HealthcheckRoute
   PrintResumeRoute: typeof PrintResumeRoute
+  ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RunningRoute: typeof RunningRoute
 }
@@ -312,6 +325,13 @@ declare module '@tanstack/react-router' {
       path: '/resume'
       fullPath: '/resume'
       preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/readme': {
+      id: '/readme'
+      path: '/readme'
+      fullPath: '/readme'
+      preLoaderRoute: typeof ReadmeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/print-resume': {
@@ -504,6 +524,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   HealthcheckRoute: HealthcheckRoute,
   PrintResumeRoute: PrintResumeRoute,
+  ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RunningRoute: RunningRoute,
 }
