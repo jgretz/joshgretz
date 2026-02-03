@@ -81,7 +81,7 @@ export const PersonalRecordsSection = ({records}: PersonalRecordsSectionProps) =
     <section className="text-center">
       <h2 className="font-serif text-3xl sm:text-5xl text-warm-700">Personal Records</h2>
       <p className="mt-3 font-serif text-lg italic text-warm-400">from the mile to the hundred</p>
-      <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
+      <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-4">
         {records.map((pr) => (
           <PRCard key={pr.id} pr={pr} />
         ))}
