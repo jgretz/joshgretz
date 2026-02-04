@@ -1,88 +1,120 @@
 import {Link, createFileRoute} from '@tanstack/react-router';
 import {type PropsWithChildren} from 'react';
+import {match} from 'ts-pattern';
 import {PageWrapper} from '../components/layout/page-wrapper';
 import {title} from '../config.shared';
+
+type SourceType = 'book' | 'video' | 'paper';
+
+type Source = {
+  title: string;
+  author: string;
+  href: string;
+  type: SourceType;
+};
 
 export const Route = createFileRoute('/readme')({
   head: () => ({
     meta: [
       {title: title('README')},
-      {name: 'description', content: 'Working With Josh Gretz - A personal README'},
+      {name: 'description', content: 'The "Short" Version of Me - A personal README'},
     ],
   }),
   component: ReadmePage,
 });
 
-const books = [
+const sources: Source[] = [
   {
     title: 'Deep Work',
-    author: 'Newport',
+    author: 'Cal Newport',
     href: 'https://www.amazon.com/Deep-Work-Focused-Success-Distracted/dp/1455586692',
+    type: 'book',
   },
   {
     title: 'The Pragmatic Programmer',
-    author: 'Hunt & Thomas',
+    author: 'Andy Hunt, Dave Thomas',
     href: 'https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary-dp-0135957052/dp/0135957052',
+    type: 'book',
   },
   {
     title: 'The Essence of Software',
-    author: 'Jackson',
+    author: 'Daniel Jackson',
     href: 'https://www.amazon.com/Essence-Software-Concepts-Matter-Design/dp/0691225389',
+    type: 'book',
   },
   {
     title: 'Zen and the Art of Motorcycle Maintenance',
-    author: 'Pirsig',
+    author: 'Robert Pirsig',
     href: 'https://www.amazon.com/Zen-Art-Motorcycle-Maintenance-Inquiry/dp/0061673730',
+    type: 'book',
   },
   {
     title: 'Atomic Habits',
-    author: 'Clear',
+    author: 'James Clear',
     href: 'https://www.amazon.com/Atomic-Habits-Proven-Build-Break/dp/0735211299',
+    type: 'book',
   },
   {
     title: 'Good to Great',
-    author: 'Collins',
+    author: 'Jim Collins',
     href: 'https://www.amazon.com/Good-Great-Some-Companies-Others/dp/0066620996',
+    type: 'book',
   },
   {
     title: 'Crucial Conversations',
-    author: 'Grenny & Switzler',
+    author: 'Kerry Patterson et al.',
     href: 'https://www.amazon.com/Crucial-Conversations-Talking-Stakes-Second/dp/0071771328',
+    type: 'book',
   },
   {
     title: 'The Goal',
-    author: 'Goldratt',
+    author: 'Eliyahu Goldratt',
     href: 'https://www.amazon.com/Goal-Process-Ongoing-Improvement/dp/0884271951',
+    type: 'book',
+  },
+  {
+    title: 'The Hard Thing About Hard Things',
+    author: 'Ben Horowitz',
+    href: 'https://www.amazon.com/Hard-Thing-About-Things-Building/dp/0062273205',
+    type: 'book',
+  },
+  {
+    title: 'Poke the Box',
+    author: 'Seth Godin',
+    href: 'https://www.amazon.com/Poke-Box-Seth-Godin/dp/1936719002',
+    type: 'book',
   },
   {
     title: 'Sondheim, Seurat, Software: Finding Art in Code',
     author: 'Jon Skeet',
     href: 'https://www.youtube.com/watch?v=FsPkHGt1p2c',
-    video: true,
+    type: 'video',
   },
   {
     title: 'Inventing on Principle',
     author: 'Bret Victor',
     href: 'https://www.youtube.com/watch?v=EGqwXt90ZqA',
-    video: true,
+    type: 'video',
   },
   {
     title: 'We Are The Art',
     author: 'Brandon Sanderson',
     href: 'https://www.youtube.com/watch?v=mb3uK-_QkOo',
-    video: true,
+    type: 'video',
   },
   {
     title: 'Propositions As Types',
     author: 'Philip Wadler',
     href: 'https://homepages.inf.ed.ac.uk/wadler/papers/propositions-as-types/propositions-as-types.pdf',
+    type: 'paper',
   },
   {
     title: 'The Cathedral and the Bazaar',
     author: 'Eric S. Raymond',
     href: 'https://monoskop.org/images/e/e0/Raymond_Eric_S_The_Cathedral_and_the_Bazaar_rev_ed.pdf',
+    type: 'paper',
   },
-] as const;
+];
 
 const cliftonStrengths = [
   'Input',
@@ -102,36 +134,47 @@ function ReadmePage() {
     <PageWrapper className="max-w-[720px]">
       {/* Hero */}
       <header className="mb-12 text-center">
-        <h1 className="font-serif text-4xl font-normal text-warm-800">Working With Josh Gretz</h1>
-        <p className="mt-3 font-hand text-xl italic text-warm-600">
-          Husband, father, developer, cook, baker, nerd, geek.
-        </p>
+        <h1 className="font-serif text-4xl font-normal text-warm-800">
+          The &ldquo;Short&rdquo; Version of Me
+        </h1>
       </header>
 
       {/* Intro Quote */}
       <div className="mb-12 rounded-xl border-l-[3px] border-warm-600 bg-white/50 px-8 py-6">
         <Prose>
-          I believe highly functioning software teams make the world better. I&apos;m a builder - of
-          software, of teams, of organizations.
+          If you&apos;re here, you&apos;re probably considering working with me or we&apos;re about
+          to start. Here&apos;s the context I want you to have: how I think, how I communicate, what
+          I value, and what to expect from me.
         </Prose>
       </div>
 
       {/* My Philosophy */}
       <Section title="My Philosophy">
         <Belief>
-          <strong>I&apos;m driven to see genius realized</strong> through the fusion of ideas,
-          collaboration, and hard work.
+          <strong>I&apos;m driven to unlock potential</strong> - equipping people and creating
+          environments where they can express their true strengths in tangible ways that lead to
+          real results.
         </Belief>
         <Belief>
           <strong>I believe the best software is built by people for people</strong> - an artistic
-          endeavor rooted in engineering sensibility. Code can be an artistic medium. The knowledge
-          the team holds is the true value; the code is the easy part.
+          endeavor rooted in engineering sensibility. The knowledge the team holds is the true
+          value; the code is the easy part.
         </Belief>
         <Belief>
           <strong>The magic happens</strong> when software makes a formerly difficult or tedious
           task disappear, surfaces that critical bit of data at the right moment, or maps the real
-          world to the user&apos;s journey in a way that just <em>works</em>. That&apos;s what
-          software is - not the loops, object, buttons, or text boxes.
+          world to the user&apos;s journey in a way that just <em>works</em>. That&apos;s what great
+          software is - not the loops, objects, buttons, or text boxes.
+        </Belief>
+        <Belief>
+          <strong>Great software requires more than code.</strong> Product thinking, design
+          sensibility, technical execution - each is essential. The best outcomes come from
+          different perspectives collaborating as equals.
+        </Belief>
+        <Belief>
+          <strong>Understanding comes first.</strong> Every situation is different. I seek to learn
+          about the people, the product, the history, and the constraints before forming a point of
+          view.
         </Belief>
         <Belief>
           <strong>I believe in Conway&apos;s Law:</strong> software will evolve to match the team
@@ -139,9 +182,10 @@ function ReadmePage() {
           quality from team quality. Fix the team, and the software follows.
         </Belief>
         <Belief>
-          <strong>I hold strong opinions, loosely.</strong> I&apos;ll push hard on ideas I believe
-          in, but I keep an open mind and I&apos;m persuadable. I strive to express my views humbly,
-          and I expect the same direct engagement in return.
+          <strong>Strong opinions, loosely held, humbly expressed.</strong> What I mean: my opinions
+          come from real experience and hard-won lessons - they have reasons behind them. But
+          I&apos;ve also learned that the world is bigger than what I&apos;ve seen, so I hold them
+          loosely, committed to the best idea winning.
         </Belief>
         <Belief>
           <strong>My goal is always to build capability, not dependency.</strong> Success isn&apos;t
@@ -154,29 +198,74 @@ function ReadmePage() {
 
       {/* How I Work */}
       <Section title="How I Work">
-        <Subsection title="Context Shapes Intensity" />
-        <Prose>My approach shifts depending on where we are in the journey.</Prose>
+        <Subsection title="Meeting the Moment" />
         <Prose>
-          <strong>Early on</strong>, when we&apos;re building the foundation and standing up the
-          team, I take a stronger hand in driving progress. There&apos;s no existing muscle yet -
-          decisions need to be made, direction needs to be set. Expect me to be more directive.
+          My role shifts as the product and team evolve. I step into whatever is needed most, then
+          deliberately create space for others to grow into.
         </Prose>
         <Prose>
-          <strong>As the team matures</strong>, I deliberately step back into coaching. The goal
-          shifts from <em>me</em> driving progress to <em>them</em> developing the capacity to drive
-          it themselves. I&apos;ll push for them to figure it out, but I&apos;m always the backstop
-          for the team and the company. I coach people to accomplish things while keeping who{' '}
-          <em>they</em> are as the guiding light for <em>how</em> they do it. I&apos;m not trying to
-          create mini-Joshes - I&apos;m trying to unlock your version of strong.
+          <strong>Founder / Early Stage:</strong> When there&apos;s a vision but no team yet, I
+          function as the founding engineer and team builder. I&apos;m hands-on in the code,
+          translating vision to roadmap to working software, while simultaneously recruiting and
+          shaping the team that will carry it forward.
+        </Prose>
+        <Prose>
+          <strong>Team Forming:</strong> As the team takes shape, I fill the gaps - CTO, architect,
+          principal engineer, whatever the team needs most. The title matters less than the
+          function. I keep the foundation secure while people find their footing.
+        </Prose>
+        <Prose>
+          <strong>Team In Place:</strong> Once the team has its legs, I shift into coaching and
+          mentoring. My job becomes developing their capacity, not doing the work myself. I push
+          them to figure it out, but I&apos;m always there as a safety net while they build
+          confidence.
+        </Prose>
+        <Prose>
+          <strong>Rolling Out:</strong> The goal is always working myself out of the day-to-day.
+          When the team is hitting its stride and running things themselves, I step back - available
+          when needed, but out of the way. Success is the team thriving, and knowing I&apos;m a
+          phone call away if something unusual comes up.
+        </Prose>
+
+        <Subsection title="Understanding the Whole Picture" />
+        <Prose>
+          Whether I&apos;m starting from scratch, stepping into something established, or diagnosing
+          why something isn&apos;t working - I start the same way: by seeking to understand.
+        </Prose>
+        <Prose>
+          <strong>On a greenfield build,</strong> that means understanding the vision, the
+          constraints, the market, and the users - sometimes through research, sometimes by building
+          to learn. The best architecture emerges from understanding the problem deeply.
+        </Prose>
+        <Prose>
+          <strong>On an existing product,</strong> that means learning the history - why decisions
+          were made, what&apos;s been tried, what the team has learned. Context isn&apos;t a luxury;
+          it&apos;s the foundation.
+        </Prose>
+        <Prose>
+          <strong>When something&apos;s not working,</strong> my instinct is to look at the system,
+          not the individuals. The issue is rarely the people-it&apos;s usually something about the
+          environment, the process, or the information flow that&apos;s getting in their way.
+        </Prose>
+        <Prose>
+          In all cases, the goal is the same: understand deeply so we can craft the right container
+          for success.
         </Prose>
 
         <Subsection title="Communication" />
         <Prose>
-          I value protecting focus time - mine and yours. This drives a lot of my thinking around
-          communication.
+          Much of my career has been spent as a bridge-between developers and stakeholders,
+          technical teams and business leadership, product and engineering. I translate naturally,
+          adjusting my language based on who I&apos;m talking to and what they need to hear. I
+          won&apos;t bury a founder in implementation details or oversimplify for a senior engineer.
         </Prose>
         <Prose>
-          <strong>I match medium to message type:</strong>
+          I also spend a lot of time helping teams build this muscle themselves - coaching
+          architects to communicate with executives, establishing rhythms so the right conversations
+          happen at the right level with the right people.
+        </Prose>
+        <Prose>
+          <strong>I match medium to message:</strong>
         </Prose>
 
         <div className="mb-6 overflow-x-auto">
@@ -190,95 +279,100 @@ function ReadmePage() {
             </thead>
             <tbody>
               <tr className="border-b border-warm-400/30">
-                <td className="py-2 pr-4">Information sharing, updates</td>
-                <td className="py-2 pr-4">Slack async (primary), email (secondary)</td>
+                <td className="py-2 pr-4">Information sharing</td>
+                <td className="py-2 pr-4">Slack async, email</td>
                 <td className="py-2">Doesn&apos;t interrupt flow</td>
               </tr>
               <tr className="border-b border-warm-400/30">
                 <td className="py-2 pr-4">Decision making</td>
                 <td className="py-2 pr-4">Slack sync</td>
-                <td className="py-2">Often evolves naturally from info sharing</td>
+                <td className="py-2">Often evolves from info sharing</td>
               </tr>
               <tr className="border-b border-warm-400/30">
                 <td className="py-2 pr-4">Collaboration</td>
-                <td className="py-2 pr-4">
-                  Video call when text hits ~20+ messages or complexity exceeds what text handles
-                  well
-                </td>
+                <td className="py-2 pr-4">Video when text hits ~20+ messages</td>
                 <td className="py-2">Real-time is faster past a threshold</td>
               </tr>
               <tr className="border-b border-warm-400/30">
                 <td className="py-2 pr-4">Ideation</td>
-                <td className="py-2 pr-4">Video + visual tools (Miro, etc.) or in-person</td>
-                <td className="py-2">Needs a larger pipe</td>
+                <td className="py-2 pr-4">Video + visual tools</td>
+                <td className="py-2">Ideas need room to breathe</td>
               </tr>
               <tr>
                 <td className="py-2 pr-4">Conflict resolution</td>
                 <td className="py-2 pr-4">Video/audio required</td>
-                <td className="py-2">Non-verbals matter; you can&apos;t replace them in text</td>
+                <td className="py-2">Non-verbals matter</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <Prose>
-          Once decisions are made in real-time conversation, they should always be captured in Slack
-          and/or a knowledge base (Notion, Confluence, etc.).
+          Once decisions are made in real-time conversation, they should be captured in Slack and/or
+          a knowledge base.
         </Prose>
+        <Prose>
+          Communication is a two-way street. I value directness, honesty, and clarity - and I want
+          the same from you. Don&apos;t pull punches; I can take it. The faster we get to
+          transparency, the faster we get to the real work.
+        </Prose>
+        <Prose>Clarity is kindness. Ambiguity is expensive.</Prose>
 
         <Subsection title="Meetings" />
-        <BulletList>
-          <li>
-            <strong>Camera on, muted until speaking</strong> - that&apos;s my default
-          </li>
-          <li>
-            <strong>Agendas and purpose required</strong> - I value the time of the people on my
-            teams
-          </li>
-          <li>
-            <strong>Fewer routine reporting meetings</strong> - use Slack for basic standups; invest
-            meeting time in high-bandwidth work like demos, ideation, and collaboration
-          </li>
-          <li>
-            <strong>I&apos;m a storyteller</strong> - I&apos;ll admit to sometimes being the cause
-            of a meeting going off course. Feel free to &ldquo;smack&rdquo; me back on track. But
-            there&apos;s also value, especially in virtual environments, in spending some time on
-            the personal and relational. Identifying the constraints of the meeting upfront helps.
-          </li>
-        </BulletList>
+        <Prose>
+          I don&apos;t hate meetings - just the bad ones. A good meeting has a clear purpose, the
+          right people, and ends with decisions or next steps.
+        </Prose>
+        <Prose>I think about time in three rhythms:</Prose>
+        <Prose>
+          <strong>Meetings</strong> - for decisions, coordination, and moving things forward.
+        </Prose>
+        <Prose>
+          <strong>Maker time</strong> - for deep focused work. This is where code gets written and
+          hard problems get solved. Uninterrupted time matters.
+        </Prose>
+        <Prose>
+          <strong>Collaboration time</strong> - for ideation and creative problem-solving together.
+          Whiteboarding, brainstorming, exploring possibilities. Different work, different energy.
+        </Prose>
+        <Prose>
+          All three matter. I&apos;m intentional about crafting schedules that let people bring
+          their best to the moment.
+        </Prose>
+        <Prose>
+          <strong>A confession:</strong> I&apos;m a storyteller. I&apos;ll admit to sometimes being
+          the cause of a meeting going off course. Feel free to nudge me back on track. But
+          there&apos;s also value - especially in virtual environments - in spending some time on
+          the personal and relational. Identifying the constraints of the meeting upfront helps us
+          balance both.
+        </Prose>
 
         <Subsection title="Calendar" />
-        <BulletList>
-          <li>
-            <strong>My calendar is gospel</strong> - given the reality of my work across multiple
-            contexts, I invest in tooling to ensure my calendar accurately shows my availability.
-            You can trust what you see.
-          </li>
-          <li>
-            <strong>Punctuality is respect</strong> - things happen, and I&apos;ll always
-            communicate if something needs to change last minute. I expect the same.
-          </li>
-        </BulletList>
+        <Prose>
+          You can trust my calendar. I work across multiple contexts and invest in keeping it
+          accurate. What you see is real.
+        </Prose>
+        <Prose>Life happens. When it does, I communicate early - and appreciate the same.</Prose>
 
         <Subsection title="Responsiveness" />
         <Prose>
-          I try to be responsive on Slack (then email) and never want to be the blocker. If
-          there&apos;s a reason I can&apos;t be responsive for a time frame, you&apos;ll know about
-          it beforehand.
+          I try to be responsive on Slack (then email) and never want to be a blocker. If I&apos;m
+          going to be unavailable, you&apos;ll know beforehand.
         </Prose>
         <Prose>
-          My default communication style is train of thought - direct and unpolished unless the
-          situation requires something more deliberate (which is rare for day-to-day work).
+          My style is thinking out loud - short messages, quick replies, working through ideas in
+          real-time rather than going quiet and returning with a polished answer. If you need a
+          synthesized take, just ask.
         </Prose>
       </Section>
 
       {/* 1:1s */}
       <Section title="1:1s">
         <Prose>
-          <strong>1:1s are primarily for you, not me.</strong> It&apos;s your time and space to get
-          what you need, express your thoughts and opinions. It&apos;s not a status report -
-          it&apos;s a true check-in on how you&apos;re doing, what&apos;s occupying your thoughts,
-          and what you need to be happy and effective.
+          1:1s are primarily for you, not me. It&apos;s your time and space to get what you need,
+          express your thoughts and opinions. It&apos;s not a status report - it&apos;s a true
+          check-in on how you&apos;re doing, what&apos;s occupying your thoughts, and what you need
+          to be happy and effective.
         </Prose>
         <Prose>
           1:1s naturally vary by person and situation. Sometimes they&apos;re career-oriented,
@@ -291,29 +385,33 @@ function ReadmePage() {
       {/* What I Value */}
       <Section title="What I Value">
         <Prose>
-          <strong>Direct, transparent communication</strong> - say what you mean
+          <strong>Direct, transparent communication</strong> - say what you mean.
         </Prose>
         <Prose>
           <strong>Addressing problems early</strong> - confronting concerns head-on prevents them
-          from becoming larger issues
+          from becoming larger issues.
         </Prose>
         <Prose>
-          <strong>Curiosity and understanding</strong> - seek to understand a problem before asking
-          others for help. At the same time, know when to stop spinning and ask - there&apos;s value
-          in talking to the duck (or a human)
+          <strong>Curiosity and understanding</strong> - dig into a problem before escalating. Come
+          with what you&apos;ve tried and what you&apos;ve learned. At the same time, know when to
+          stop spinning and ask-there&apos;s value in talking to the duck (or a human).
         </Prose>
         <Prose>
-          <strong>Understanding over generation</strong> - code generation tools can be a great
-          help, but you can never give up the necessity of understanding the problem and the
-          solution. You can&apos;t outsource comprehension.
+          <strong>Understanding over output</strong> - AI and automation can help, but you
+          can&apos;t outsource comprehension. You still need to understand the problem and the
+          solution.
         </Prose>
         <Prose>
-          <strong>Craftsmanship</strong> - I appreciate code that works, is elegant, consistent, and
-          maintainable
+          <strong>Craftsmanship</strong> - I appreciate work that&apos;s thoughtful, elegant,
+          consistent, and built to last. Code, process, or presentation - same standard.
         </Prose>
         <Prose>
-          <strong>Doing the right thing</strong> - I appreciate people who care about those around
-          them enough to do the right thing regardless of the immediate cost
+          <strong>Different lenses, better outcomes</strong> - the best solutions come from product,
+          design, and engineering working together. I value seeking out perspectives different from
+          my own.
+        </Prose>
+        <Prose>
+          <strong>Doing the right thing</strong> - regardless of the immediate cost.
         </Prose>
         <Prose>
           <strong>Ownership</strong> - if there&apos;s a problem, it&apos;s everyone&apos;s problem
@@ -323,91 +421,94 @@ function ReadmePage() {
 
       {/* What to Know About Me */}
       <Section title="What to Know About Me">
-        <Subsection title="Energy Sources" />
-        <BulletList>
-          <li>Creating</li>
-          <li>Solving hard problems</li>
-          <li>Learning</li>
-        </BulletList>
-
-        <Subsection title="Energy Drains" />
-        <BulletList>
-          <li>Repetitive busy work</li>
-          <li>Justifying the obvious</li>
-        </BulletList>
-
-        <Subsection title="Growth Edges" />
+        <Subsection title="How I'm Wired" />
         <Prose>
-          <strong>Celebrating.</strong> I&apos;m naturally wired to solve a problem and then move to
-          the next one. I don&apos;t spend a lot of time celebrating wins. I try to step back and do
-          this more often, but it&apos;s still a growth edge. Don&apos;t interpret me moving on as
-          not caring - and feel free to prompt me (&ldquo;Hey, can we take a minute on
-          this?&rdquo;).
+          I come alive when I&apos;m creating, solving hard problems, and learning something new.
+          The harder the puzzle, the better. I love being on the frontier - taking an idea and
+          making it real. Few things beat the moment when a complex problem finally clicks into
+          place.
         </Prose>
         <Prose>
-          <strong>Patience with what feels obvious.</strong> What&apos;s self-evident to me may not
-          be to others. I&apos;m aware of this and work on it.
+          My brain tends to leap from A to D, and walking back through B and C takes real effort.
+          Repeating the same explanation multiple times wears on me. I find it frustrating when
+          clear decisions get blocked by politics or ego rather than substance.
+        </Prose>
+        <Prose>
+          I know this about myself. If I&apos;m moving too fast, slow me down. If you need me to
+          explain my reasoning, ask - I&apos;d rather do that than have you feel left behind.
+        </Prose>
+        <Prose>
+          One more thing: I tend to solve a problem and move onto the next one without pausing to
+          celebrate. If I move on quickly, it&apos;s not a lack of caring - feel free to pull me
+          back.
+        </Prose>
+
+        <Subsection title="Relationships Outlast Roles" />
+        <Prose>
+          I approach people as humans first, colleagues second. People I worked with years ago still
+          reach out - trading career advice, debugging problems together, catching up on life.
+          That&apos;s what makes the work worth it.
         </Prose>
 
         <Subsection title="Personal Context" />
         <Prose>
-          <strong>I have ADHD and OCD.</strong> I&apos;ve learned to use them as a bit of a
-          superpower, but they show up in ways you might notice - grammar pedantry, punctuality
-          about reservations, intensity of focus. Naming this helps explain behaviors that might
-          otherwise seem arbitrary.
+          <strong>I have ADHD and OCD.</strong> I&apos;ve learned to channel them productively, but
+          they show up in ways you might notice - intensity of focus, attention to detail, and an
+          innate rigidity about time. Naming this helps explain behaviors that might otherwise seem
+          arbitrary.
         </Prose>
         <Prose>
-          <strong>I&apos;m an ultra runner</strong> (
-          <Link to="/running" className="text-warm-600 underline hover:text-warm-800">
-            joshgretz.com/running
-          </Link>
-          ). I&apos;m committed to doing the hard thing regardless of how hard. I may get knocked
-          down, but I will always keep going.
+          <strong>
+            I&apos;m a{' '}
+            <Link to="/running" className="text-warm-600 underline hover:text-warm-800">
+              runner
+            </Link>
+            .
+          </strong>{' '}
+          It&apos;s taught me that I can keep going longer than I think I can and that most limits
+          are negotiable.
         </Prose>
         <Prose>
-          <strong>I love to cook and bake</strong> - it&apos;s how I unwind and another expression
-          of the same creative/maker/builder wiring that drives my work.
+          <strong>I love to cook and bake</strong> - same maker wiring, different medium.
         </Prose>
 
         <Subsection title="Work Hours" />
-        <BulletList>
-          <li>Generally 9-6 EST, but rarely fully &ldquo;off&rdquo; from communication</li>
-          <li>I weave personal and work lives so both get my best - not rigid separation</li>
-          <li>I communicate proactively when conflicts arise and expect the same</li>
-          <li>I expect you to care for yourself, be flexible, and communicate openly</li>
-        </BulletList>
+        <Prose>
+          I&apos;m generally available 9&ndash;6 EST, but I&apos;m rarely fully offline. I weave
+          personal and work together so both get my best - not rigid separation. That said, my
+          availability doesn&apos;t create expectations for yours. Take care of yourself, be
+          flexible, and communicate openly. I&apos;ll do the same.
+        </Prose>
       </Section>
 
       {/* Feedback & Accountability */}
       <Section title="Feedback & Accountability">
+        <Prose>These are expectations I hold for myself - and for the teams I work with.</Prose>
         <Prose>
-          <strong>Call me on my BS.</strong> I want anyone to feel free to do this at any point. I
-          commit to listening, seeking to understand, and having an open and honest conversation. We
-          might not always agree, but we will always hear each other.
+          <strong>Call me on my BS.</strong> I mean it. I commit to listening, seeking to
+          understand, and having an honest conversation. We might not always agree, but we will
+          always hear each other.
         </Prose>
         <Prose>
-          <strong>Intentions don&apos;t override consequences.</strong> I realize intention and
-          action don&apos;t always equal each other, but consequences are the truth regardless of
-          intention. Good intentions are not a get-out-of-jail-free card - everyone needs to own the
-          results of their actions.
+          <strong>Consequences are the truth.</strong> Good intentions don&apos;t erase impact. I
+          own the results of my actions, not just my intentions - and I expect the same.
         </Prose>
         <Prose>
-          <strong>No time machines.</strong> When something has gone wrong, we should acknowledge
-          it, learn what we can, and move onto solving the reality we face. That doesn&apos;t mean
-          downplaying emotional and relational effects - those are part of the reality we need to
-          address going forward.
+          <strong>No time machines.</strong> When something goes wrong, acknowledge it, learn from
+          it, and solve the reality we&apos;re facing. That doesn&apos;t mean ignoring the emotional
+          or relational fallout - those are part of the reality too.
         </Prose>
         <Prose>
-          <strong>Restitution matters.</strong> An apology without restitution is just words. Making
-          it right is part of making it right.
+          <strong>Apologies need legs.</strong> Making it right means actually making it right - not
+          just saying the words.
         </Prose>
       </Section>
 
       {/* Books & Ideas */}
       <Section title="Books & Ideas That Shape My Thinking">
         <div className="space-y-3">
-          {books.map((book) => (
-            <BookLink key={book.title} {...book} />
+          {sources.map((source) => (
+            <SourceLink key={source.title} {...source} />
           ))}
         </div>
       </Section>
@@ -416,36 +517,36 @@ function ReadmePage() {
       <Section title="Assessments">
         <Subsection title="DISC: D-Style" />
         <Prose>
-          I&apos;m strongly D-style - direct, results-oriented, takes charge. My intensity varies by
-          context: more directive when building foundations, more coaching-oriented as teams mature.
+          Direct, results-oriented, takes charge. My intensity varies by context - more directive
+          when building foundations, more coaching-oriented as teams mature.
         </Prose>
 
         <Subsection title="CliftonStrengths Top 10" />
-        <ol className="mb-4 list-decimal pl-6 font-serif text-[0.95rem] leading-[1.8] text-warm-700">
-          {cliftonStrengths.map((strength) => (
-            <li key={strength} className="text-warm-700">
-              {strength}
-            </li>
-          ))}
-        </ol>
+        <Prose>{cliftonStrengths.join(', ')}</Prose>
         <Prose>
-          I lead with <strong>Strategic Thinking</strong> - I absorb and analyze information to
-          inform better decisions.
+          I lead with Strategic Thinking: absorb and analyze information to inform better decisions.
         </Prose>
 
         <Subsection title="Enneagram: Type 8 (The Challenger)" />
         <Prose>
-          Protective, direct, ownership-oriented. I see myself as strong and capable, stand up for
-          what I believe in, and fight for those I care about.
+          Protective, direct, ownership-oriented. Stand up for what I believe in, fight for those I
+          care about.
+        </Prose>
+
+        <Subsection title="Sparketype: Maven / Maker" />
+        <Prose>Energized by learning deeply, then building something with it.</Prose>
+
+        <Subsection title="Predictive Index: Captain" />
+        <Prose>
+          Problem solver who drives change and innovation while controlling the big picture.
+        </Prose>
+
+        <Subsection title="MCORE: Overcome, Experience the Ideal, Establish" />
+        <Prose>
+          Motivated by winning out over obstacles, living out ideas and values, and building things
+          that last.
         </Prose>
       </Section>
-
-      {/* Closing */}
-      <footer className="mt-16 text-center">
-        <p className="font-hand text-xl italic text-warm-600">
-          Strong opinions, loosely held, humbly expressed.
-        </p>
-      </footer>
     </PageWrapper>
   );
 }
@@ -477,35 +578,7 @@ const Belief = ({children}: PropsWithChildren) => (
   </p>
 );
 
-const BulletList = ({children}: PropsWithChildren) => (
-  <ul className="mb-6 list-none space-y-2 pl-0">
-    {Array.isArray(children) ? (
-      // biome-ignore lint/suspicious/noArrayIndexKey: acceptable here since list is static and generic
-      children.map((child, i) => <BulletItem key={`item-${i}`}>{child}</BulletItem>)
-    ) : (
-      <BulletItem>{children}</BulletItem>
-    )}
-  </ul>
-);
-
-const BulletItem = ({children}: PropsWithChildren) => (
-  <li className="relative pl-4 font-sans text-[0.95rem] leading-[1.8] text-warm-700">
-    <span className="absolute left-0 text-warm-600">•</span>
-    {children}
-  </li>
-);
-
-const BookLink = ({
-  title,
-  author,
-  href,
-  video,
-}: {
-  title: string;
-  author: string;
-  href: string;
-  video?: boolean;
-}) => (
+const SourceLink = ({title, author, href, type}: Source) => (
   <div className="flex items-baseline gap-2 font-sans text-[0.95rem]">
     <span className="text-warm-600">→</span>
     <div>
@@ -518,11 +591,19 @@ const BookLink = ({
         {title}
       </a>
       <span className="text-warm-500"> - {author}</span>
-      {video && (
-        <span className="ml-2 rounded bg-warm-600/15 px-1.5 py-0.5 text-[0.7rem] text-warm-600">
-          video
-        </span>
-      )}
+      {match(type)
+        .with('video', () => (
+          <span className="ml-2 rounded bg-warm-600/15 px-1.5 py-0.5 text-[0.7rem] text-warm-600">
+            video
+          </span>
+        ))
+        .with('paper', () => (
+          <span className="ml-2 rounded bg-warm-600/15 px-1.5 py-0.5 text-[0.7rem] text-warm-600">
+            paper
+          </span>
+        ))
+        .with('book', () => null)
+        .exhaustive()}
     </div>
   </div>
 );
