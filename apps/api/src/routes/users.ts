@@ -29,6 +29,10 @@ const thirdPartyAccessForUserCommandSchema = {
     strava_code: t.Optional(t.String()),
     strava_refresh_token: t.Optional(t.String()),
     strava_token_expires_at: t.Optional(t.Date()),
+    google_access_token: t.Optional(t.String()),
+    google_refresh_token: t.Optional(t.String()),
+    google_token_expires_at: t.Optional(t.Date()),
+    google_spreadsheet_id: t.Optional(t.String()),
   }),
 };
 

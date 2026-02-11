@@ -15,6 +15,7 @@
     "elysia": "latest",
     "env": "workspace:*",
     "geoapify": "workspace:*",
+    "google-sheets": "workspace:*",
     "injectx": "^1.0.4",
     "running": "workspace:*",
     "strava": "workspace:*",

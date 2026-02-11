@@ -23,12 +23,16 @@ import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/inde
 import { Route as AdminRacesIndexRouteImport } from './routes/admin/races/index'
 import { Route as AdminPrsIndexRouteImport } from './routes/admin/prs/index'
 import { Route as AdminJobsIndexRouteImport } from './routes/admin/jobs/index'
+import { Route as AdminGoogleIndexRouteImport } from './routes/admin/google/index'
 import { Route as AdminActivitiesIndexRouteImport } from './routes/admin/activities/index'
 import { Route as AdminStravaImportRouteImport } from './routes/admin/strava/import'
 import { Route as AdminStravaConnectRouteImport } from './routes/admin/strava/connect'
 import { Route as AdminStravaCallbackRouteImport } from './routes/admin/strava/callback'
 import { Route as AdminRacesNewRouteImport } from './routes/admin/races/new'
 import { Route as AdminPrsNewRouteImport } from './routes/admin/prs/new'
+import { Route as AdminGoogleSyncRouteImport } from './routes/admin/google/sync'
+import { Route as AdminGoogleConnectRouteImport } from './routes/admin/google/connect'
+import { Route as AdminGoogleCallbackRouteImport } from './routes/admin/google/callback'
 import { Route as AdminAuthCallbackRouteImport } from './routes/admin/auth/callback'
 import { Route as AdminRacesIdEditRouteImport } from './routes/admin/races/$id.edit'
 import { Route as AdminPrsIdEditRouteImport } from './routes/admin/prs/$id.edit'
@@ -103,6 +107,11 @@ const AdminJobsIndexRoute = AdminJobsIndexRouteImport.update({
   path: '/jobs/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminGoogleIndexRoute = AdminGoogleIndexRouteImport.update({
+  id: '/google/',
+  path: '/google/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminActivitiesIndexRoute = AdminActivitiesIndexRouteImport.update({
   id: '/activities/',
   path: '/activities/',
@@ -133,6 +142,21 @@ const AdminPrsNewRoute = AdminPrsNewRouteImport.update({
   path: '/prs/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminGoogleSyncRoute = AdminGoogleSyncRouteImport.update({
+  id: '/google/sync',
+  path: '/google/sync',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminGoogleConnectRoute = AdminGoogleConnectRouteImport.update({
+  id: '/google/connect',
+  path: '/google/connect',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminGoogleCallbackRoute = AdminGoogleCallbackRouteImport.update({
+  id: '/google/callback',
+  path: '/google/callback',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAuthCallbackRoute = AdminAuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
@@ -161,12 +185,16 @@ export interface FileRoutesByFullPath {
   '/admin/streak': typeof AdminStreakRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin/google/callback': typeof AdminGoogleCallbackRoute
+  '/admin/google/connect': typeof AdminGoogleConnectRoute
+  '/admin/google/sync': typeof AdminGoogleSyncRoute
   '/admin/prs/new': typeof AdminPrsNewRoute
   '/admin/races/new': typeof AdminRacesNewRoute
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
   '/admin/activities': typeof AdminActivitiesIndexRoute
+  '/admin/google': typeof AdminGoogleIndexRoute
   '/admin/jobs': typeof AdminJobsIndexRoute
   '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/races': typeof AdminRacesIndexRoute
@@ -185,12 +213,16 @@ export interface FileRoutesByTo {
   '/admin/streak': typeof AdminStreakRoute
   '/admin': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin/google/callback': typeof AdminGoogleCallbackRoute
+  '/admin/google/connect': typeof AdminGoogleConnectRoute
+  '/admin/google/sync': typeof AdminGoogleSyncRoute
   '/admin/prs/new': typeof AdminPrsNewRoute
   '/admin/races/new': typeof AdminRacesNewRoute
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
   '/admin/activities': typeof AdminActivitiesIndexRoute
+  '/admin/google': typeof AdminGoogleIndexRoute
   '/admin/jobs': typeof AdminJobsIndexRoute
   '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/races': typeof AdminRacesIndexRoute
@@ -211,12 +243,16 @@ export interface FileRoutesById {
   '/admin/streak': typeof AdminStreakRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin/google/callback': typeof AdminGoogleCallbackRoute
+  '/admin/google/connect': typeof AdminGoogleConnectRoute
+  '/admin/google/sync': typeof AdminGoogleSyncRoute
   '/admin/prs/new': typeof AdminPrsNewRoute
   '/admin/races/new': typeof AdminRacesNewRoute
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
   '/admin/activities/': typeof AdminActivitiesIndexRoute
+  '/admin/google/': typeof AdminGoogleIndexRoute
   '/admin/jobs/': typeof AdminJobsIndexRoute
   '/admin/prs/': typeof AdminPrsIndexRoute
   '/admin/races/': typeof AdminRacesIndexRoute
@@ -238,12 +274,16 @@ export interface FileRouteTypes {
     | '/admin/streak'
     | '/admin/'
     | '/admin/auth/callback'
+    | '/admin/google/callback'
+    | '/admin/google/connect'
+    | '/admin/google/sync'
     | '/admin/prs/new'
     | '/admin/races/new'
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
     | '/admin/activities'
+    | '/admin/google'
     | '/admin/jobs'
     | '/admin/prs'
     | '/admin/races'
@@ -262,12 +302,16 @@ export interface FileRouteTypes {
     | '/admin/streak'
     | '/admin'
     | '/admin/auth/callback'
+    | '/admin/google/callback'
+    | '/admin/google/connect'
+    | '/admin/google/sync'
     | '/admin/prs/new'
     | '/admin/races/new'
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
     | '/admin/activities'
+    | '/admin/google'
     | '/admin/jobs'
     | '/admin/prs'
     | '/admin/races'
@@ -287,12 +331,16 @@ export interface FileRouteTypes {
     | '/admin/streak'
     | '/admin/'
     | '/admin/auth/callback'
+    | '/admin/google/callback'
+    | '/admin/google/connect'
+    | '/admin/google/sync'
     | '/admin/prs/new'
     | '/admin/races/new'
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
     | '/admin/activities/'
+    | '/admin/google/'
     | '/admin/jobs/'
     | '/admin/prs/'
     | '/admin/races/'
@@ -411,6 +459,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminJobsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/google/': {
+      id: '/admin/google/'
+      path: '/google'
+      fullPath: '/admin/google'
+      preLoaderRoute: typeof AdminGoogleIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/activities/': {
       id: '/admin/activities/'
       path: '/activities'
@@ -453,6 +508,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPrsNewRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/google/sync': {
+      id: '/admin/google/sync'
+      path: '/google/sync'
+      fullPath: '/admin/google/sync'
+      preLoaderRoute: typeof AdminGoogleSyncRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/google/connect': {
+      id: '/admin/google/connect'
+      path: '/google/connect'
+      fullPath: '/admin/google/connect'
+      preLoaderRoute: typeof AdminGoogleConnectRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/google/callback': {
+      id: '/admin/google/callback'
+      path: '/google/callback'
+      fullPath: '/admin/google/callback'
+      preLoaderRoute: typeof AdminGoogleCallbackRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/auth/callback': {
       id: '/admin/auth/callback'
       path: '/auth/callback'
@@ -482,12 +558,16 @@ interface AdminRouteRouteChildren {
   AdminStreakRoute: typeof AdminStreakRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminAuthCallbackRoute: typeof AdminAuthCallbackRoute
+  AdminGoogleCallbackRoute: typeof AdminGoogleCallbackRoute
+  AdminGoogleConnectRoute: typeof AdminGoogleConnectRoute
+  AdminGoogleSyncRoute: typeof AdminGoogleSyncRoute
   AdminPrsNewRoute: typeof AdminPrsNewRoute
   AdminRacesNewRoute: typeof AdminRacesNewRoute
   AdminStravaCallbackRoute: typeof AdminStravaCallbackRoute
   AdminStravaConnectRoute: typeof AdminStravaConnectRoute
   AdminStravaImportRoute: typeof AdminStravaImportRoute
   AdminActivitiesIndexRoute: typeof AdminActivitiesIndexRoute
+  AdminGoogleIndexRoute: typeof AdminGoogleIndexRoute
   AdminJobsIndexRoute: typeof AdminJobsIndexRoute
   AdminPrsIndexRoute: typeof AdminPrsIndexRoute
   AdminRacesIndexRoute: typeof AdminRacesIndexRoute
@@ -501,12 +581,16 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminStreakRoute: AdminStreakRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminAuthCallbackRoute: AdminAuthCallbackRoute,
+  AdminGoogleCallbackRoute: AdminGoogleCallbackRoute,
+  AdminGoogleConnectRoute: AdminGoogleConnectRoute,
+  AdminGoogleSyncRoute: AdminGoogleSyncRoute,
   AdminPrsNewRoute: AdminPrsNewRoute,
   AdminRacesNewRoute: AdminRacesNewRoute,
   AdminStravaCallbackRoute: AdminStravaCallbackRoute,
   AdminStravaConnectRoute: AdminStravaConnectRoute,
   AdminStravaImportRoute: AdminStravaImportRoute,
   AdminActivitiesIndexRoute: AdminActivitiesIndexRoute,
+  AdminGoogleIndexRoute: AdminGoogleIndexRoute,
   AdminJobsIndexRoute: AdminJobsIndexRoute,
   AdminPrsIndexRoute: AdminPrsIndexRoute,
   AdminRacesIndexRoute: AdminRacesIndexRoute,

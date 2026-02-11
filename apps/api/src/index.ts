@@ -14,6 +14,7 @@ import futureRaces from './routes/future-races';
 import streak from './routes/streak';
 import stateStats from './routes/state-stats';
 import dailyStats from './routes/daily-stats';
+import googleSheets from './routes/google-sheets';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
@@ -27,6 +28,8 @@ const envSchema = z.object({
   GEOAPIFY_API_KEY: z.string(),
   STRAVA_WEBHOOK_VERIFY_TOKEN: z.string(),
   TASK_API_KEY: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
 });
 const env = parseEnv(envSchema);
 
@@ -67,7 +70,8 @@ const root = new Elysia()
         .use(futureRaces)
         .use(streak)
         .use(stateStats)
-        .use(dailyStats),
+        .use(dailyStats)
+        .use(googleSheets),
   )
   .listen(env.PORT);
 

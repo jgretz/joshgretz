@@ -19,6 +19,10 @@ export interface ThirdPartyAccess {
   strava_code?: string | null;
   strava_refresh_token?: string | null;
   strava_token_expires_at?: string | null;
+  google_access_token?: string | null;
+  google_refresh_token?: string | null;
+  google_token_expires_at?: string | null;
+  google_spreadsheet_id?: string | null;
 }
 
 const headers = () => ({
@@ -133,6 +137,22 @@ export const deleteActivity = async (
   });
   if (response.status === 404) return null;
   await assertOk(response, `Failed to delete activity strava_id=${stravaId}`);
+  return response.json();
+};
+
+export const fetchActivitiesByDateRange = async (
+  userId: number,
+  from?: string,
+  to?: string,
+): Promise<Record<string, unknown>[]> => {
+  const params = new URLSearchParams({user_id: String(userId)});
+  if (from) params.set('from', from);
+  if (to) params.set('to', to);
+
+  const response = await fetch(`${config.API_URL}/running/activities/by-date-range?${params}`, {
+    headers: headers(),
+  });
+  await assertOk(response, 'Failed to fetch activities by date range');
   return response.json();
 };
 

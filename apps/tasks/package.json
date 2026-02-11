@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "env": "workspace:*",
+    "google-sheets": "workspace:*",
     "pg-boss": "^10.1.5",
     "strava": "workspace:*",
     "ts-pattern": "^5.6.0",

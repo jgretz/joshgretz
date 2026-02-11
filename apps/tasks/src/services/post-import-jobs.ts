@@ -9,6 +9,14 @@ const POST_IMPORT_JOBS: PostImportJob[] = [
   {type: 'streak-update', buildPayload: (userId) => ({user_id: userId})},
   {type: 'state-stats-update', buildPayload: (userId) => ({user_id: userId})},
   {type: 'daily-stats-update', buildPayload: (userId, dates) => ({user_id: userId, dates})},
+  {
+    type: 'google-sheets-sync',
+    buildPayload: (userId, dates) => ({
+      user_id: userId,
+      from: dates?.[0],
+      to: dates?.[dates.length - 1],
+    }),
+  },
 ];
 
 export const schedulePostImportJobs = async (userId: number, dates?: string[]) => {

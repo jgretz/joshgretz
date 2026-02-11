@@ -33,6 +33,7 @@ export {findDailyStatsByUserIdAndYear} from './query/findDailyStatsByUserIdAndYe
 export {upsertDailyStats} from './command/upsertDailyStats';
 export {aggregateDailyStats} from './query/aggregateDailyStats';
 export {recalculateDailyStats} from './services/recalculateDailyStats';
+export {findActivitiesByDateRange} from './query/findActivitiesByDateRange';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});

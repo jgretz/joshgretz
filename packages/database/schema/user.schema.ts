@@ -26,6 +26,11 @@ export const thirdPartyAccess = pgTable(
     strava_code: varchar('strava_code', {length: 50}),
     strava_refresh_token: varchar('strava_refresh_token', {length: 100}),
     strava_token_expires_at: timestamp('strava_token_expires_at'),
+
+    google_access_token: varchar('google_access_token', {length: 2048}),
+    google_refresh_token: varchar('google_refresh_token', {length: 512}),
+    google_token_expires_at: timestamp('google_token_expires_at'),
+    google_spreadsheet_id: varchar('google_spreadsheet_id', {length: 200}),
   },
   (thirdPartyAccess) => {
     return {

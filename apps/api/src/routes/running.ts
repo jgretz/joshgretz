@@ -1,6 +1,6 @@
 import {Elysia, t} from 'elysia';
 import {Schema} from 'database';
-import {storeStravaActivity, searchActivities, deleteActivityByStravaId} from 'running';
+import {storeStravaActivity, searchActivities, deleteActivityByStravaId, findActivitiesByDateRange} from 'running';
 import {databasePlugin} from '../plugins/database';
 
 const importActivitiesSchema = {
@@ -77,6 +77,19 @@ export default new Elysia({prefix: '/running'})
         user_id: t.Numeric(),
         q: t.Optional(t.String()),
         strava_id: t.Optional(t.String()),
+      }),
+    },
+  )
+  .get(
+    '/activities/by-date-range',
+    async ({query: {user_id, from, to}}) => {
+      return await findActivitiesByDateRange({userId: user_id, from, to});
+    },
+    {
+      query: t.Object({
+        user_id: t.Numeric(),
+        from: t.Optional(t.String()),
+        to: t.Optional(t.String()),
       }),
     },
   )

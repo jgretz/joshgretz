@@ -19,6 +19,14 @@ const navItems: NavItem[] = [
       {label: 'Import', to: '/admin/strava/import'},
     ],
   },
+  {
+    label: 'Google Sheets',
+    to: '/admin/google',
+    children: [
+      {label: 'Connect', to: '/admin/google/connect'},
+      {label: 'Sync', to: '/admin/google/sync'},
+    ],
+  },
   {label: 'Personal Records', to: '/admin/prs'},
   {label: 'Future Races', to: '/admin/races'},
   {label: 'Streak', to: '/admin/streak'},
