@@ -19,12 +19,10 @@ fi
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command')
 
-# Already has the cd prefix — let it through
 if echo "$COMMAND" | grep -q "^cd.*$PROJECT_DIR"; then
   exit 0
 fi
 
-# Auto-prepend the cd
 jq -n --arg cmd "cd $PROJECT_DIR && $COMMAND" '{
   hookSpecificOutput: {
     hookEventName: "PreToolUse",
