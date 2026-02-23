@@ -177,4 +177,5 @@ dist
 # Claude Code local config
 CLAUDE-LOCAL.md
 CLAUDE-WORKING.md
-.claude/hooks/.env
+.claude/hooks/
+.claude/settings.local.json
