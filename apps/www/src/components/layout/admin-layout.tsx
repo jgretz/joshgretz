@@ -32,6 +32,7 @@ const navItems: NavItem[] = [
   {label: 'Streak', to: '/admin/streak'},
   {label: 'Activities', to: '/admin/activities'},
   {label: 'Jobs', to: '/admin/jobs'},
+  {label: 'Thoughts', to: '/admin/thoughts'},
 ];
 
 const isActive = (pathname: string, to: string) =>
