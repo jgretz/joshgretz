@@ -181,6 +181,7 @@ CLAUDE-WORKING.md
 .claude/settings.local.json
 .mcp.json
 .worksite/
+.worksite-*
 .claude/rules/worksite-worker.md
 .claude/rules/worksite-verification.md
 .claude/rules/worksite-debugging.md

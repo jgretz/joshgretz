@@ -30,9 +30,11 @@ export const getThoughts = createServerFn({
   return response.json();
 });
 
+export type PublishedThought = Omit<Thought, 'published_at'> & {published_at: string};
+
 export const getPublishedThoughts = createServerFn({
   method: 'GET',
-}).handler(async (): Promise<Thought[]> => {
+}).handler(async (): Promise<PublishedThought[]> => {
   const env = getEnv();
   const response = await fetch(`${env.apiUrl}/thoughts/published`, {
     headers: {Authorization: `Bearer ${env.apiToken}`},

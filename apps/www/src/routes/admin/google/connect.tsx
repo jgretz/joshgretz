@@ -4,11 +4,11 @@ import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
 import {getThirdPartyAccess} from '../../../services/auth/auth-server';
+import {requireAuth} from '../../../services/auth/requireAuth';
 import {
   getGoogleSheetsAuthUrl,
   saveSpreadsheetId,
 } from '../../../services/google-sheets/google-sheets-server';
-import {requireAuth} from '../../../services/auth/requireAuth';
 
 export const Route = createFileRoute('/admin/google/connect')({
   component: GoogleConnect,

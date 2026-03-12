@@ -29,7 +29,11 @@ function generateSitemapXml(thoughts: ThoughtSlug[]): string {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...urls.map(
       (url) =>
-        `  <url>\n    <loc>${url.loc}</loc>${url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : ''}\n    <changefreq>${url.changefreq}</changefreq>\n    <priority>${url.priority}</priority>\n  </url>`,
+        `  <url>\n    <loc>${url.loc}</loc>${
+          url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : ''
+        }\n    <changefreq>${url.changefreq}</changefreq>\n    <priority>${
+          url.priority
+        }</priority>\n  </url>`,
     ),
     '</urlset>',
   ].join('\n');

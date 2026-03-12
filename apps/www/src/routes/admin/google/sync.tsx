@@ -3,8 +3,8 @@ import {useCallback, useState} from 'react';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {triggerGoogleSheetsSync} from '../../../services/google-sheets/google-sheets-server';
 import {requireAuth} from '../../../services/auth/requireAuth';
+import {triggerGoogleSheetsSync} from '../../../services/google-sheets/google-sheets-server';
 
 export const Route = createFileRoute('/admin/google/sync')({
   component: GoogleSync,

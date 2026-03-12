@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router';
+import {ThoughtCard} from '../components/thoughts/thought-card';
 import {title} from '../config.shared';
 import {getPublishedThoughts} from '../services/thoughts/thoughts-server';
-import {ThoughtCard} from '../components/thoughts/thought-card';
 
 export const Route = createFileRoute('/thoughts/')({
   component: ThoughtsPage,
@@ -33,7 +33,7 @@ function ThoughtsPage() {
               title={thought.title}
               slug={thought.slug}
               tags={thought.tags}
-              published_at={thought.published_at!}
+              published_at={thought.published_at}
             />
           ))}
         </div>

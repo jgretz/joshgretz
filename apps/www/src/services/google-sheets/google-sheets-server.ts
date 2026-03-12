@@ -78,9 +78,7 @@ export const saveSpreadsheetId = createServerFn({
 export const triggerGoogleSheetsSync = createServerFn({
   method: 'POST',
 })
-  .inputValidator(
-    (data: {userId: number; from?: string; to?: string; fullSync?: boolean}) => data,
-  )
+  .inputValidator((data: {userId: number; from?: string; to?: string; fullSync?: boolean}) => data)
   .handler(async ({data}) => {
     const env = getEnv();
 

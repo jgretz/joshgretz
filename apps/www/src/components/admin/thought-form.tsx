@@ -139,6 +139,7 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
         {preview ? (
           <div
             className="prose prose-warm min-h-[200px] rounded-md border border-warm-200 bg-warm-50 p-3"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: rendering sanitized markdown preview
             dangerouslySetInnerHTML={{__html: sanitizeHtml(marked.parse(content) as string)}}
           />
         ) : (
