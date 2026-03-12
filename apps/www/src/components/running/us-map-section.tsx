@@ -1,5 +1,6 @@
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {STATE_NAMES, US_STATE_PATHS} from '../../data/us-map-paths';
+import type {FutureRace} from 'running';
 
 type StateStat = {
   id: number;
@@ -10,19 +11,6 @@ type StateStat = {
   first_marathon_name: string | null;
   first_marathon_date: string | null;
   first_marathon_strava_id: string | null;
-  created_at: string | null;
-  updated_at: string | null;
-};
-
-type FutureRace = {
-  id: number;
-  user_id: number;
-  title: string;
-  location: string | null;
-  state: string | null;
-  distance: string | null;
-  url: string | null;
-  race_date: string | null;
   created_at: string | null;
   updated_at: string | null;
 };
@@ -48,8 +36,8 @@ const getStateStatus = (
 ): StateStatus => {
   const stat = statsMap.get(abbr);
   if (stat && (stat.marathon_count ?? 0) > 0) return 'marathon';
-  if (stat && (stat.run_count ?? 0) > 0) return 'runOnly';
   if (plannedMap.has(abbr)) return 'planned';
+  if (stat && (stat.run_count ?? 0) > 0) return 'runOnly';
   return 'none';
 };
 
@@ -104,29 +92,30 @@ export const USMapSection = ({stateStats, futureRaces = []}: USMapSectionProps) 
   const statesMarathon = stateStats.filter((s) => (s.marathon_count ?? 0) > 0).length;
   const statesPlanned = plannedMap.size;
 
-  const handleMouseEnter = useCallback(
-    (abbr: string, status: StateStatus, e: React.MouseEvent<SVGPathElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const stat = statsMap.get(abbr);
-      const futureRace = plannedMap.get(abbr);
-      const raceLine =
-        status === 'planned' && futureRace?.title && futureRace?.race_date
-          ? `${futureRace.title} (${formatRaceDate(futureRace.race_date)})`
-          : stat?.first_marathon_name && stat?.first_marathon_date
-            ? `${stat.first_marathon_name} (${formatMarathonDate(stat.first_marathon_date)})`
-            : null;
-      setTooltip({
-        name: STATE_NAMES[abbr] ?? abbr,
-        status: statusLabel(status),
-        raceLine,
-        x: rect.left + rect.width / 2,
-        y: rect.top,
-      });
-    },
-    [statsMap, plannedMap],
-  );
+  const handleMouseEnter = (
+    abbr: string,
+    status: StateStatus,
+    e: React.MouseEvent<SVGPathElement>,
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const stat = statsMap.get(abbr);
+    const futureRace = plannedMap.get(abbr);
+    const raceLine =
+      status === 'planned' && futureRace?.title && futureRace?.race_date
+        ? `${futureRace.title} (${formatRaceDate(futureRace.race_date)})`
+        : stat?.first_marathon_name && stat?.first_marathon_date
+          ? `${stat.first_marathon_name} (${formatMarathonDate(stat.first_marathon_date)})`
+          : null;
+    setTooltip({
+      name: STATE_NAMES[abbr] ?? abbr,
+      status: statusLabel(status),
+      raceLine,
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    });
+  };
 
-  const handleMouseLeave = useCallback(() => setTooltip(null), []);
+  const handleMouseLeave = () => setTooltip(null);
 
   return (
     <section className="text-center">
