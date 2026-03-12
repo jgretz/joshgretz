@@ -65,11 +65,14 @@ export default new Elysia({prefix: '/thoughts'})
   .put(
     '/:id',
     async ({params: {id}, body}) => {
-      const thought = await updateThought(id, body);
-      if (!thought) {
-        return new Response('Not found', {status: 404});
+      try {
+        return await updateThought(id, body);
+      } catch (e) {
+        if (e instanceof Error && e.message.startsWith('Thought not found')) {
+          return new Response('Not found', {status: 404});
+        }
+        throw e;
       }
-      return thought;
     },
     {
       params: t.Object({
