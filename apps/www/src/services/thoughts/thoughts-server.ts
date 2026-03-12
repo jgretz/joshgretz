@@ -1,6 +1,6 @@
 import {createServerFn} from '@tanstack/react-start';
 
-type Thought = {
+export type Thought = {
   id: number;
   title: string;
   slug: string;
@@ -31,6 +31,20 @@ export const getThoughts = createServerFn({
   return response.json();
 });
 
+export const getPublishedThoughts = createServerFn({
+  method: 'GET',
+}).handler(async (): Promise<Thought[]> => {
+  const env = getEnv();
+  const response = await fetch(`${env.apiUrl}/thoughts/published`, {
+    headers: {Authorization: `Bearer ${env.apiToken}`},
+  });
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Failed to fetch published thoughts: ${response.status} ${body}`);
+  }
+  return response.json();
+});
+
 export const getThought = createServerFn({
   method: 'GET',
 })
@@ -38,6 +52,23 @@ export const getThought = createServerFn({
   .handler(async ({data}): Promise<Thought | null> => {
     const env = getEnv();
     const response = await fetch(`${env.apiUrl}/thoughts/${data.id}`, {
+      headers: {Authorization: `Bearer ${env.apiToken}`},
+    });
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      const body = await response.text();
+      throw new Error(`Failed to fetch thought: ${response.status} ${body}`);
+    }
+    return response.json();
+  });
+
+export const getThoughtBySlug = createServerFn({
+  method: 'GET',
+})
+  .inputValidator((data: {slug: string}) => data)
+  .handler(async ({data}): Promise<Thought | null> => {
+    const env = getEnv();
+    const response = await fetch(`${env.apiUrl}/thoughts/slug/${data.slug}`, {
       headers: {Authorization: `Bearer ${env.apiToken}`},
     });
     if (!response.ok) {
