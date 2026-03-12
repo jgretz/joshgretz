@@ -88,7 +88,14 @@ export default new Elysia({prefix: '/thoughts'})
   .delete(
     '/:id',
     async ({params: {id}}) => {
-      await deleteThought(id);
+      try {
+        await deleteThought(id);
+      } catch (e) {
+        if (e instanceof Error && e.message.startsWith('Thought not found')) {
+          return new Response('Not found', {status: 404});
+        }
+        throw e;
+      }
       return {success: true};
     },
     {
