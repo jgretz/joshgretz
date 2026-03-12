@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ThoughtsRouteImport } from './routes/thoughts'
 import { Route as RunningRouteImport } from './routes/running'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as ReadmeRouteImport } from './routes/readme'
@@ -16,7 +17,9 @@ import { Route as PrintResumeRouteImport } from './routes/print-resume'
 import { Route as HealthcheckRouteImport } from './routes/healthcheck'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ThoughtsIndexRouteImport } from './routes/thoughts.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as ThoughtsSlugRouteImport } from './routes/thoughts.$slug'
 import { Route as AdminStreakRouteImport } from './routes/admin/streak'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/index'
@@ -37,6 +40,11 @@ import { Route as AdminAuthCallbackRouteImport } from './routes/admin/auth/callb
 import { Route as AdminRacesIdEditRouteImport } from './routes/admin/races/$id.edit'
 import { Route as AdminPrsIdEditRouteImport } from './routes/admin/prs/$id.edit'
 
+const ThoughtsRoute = ThoughtsRouteImport.update({
+  id: '/thoughts',
+  path: '/thoughts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RunningRoute = RunningRouteImport.update({
   id: '/running',
   path: '/running',
@@ -72,10 +80,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThoughtsIndexRoute = ThoughtsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ThoughtsRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const ThoughtsSlugRoute = ThoughtsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ThoughtsRoute,
 } as any)
 const AdminStreakRoute = AdminStreakRouteImport.update({
   id: '/streak',
@@ -181,9 +199,12 @@ export interface FileRoutesByFullPath {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
+  '/thoughts': typeof ThoughtsRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/streak': typeof AdminStreakRoute
+  '/thoughts/$slug': typeof ThoughtsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/thoughts/': typeof ThoughtsIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
   '/admin/google/callback': typeof AdminGoogleCallbackRoute
   '/admin/google/connect': typeof AdminGoogleConnectRoute
@@ -211,7 +232,9 @@ export interface FileRoutesByTo {
   '/running': typeof RunningRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/streak': typeof AdminStreakRoute
+  '/thoughts/$slug': typeof ThoughtsSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/thoughts': typeof ThoughtsIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
   '/admin/google/callback': typeof AdminGoogleCallbackRoute
   '/admin/google/connect': typeof AdminGoogleConnectRoute
@@ -239,9 +262,12 @@ export interface FileRoutesById {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
+  '/thoughts': typeof ThoughtsRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/streak': typeof AdminStreakRoute
+  '/thoughts/$slug': typeof ThoughtsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/thoughts/': typeof ThoughtsIndexRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
   '/admin/google/callback': typeof AdminGoogleCallbackRoute
   '/admin/google/connect': typeof AdminGoogleConnectRoute
@@ -270,9 +296,12 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/running'
+    | '/thoughts'
     | '/admin/login'
     | '/admin/streak'
+    | '/thoughts/$slug'
     | '/admin/'
+    | '/thoughts/'
     | '/admin/auth/callback'
     | '/admin/google/callback'
     | '/admin/google/connect'
@@ -300,7 +329,9 @@ export interface FileRouteTypes {
     | '/running'
     | '/admin/login'
     | '/admin/streak'
+    | '/thoughts/$slug'
     | '/admin'
+    | '/thoughts'
     | '/admin/auth/callback'
     | '/admin/google/callback'
     | '/admin/google/connect'
@@ -327,9 +358,12 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/running'
+    | '/thoughts'
     | '/admin/login'
     | '/admin/streak'
+    | '/thoughts/$slug'
     | '/admin/'
+    | '/thoughts/'
     | '/admin/auth/callback'
     | '/admin/google/callback'
     | '/admin/google/connect'
@@ -357,10 +391,18 @@ export interface RootRouteChildren {
   ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RunningRoute: typeof RunningRoute
+  ThoughtsRoute: typeof ThoughtsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/thoughts': {
+      id: '/thoughts'
+      path: '/thoughts'
+      fullPath: '/thoughts'
+      preLoaderRoute: typeof ThoughtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/running': {
       id: '/running'
       path: '/running'
@@ -410,12 +452,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/thoughts/': {
+      id: '/thoughts/'
+      path: '/'
+      fullPath: '/thoughts/'
+      preLoaderRoute: typeof ThoughtsIndexRouteImport
+      parentRoute: typeof ThoughtsRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/thoughts/$slug': {
+      id: '/thoughts/$slug'
+      path: '/$slug'
+      fullPath: '/thoughts/$slug'
+      preLoaderRoute: typeof ThoughtsSlugRouteImport
+      parentRoute: typeof ThoughtsRoute
     }
     '/admin/streak': {
       id: '/admin/streak'
@@ -603,6 +659,20 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface ThoughtsRouteChildren {
+  ThoughtsSlugRoute: typeof ThoughtsSlugRoute
+  ThoughtsIndexRoute: typeof ThoughtsIndexRoute
+}
+
+const ThoughtsRouteChildren: ThoughtsRouteChildren = {
+  ThoughtsSlugRoute: ThoughtsSlugRoute,
+  ThoughtsIndexRoute: ThoughtsIndexRoute,
+}
+
+const ThoughtsRouteWithChildren = ThoughtsRoute._addFileChildren(
+  ThoughtsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
@@ -611,6 +681,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RunningRoute: RunningRoute,
+  ThoughtsRoute: ThoughtsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
