@@ -1,3 +1,7 @@
+-- Rollback:
+-- DROP INDEX IF EXISTS "thoughts_slug_idx";
+-- DROP TABLE IF EXISTS "thoughts";
+
 CREATE TABLE IF NOT EXISTS "thoughts" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(300) NOT NULL,

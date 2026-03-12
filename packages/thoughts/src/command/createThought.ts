@@ -16,6 +16,10 @@ const command = ({database}: ThoughtsContainer) => {
       })
       .returning();
 
+    if (!thought) {
+      throw new Error('Failed to create thought');
+    }
+
     return thought;
   };
 };
