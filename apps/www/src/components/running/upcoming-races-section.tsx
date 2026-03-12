@@ -23,7 +23,14 @@ const parseRaceDate = (dateStr: string) => {
 };
 
 export const UpcomingRacesSection = ({races}: UpcomingRacesSectionProps) => {
-  if (races.length === 0) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const upcomingRaces = races.filter((race) => {
+    if (!race.race_date) return true; // show races with no date set
+    return new Date(race.race_date) >= today;
+  });
+
+  if (upcomingRaces.length === 0) return null;
 
   return (
     <section className="text-center">
@@ -32,7 +39,7 @@ export const UpcomingRacesSection = ({races}: UpcomingRacesSectionProps) => {
         always chasing the next finish line
       </p>
       <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
-        {races.map((race) => {
+        {upcomingRaces.map((race) => {
           const date = race.race_date ? parseRaceDate(race.race_date) : null;
 
           return (
