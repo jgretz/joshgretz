@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ThoughtsRouteImport } from './routes/thoughts'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RunningRouteImport } from './routes/running'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as ReadmeRouteImport } from './routes/readme'
@@ -44,6 +45,11 @@ import { Route as AdminPrsIdEditRouteImport } from './routes/admin/prs/$id.edit'
 const ThoughtsRoute = ThoughtsRouteImport.update({
   id: '/thoughts',
   path: '/thoughts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RunningRoute = RunningRouteImport.update({
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/streak': typeof AdminStreakRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/streak': typeof AdminStreakRoute
   '/thoughts/$slug': typeof ThoughtsSlugRoute
@@ -270,6 +278,7 @@ export interface FileRoutesById {
   '/readme': typeof ReadmeRoute
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/streak': typeof AdminStreakRoute
@@ -305,6 +314,7 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/running'
+    | '/sitemap.xml'
     | '/thoughts'
     | '/admin/login'
     | '/admin/streak'
@@ -337,6 +347,7 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/running'
+    | '/sitemap.xml'
     | '/admin/login'
     | '/admin/streak'
     | '/thoughts/$slug'
@@ -369,6 +380,7 @@ export interface FileRouteTypes {
     | '/readme'
     | '/resume'
     | '/running'
+    | '/sitemap.xml'
     | '/thoughts'
     | '/admin/login'
     | '/admin/streak'
@@ -403,6 +415,7 @@ export interface RootRouteChildren {
   ReadmeRoute: typeof ReadmeRoute
   ResumeRoute: typeof ResumeRoute
   RunningRoute: typeof RunningRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThoughtsRoute: typeof ThoughtsRouteWithChildren
 }
 
@@ -413,6 +426,13 @@ declare module '@tanstack/react-router' {
       path: '/thoughts'
       fullPath: '/thoughts'
       preLoaderRoute: typeof ThoughtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/running': {
@@ -702,6 +722,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReadmeRoute: ReadmeRoute,
   ResumeRoute: ResumeRoute,
   RunningRoute: RunningRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThoughtsRoute: ThoughtsRouteWithChildren,
 }
 export const routeTree = rootRouteImport

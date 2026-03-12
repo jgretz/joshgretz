@@ -1,3 +1,5 @@
+import {createFileRoute} from '@tanstack/react-router';
+
 const BASE_URL = 'https://joshgretz.com';
 
 const STATIC_PAGES = ['/', '/resume', '/readme', '/thoughts', '/running'];
@@ -33,26 +35,29 @@ function generateSitemapXml(thoughts: ThoughtSlug[]): string {
   ].join('\n');
 }
 
-export async function fetchSitemapResponse(): Promise<Response> {
-  const apiUrl = process.env.JOSHGRETZ_API_URL || 'http://localhost:3001';
-  const apiToken = process.env.HELMET || '';
+export const Route = createFileRoute('/sitemap.xml')({
+  component: () => null,
+  loader: async () => {
+    const apiUrl = process.env.JOSHGRETZ_API_URL || 'http://localhost:3001';
+    const apiToken = process.env.HELMET || '';
 
-  let thoughts: ThoughtSlug[] = [];
-  try {
-    const response = await fetch(`${apiUrl}/thoughts/published`, {
-      headers: {Authorization: `Bearer ${apiToken}`},
-    });
-    if (response.ok) {
-      thoughts = (await response.json()) as ThoughtSlug[];
+    let thoughts: ThoughtSlug[] = [];
+    try {
+      const response = await fetch(`${apiUrl}/thoughts/published`, {
+        headers: {Authorization: `Bearer ${apiToken}`},
+      });
+      if (response.ok) {
+        thoughts = (await response.json()) as ThoughtSlug[];
+      }
+    } catch {
+      // Static pages only if API unavailable
     }
-  } catch {
-    // Return sitemap with only static pages if API is unavailable
-  }
 
-  return new Response(generateSitemapXml(thoughts), {
-    headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600',
-    },
-  });
-}
+    throw new Response(generateSitemapXml(thoughts), {
+      headers: {
+        'Content-Type': 'application/xml',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    });
+  },
+});
