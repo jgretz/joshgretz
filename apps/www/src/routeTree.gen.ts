@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminStreakRouteImport } from './routes/admin/streak'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminThoughtsIndexRouteImport } from './routes/admin/thoughts/index'
 import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/index'
 import { Route as AdminRacesIndexRouteImport } from './routes/admin/races/index'
 import { Route as AdminPrsIndexRouteImport } from './routes/admin/prs/index'
@@ -85,6 +86,11 @@ const AdminStreakRoute = AdminStreakRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminThoughtsIndexRoute = AdminThoughtsIndexRouteImport.update({
+  id: '/thoughts/',
+  path: '/thoughts/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminStravaIndexRoute = AdminStravaIndexRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/races': typeof AdminRacesIndexRoute
   '/admin/strava': typeof AdminStravaIndexRoute
+  '/admin/thoughts': typeof AdminThoughtsIndexRoute
   '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
   '/admin/races/$id/edit': typeof AdminRacesIdEditRoute
 }
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/admin/prs': typeof AdminPrsIndexRoute
   '/admin/races': typeof AdminRacesIndexRoute
   '/admin/strava': typeof AdminStravaIndexRoute
+  '/admin/thoughts': typeof AdminThoughtsIndexRoute
   '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
   '/admin/races/$id/edit': typeof AdminRacesIdEditRoute
 }
@@ -257,6 +265,7 @@ export interface FileRoutesById {
   '/admin/prs/': typeof AdminPrsIndexRoute
   '/admin/races/': typeof AdminRacesIndexRoute
   '/admin/strava/': typeof AdminStravaIndexRoute
+  '/admin/thoughts/': typeof AdminThoughtsIndexRoute
   '/admin/prs/$id/edit': typeof AdminPrsIdEditRoute
   '/admin/races/$id/edit': typeof AdminRacesIdEditRoute
 }
@@ -288,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin/prs'
     | '/admin/races'
     | '/admin/strava'
+    | '/admin/thoughts'
     | '/admin/prs/$id/edit'
     | '/admin/races/$id/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/admin/prs'
     | '/admin/races'
     | '/admin/strava'
+    | '/admin/thoughts'
     | '/admin/prs/$id/edit'
     | '/admin/races/$id/edit'
   id:
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/admin/prs/'
     | '/admin/races/'
     | '/admin/strava/'
+    | '/admin/thoughts/'
     | '/admin/prs/$id/edit'
     | '/admin/races/$id/edit'
   fileRoutesById: FileRoutesById
@@ -429,6 +441,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/thoughts/': {
+      id: '/admin/thoughts/'
+      path: '/thoughts'
+      fullPath: '/admin/thoughts'
+      preLoaderRoute: typeof AdminThoughtsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/strava/': {
@@ -572,6 +591,7 @@ interface AdminRouteRouteChildren {
   AdminPrsIndexRoute: typeof AdminPrsIndexRoute
   AdminRacesIndexRoute: typeof AdminRacesIndexRoute
   AdminStravaIndexRoute: typeof AdminStravaIndexRoute
+  AdminThoughtsIndexRoute: typeof AdminThoughtsIndexRoute
   AdminPrsIdEditRoute: typeof AdminPrsIdEditRoute
   AdminRacesIdEditRoute: typeof AdminRacesIdEditRoute
 }
@@ -595,6 +615,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminPrsIndexRoute: AdminPrsIndexRoute,
   AdminRacesIndexRoute: AdminRacesIndexRoute,
   AdminStravaIndexRoute: AdminStravaIndexRoute,
+  AdminThoughtsIndexRoute: AdminThoughtsIndexRoute,
   AdminPrsIdEditRoute: AdminPrsIdEditRoute,
   AdminRacesIdEditRoute: AdminRacesIdEditRoute,
 }
