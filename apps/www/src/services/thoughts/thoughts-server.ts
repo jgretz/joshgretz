@@ -24,7 +24,10 @@ export const getThoughts = createServerFn({
   const response = await fetch(`${env.apiUrl}/thoughts`, {
     headers: {Authorization: `Bearer ${env.apiToken}`},
   });
-  if (!response.ok) throw new Error('Failed to fetch thoughts');
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Failed to fetch thoughts: ${response.status} ${body}`);
+  }
   return response.json();
 });
 
@@ -39,34 +42,8 @@ export const getThought = createServerFn({
     });
     if (!response.ok) {
       if (response.status === 404) return null;
-      throw new Error('Failed to fetch thought');
-    }
-    return response.json();
-  });
-
-export const getPublishedThoughts = createServerFn({
-  method: 'GET',
-}).handler(async (): Promise<Thought[]> => {
-  const env = getEnv();
-  const response = await fetch(`${env.apiUrl}/thoughts/published`, {
-    headers: {Authorization: `Bearer ${env.apiToken}`},
-  });
-  if (!response.ok) throw new Error('Failed to fetch published thoughts');
-  return response.json();
-});
-
-export const getThoughtBySlug = createServerFn({
-  method: 'GET',
-})
-  .inputValidator((data: {slug: string}) => data)
-  .handler(async ({data}): Promise<Thought | null> => {
-    const env = getEnv();
-    const response = await fetch(`${env.apiUrl}/thoughts/slug/${data.slug}`, {
-      headers: {Authorization: `Bearer ${env.apiToken}`},
-    });
-    if (!response.ok) {
-      if (response.status === 404) return null;
-      throw new Error('Failed to fetch thought');
+      const body = await response.text();
+      throw new Error(`Failed to fetch thought: ${response.status} ${body}`);
     }
     return response.json();
   });
@@ -94,7 +71,10 @@ export const createThought = createServerFn({
       },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Failed to create thought');
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to create thought: ${response.status} ${body}`);
+    }
     return response.json();
   });
 
@@ -123,7 +103,10 @@ export const updateThought = createServerFn({
       },
       body: JSON.stringify(body),
     });
-    if (!response.ok) throw new Error('Failed to update thought');
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to update thought: ${response.status} ${body}`);
+    }
     return response.json();
   });
 
@@ -137,5 +120,8 @@ export const deleteThought = createServerFn({
       method: 'DELETE',
       headers: {Authorization: `Bearer ${env.apiToken}`},
     });
-    if (!response.ok) throw new Error('Failed to delete thought');
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to delete thought: ${response.status} ${body}`);
+    }
   });

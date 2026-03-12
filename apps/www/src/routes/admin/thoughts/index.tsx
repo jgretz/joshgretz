@@ -80,9 +80,13 @@ function ThoughtsList() {
       tags: string[] | null;
       published_at: string | null;
     }) => {
-      await createThought({data});
-      setCreateOpen(false);
-      router.invalidate();
+      try {
+        await createThought({data});
+        setCreateOpen(false);
+        router.invalidate();
+      } catch (err) {
+        alert(err instanceof Error ? err.message : 'Failed to create thought');
+      }
     },
     [router],
   );
@@ -97,9 +101,13 @@ function ThoughtsList() {
       published_at: string | null;
     }) => {
       if (!editingThought) return;
-      await updateThought({data: {id: editingThought.id, ...data}});
-      setEditingThought(null);
-      router.invalidate();
+      try {
+        await updateThought({data: {id: editingThought.id, ...data}});
+        setEditingThought(null);
+        router.invalidate();
+      } catch (err) {
+        alert(err instanceof Error ? err.message : 'Failed to update thought');
+      }
     },
     [editingThought, router],
   );

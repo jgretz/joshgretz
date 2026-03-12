@@ -1,8 +1,8 @@
 import {marked} from 'marked';
+import {type FormEvent, useCallback, useId, useRef, useState} from 'react';
+import {Button} from '../ui/button';
 
 marked.use({async: false});
-import {type FormEvent, useCallback, useRef, useState} from 'react';
-import {Button} from '../ui/button';
 
 type ThoughtFormProps = {
   initialData?: {
@@ -24,6 +24,10 @@ type ThoughtFormProps = {
   submitLabel: string;
 };
 
+function sanitizeHtml(html: string): string {
+  return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+}
+
 function toSlug(text: string): string {
   return text
     .toLowerCase()
@@ -34,6 +38,7 @@ function toSlug(text: string): string {
 }
 
 export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormProps) {
+  const formId = useId();
   const [title, setTitle] = useState(initialData?.title ?? '');
   const [slug, setSlug] = useState(initialData?.slug ?? '');
   const [content, setContent] = useState(initialData?.content ?? '');
@@ -43,6 +48,13 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
   const [preview, setPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const slugManuallyEdited = useRef(!!initialData);
+
+  const titleId = `${formId}-title`;
+  const slugId = `${formId}-slug`;
+  const contentId = `${formId}-content`;
+  const descriptionId = `${formId}-description`;
+  const tagsId = `${formId}-tags`;
+  const publishedAtId = `${formId}-published-at`;
 
   const handleTitleChange = useCallback((value: string) => {
     setTitle(value);
@@ -89,8 +101,11 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className={labelClass}>Title</label>
+        <label htmlFor={titleId} className={labelClass}>
+          Title
+        </label>
         <input
+          id={titleId}
           type="text"
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
@@ -100,8 +115,11 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
       </div>
 
       <div>
-        <label className={labelClass}>Slug</label>
+        <label htmlFor={slugId} className={labelClass}>
+          Slug
+        </label>
         <input
+          id={slugId}
           type="text"
           value={slug}
           onChange={(e) => handleSlugChange(e.target.value)}
@@ -112,7 +130,9 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
 
       <div>
         <div className="mb-1 flex items-center justify-between">
-          <label className={labelClass}>Content</label>
+          <label htmlFor={contentId} className={labelClass}>
+            Content
+          </label>
           <button
             type="button"
             onClick={() => setPreview((p) => !p)}
@@ -124,10 +144,11 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
         {preview ? (
           <div
             className="prose prose-warm min-h-[200px] rounded-md border border-warm-200 bg-warm-50 p-3"
-            dangerouslySetInnerHTML={{__html: marked.parse(content) as string}}
+            dangerouslySetInnerHTML={{__html: sanitizeHtml(marked.parse(content) as string)}}
           />
         ) : (
           <textarea
+            id={contentId}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className={`${inputClass} min-h-[200px]`}
@@ -137,8 +158,11 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
       </div>
 
       <div>
-        <label className={labelClass}>Description</label>
+        <label htmlFor={descriptionId} className={labelClass}>
+          Description
+        </label>
         <textarea
+          id={descriptionId}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className={`${inputClass} min-h-[80px]`}
@@ -146,8 +170,11 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
       </div>
 
       <div>
-        <label className={labelClass}>Tags (comma-separated)</label>
+        <label htmlFor={tagsId} className={labelClass}>
+          Tags (comma-separated)
+        </label>
         <input
+          id={tagsId}
           type="text"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
@@ -157,8 +184,11 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
       </div>
 
       <div>
-        <label className={labelClass}>Published At (leave empty for draft)</label>
+        <label htmlFor={publishedAtId} className={labelClass}>
+          Published At (leave empty for draft)
+        </label>
         <input
+          id={publishedAtId}
           type="datetime-local"
           value={publishedAt}
           onChange={(e) => setPublishedAt(e.target.value)}
