@@ -64,6 +64,7 @@
  */
 
 import path from 'node:path';
+import {fetchSitemapResponse} from './src/lib/sitemap';
 
 // Configuration
 const SERVER_PORT = Number(process.env.PORT ?? 3000);
@@ -486,6 +487,9 @@ const initializeServer = async () => {
     port: SERVER_PORT,
 
     routes: {
+      // Dynamic sitemap with published thoughts
+      '/api/sitemap': () => fetchSitemapResponse(),
+
       // Serve static assets (preloaded or on-demand)
       ...routes,
 

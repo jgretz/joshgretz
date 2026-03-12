@@ -5,6 +5,7 @@ const navItems = [
   {label: 'About', href: '/'},
   {label: 'Resume', href: '/resume'},
   {label: 'ReadMe', href: '/readme'},
+  {label: 'Thoughts', href: '/thoughts'},
   {label: 'Running', href: '/running'},
 ];
 
