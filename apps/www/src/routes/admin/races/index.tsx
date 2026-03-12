@@ -69,6 +69,7 @@ function FutureRacesList() {
                 <div className="flex gap-3 text-sm text-warm-600">
                   {race.distance && <span>{race.distance}</span>}
                   {race.location && <span>{race.location}</span>}
+                  {race.state && <span>{race.state}</span>}
                   {race.race_date && <span>{formatDate(race.race_date)}</span>}
                 </div>
                 {race.url && (

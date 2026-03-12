@@ -44,6 +44,7 @@ export default new Elysia({prefix: '/future-races'})
         user_id: t.Number(),
         title: t.String(),
         location: t.Optional(t.Nullable(t.String())),
+        state: t.Optional(t.Nullable(t.String())),
         distance: t.Optional(t.Nullable(t.String())),
         url: t.Optional(t.Nullable(t.String())),
         race_date: t.Optional(t.Nullable(t.String())),
@@ -66,6 +67,7 @@ export default new Elysia({prefix: '/future-races'})
       body: t.Object({
         title: t.Optional(t.String()),
         location: t.Optional(t.Nullable(t.String())),
+        state: t.Optional(t.Nullable(t.String())),
         distance: t.Optional(t.Nullable(t.String())),
         url: t.Optional(t.Nullable(t.String())),
         race_date: t.Optional(t.Nullable(t.String())),

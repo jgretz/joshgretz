@@ -10,6 +10,7 @@ const command = ({database}: RunningContainer) => {
         user_id: input.user_id,
         title: input.title,
         location: input.location ?? null,
+        state: input.state ?? null,
         distance: input.distance ?? null,
         url: input.url ?? null,
         race_date: input.race_date ?? null,

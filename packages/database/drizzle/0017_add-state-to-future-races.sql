@@ -1,0 +1,1 @@
+ALTER TABLE "future_races" ADD COLUMN "state" varchar(2);
