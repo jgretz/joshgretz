@@ -110,6 +110,7 @@ export const futureRaces = pgTable(
     user_id: integer('user_id').notNull(),
     title: varchar('title', {length: 200}).notNull(),
     location: varchar('location', {length: 300}),
+    state: varchar('state', {length: 2}),
     distance: varchar('distance', {length: 100}),
     url: varchar('url', {length: 500}),
     race_date: timestamp('race_date', {mode: 'string'}),
@@ -182,10 +183,7 @@ export const dailyStats = pgTable(
   (dailyStats) => {
     return {
       userIdIdx: index('daily_stats_user_id_idx').on(dailyStats.user_id),
-      userDateIdx: uniqueIndex('daily_stats_user_date_idx').on(
-        dailyStats.user_id,
-        dailyStats.date,
-      ),
+      userDateIdx: uniqueIndex('daily_stats_user_date_idx').on(dailyStats.user_id, dailyStats.date),
     };
   },
 );

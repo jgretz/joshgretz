@@ -5,6 +5,7 @@ import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {getFutureRace, updateFutureRace} from '../../../services/future-races/future-races-server';
+import {US_STATES} from '../../../data/us-states';
 
 export const Route = createFileRoute('/admin/races/$id/edit')({
   component: EditFutureRace,
@@ -32,6 +33,7 @@ function EditFutureRace() {
 
   const [raceTitle, setRaceTitle] = useState(race?.title || '');
   const [location, setLocation] = useState(race?.location || '');
+  const [state, setState] = useState(race?.state || '');
   const [distance, setDistance] = useState(race?.distance || '');
   const [url, setUrl] = useState(race?.url || '');
   const [raceDate, setRaceDate] = useState(toDateInputValue(race?.race_date ?? null));
@@ -56,6 +58,7 @@ function EditFutureRace() {
             id: parseInt(id, 10),
             title: raceTitle.trim(),
             location: location.trim() || null,
+            state: state || null,
             distance: distance.trim() || null,
             url: url.trim() || null,
             raceDate: raceDate || null,
@@ -69,7 +72,7 @@ function EditFutureRace() {
         setLoading(false);
       }
     },
-    [id, raceTitle, location, distance, url, raceDate, navigate, router],
+    [id, raceTitle, location, state, distance, url, raceDate, navigate, router],
   );
 
   if (!race) {
@@ -114,6 +117,25 @@ function EditFutureRace() {
               placeholder="e.g., Boston, MA"
               className="w-full rounded-lg border border-warm-300 px-4 py-2 focus:border-warm-500 focus:outline-none focus:ring-2 focus:ring-warm-500"
             />
+          </div>
+
+          <div>
+            <label htmlFor="state" className="mb-2 block text-sm font-medium text-warm-700">
+              State
+            </label>
+            <select
+              id="state"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              className="w-full rounded-lg border border-warm-300 px-4 py-2 focus:border-warm-500 focus:outline-none focus:ring-2 focus:ring-warm-500"
+            >
+              <option value="">Select state</option>
+              {US_STATES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>

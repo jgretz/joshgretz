@@ -72,7 +72,7 @@ function Running() {
             onYearChange={handleYearChange}
           />
         </div>
-        <USMapSection stateStats={stateStats} />
+        <USMapSection stateStats={stateStats} futureRaces={futureRaces} />
         <PersonalRecordsSection records={personalRecords} />
         <UpcomingRacesSection races={futureRaces} />
         <StravaCTASection />

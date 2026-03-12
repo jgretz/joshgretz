@@ -5,6 +5,7 @@ type FutureRace = {
   user_id: number;
   title: string;
   location: string | null;
+  state: string | null;
   distance: string | null;
   url: string | null;
   race_date: string | null;
@@ -62,6 +63,7 @@ export const createFutureRace = createServerFn({
       userId: number;
       title: string;
       location?: string | null;
+      state?: string | null;
       distance?: string | null;
       url?: string | null;
       raceDate?: string | null;
@@ -80,6 +82,7 @@ export const createFutureRace = createServerFn({
         user_id: data.userId,
         title: data.title,
         location: data.location ?? null,
+        state: data.state ?? null,
         distance: data.distance ?? null,
         url: data.url ?? null,
         race_date: data.raceDate ?? null,
@@ -101,6 +104,7 @@ export const updateFutureRace = createServerFn({
       id: number;
       title?: string;
       location?: string | null;
+      state?: string | null;
       distance?: string | null;
       url?: string | null;
       raceDate?: string | null;
@@ -112,6 +116,7 @@ export const updateFutureRace = createServerFn({
     const body: Record<string, unknown> = {};
     if (data.title !== undefined) body.title = data.title;
     if (data.location !== undefined) body.location = data.location;
+    if (data.state !== undefined) body.state = data.state;
     if (data.distance !== undefined) body.distance = data.distance;
     if (data.url !== undefined) body.url = data.url;
     if (data.raceDate !== undefined) body.race_date = data.raceDate;

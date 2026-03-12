@@ -54,6 +54,7 @@ export type FutureRace = {
   user_id: number;
   title: string;
   location: string | null;
+  state: string | null;
   distance: string | null;
   url: string | null;
   race_date: string | null;
@@ -65,6 +66,7 @@ export type CreateFutureRaceInput = {
   user_id: number;
   title: string;
   location?: string | null;
+  state?: string | null;
   distance?: string | null;
   url?: string | null;
   race_date?: string | null;
@@ -73,6 +75,7 @@ export type CreateFutureRaceInput = {
 export type UpdateFutureRaceInput = {
   title?: string;
   location?: string | null;
+  state?: string | null;
   distance?: string | null;
   url?: string | null;
   race_date?: string | null;

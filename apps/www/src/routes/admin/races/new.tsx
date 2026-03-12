@@ -5,6 +5,7 @@ import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {createFutureRace} from '../../../services/future-races/future-races-server';
+import {US_STATES} from '../../../data/us-states';
 
 export const Route = createFileRoute('/admin/races/new')({
   component: NewFutureRace,
@@ -20,6 +21,7 @@ function NewFutureRace() {
   const {user} = Route.useRouteContext();
   const [raceTitle, setRaceTitle] = useState('');
   const [location, setLocation] = useState('');
+  const [state, setState] = useState('');
   const [distance, setDistance] = useState('');
   const [url, setUrl] = useState('');
   const [raceDate, setRaceDate] = useState('');
@@ -49,6 +51,7 @@ function NewFutureRace() {
             userId: user.id,
             title: raceTitle.trim(),
             location: location.trim() || null,
+            state: state || null,
             distance: distance.trim() || null,
             url: url.trim() || null,
             raceDate: raceDate || null,
@@ -62,7 +65,7 @@ function NewFutureRace() {
         setLoading(false);
       }
     },
-    [user, raceTitle, location, distance, url, raceDate, navigate, router],
+    [user, raceTitle, location, state, distance, url, raceDate, navigate, router],
   );
 
   return (
@@ -96,6 +99,25 @@ function NewFutureRace() {
               placeholder="e.g., Boston, MA"
               className="w-full rounded-lg border border-warm-300 px-4 py-2 focus:border-warm-500 focus:outline-none focus:ring-2 focus:ring-warm-500"
             />
+          </div>
+
+          <div>
+            <label htmlFor="state" className="mb-2 block text-sm font-medium text-warm-700">
+              State
+            </label>
+            <select
+              id="state"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              className="w-full rounded-lg border border-warm-300 px-4 py-2 focus:border-warm-500 focus:outline-none focus:ring-2 focus:ring-warm-500"
+            >
+              <option value="">Select state</option>
+              {US_STATES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>

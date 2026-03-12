@@ -1,5 +1,6 @@
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {STATE_NAMES, US_STATE_PATHS} from '../../data/us-map-paths';
+import type {FutureRace} from 'running';
 
 type StateStat = {
   id: number;
@@ -16,21 +17,27 @@ type StateStat = {
 
 type USMapSectionProps = {
   stateStats: StateStat[];
+  futureRaces?: FutureRace[];
 };
 
 const COLORS = {
   marathon: '#8b5a2b',
   runOnly: '#c4a574',
+  planned: '#4a7c59',
   none: '#e8dfd5',
 } as const;
 
-type StateStatus = 'marathon' | 'runOnly' | 'none';
+type StateStatus = 'marathon' | 'runOnly' | 'planned' | 'none';
 
-const getStateStatus = (abbr: string, statsMap: Map<string, StateStat>): StateStatus => {
+const getStateStatus = (
+  abbr: string,
+  statsMap: Map<string, StateStat>,
+  plannedMap: Map<string, FutureRace>,
+): StateStatus => {
   const stat = statsMap.get(abbr);
-  if (!stat) return 'none';
-  if ((stat.marathon_count ?? 0) > 0) return 'marathon';
-  if ((stat.run_count ?? 0) > 0) return 'runOnly';
+  if (stat && (stat.marathon_count ?? 0) > 0) return 'marathon';
+  if (plannedMap.has(abbr)) return 'planned';
+  if (stat && (stat.run_count ?? 0) > 0) return 'runOnly';
   return 'none';
 };
 
@@ -45,12 +52,19 @@ const statusLabel = (status: StateStatus) => {
       return 'Race';
     case 'runOnly':
       return 'Run';
+    case 'planned':
+      return 'Planned';
     case 'none':
       return 'Not yet';
   }
 };
 
-export const USMapSection = ({stateStats}: USMapSectionProps) => {
+const formatRaceDate = (dateStr: string): string => {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+};
+
+export const USMapSection = ({stateStats, futureRaces = []}: USMapSectionProps) => {
   const [tooltip, setTooltip] = useState<{
     name: string;
     status: string;
@@ -64,29 +78,44 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
     statsMap.set(stat.state, stat);
   }
 
-  const statesRun = stateStats.filter((s) => (s.run_count ?? 0) > 0).length;
-  const statesMarathon = stateStats.filter((s) => (s.marathon_count ?? 0) > 0).length;
+  const plannedMap = new Map<string, FutureRace>();
+  for (const race of futureRaces) {
+    if (race.state) {
+      const hasStat = statsMap.has(race.state);
+      const hasMarathon = hasStat && (statsMap.get(race.state)?.marathon_count ?? 0) > 0;
+      if (!hasStat || !hasMarathon) {
+        plannedMap.set(race.state, race);
+      }
+    }
+  }
 
-  const handleMouseEnter = useCallback(
-    (abbr: string, status: StateStatus, e: React.MouseEvent<SVGPathElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const stat = statsMap.get(abbr);
-      const raceLine =
-        stat?.first_marathon_name && stat?.first_marathon_date
+  const statesMarathon = stateStats.filter((s) => (s.marathon_count ?? 0) > 0).length;
+  const statesPlanned = plannedMap.size;
+
+  const handleMouseEnter = (
+    abbr: string,
+    status: StateStatus,
+    e: React.MouseEvent<SVGPathElement>,
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const stat = statsMap.get(abbr);
+    const futureRace = plannedMap.get(abbr);
+    const raceLine =
+      status === 'planned' && futureRace?.title && futureRace?.race_date
+        ? `${futureRace.title} (${formatRaceDate(futureRace.race_date)})`
+        : stat?.first_marathon_name && stat?.first_marathon_date
           ? `${stat.first_marathon_name} (${formatMarathonDate(stat.first_marathon_date)})`
           : null;
-      setTooltip({
-        name: STATE_NAMES[abbr] ?? abbr,
-        status: statusLabel(status),
-        raceLine,
-        x: rect.left + rect.width / 2,
-        y: rect.top,
-      });
-    },
-    [statsMap],
-  );
+    setTooltip({
+      name: STATE_NAMES[abbr] ?? abbr,
+      status: statusLabel(status),
+      raceLine,
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    });
+  };
 
-  const handleMouseLeave = useCallback(() => setTooltip(null), []);
+  const handleMouseLeave = () => setTooltip(null);
 
   return (
     <section className="text-center">
@@ -94,12 +123,12 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
       <p className="mt-3 font-serif text-lg italic text-warm-400">running across America</p>
       <div className="mt-6 flex justify-center gap-6 sm:gap-12">
         <div>
-          <div className="font-serif text-3xl text-warm-700">{statesRun}/50</div>
-          <div className="font-sans text-sm text-warm-400">states run</div>
-        </div>
-        <div>
           <div className="font-serif text-3xl text-warm-700">{statesMarathon}/50</div>
           <div className="font-sans text-sm text-warm-400">marathon states</div>
+        </div>
+        <div>
+          <div className="font-serif text-3xl text-warm-700">{statesPlanned}</div>
+          <div className="font-sans text-sm text-warm-400">planned</div>
         </div>
       </div>
       <div className="mt-6 rounded-2xl border border-warm-200 bg-white/60 p-3 sm:p-6">
@@ -107,7 +136,7 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
           <svg viewBox="0 0 960 600" className="mx-auto w-full max-w-3xl">
             <title>US map showing states run and raced in</title>
             {Object.entries(US_STATE_PATHS).map(([abbr, path]) => {
-              const status = getStateStatus(abbr, statsMap);
+              const status = getStateStatus(abbr, statsMap, plannedMap);
               return (
                 <path
                   key={abbr}
@@ -152,6 +181,13 @@ export const USMapSection = ({stateStats}: USMapSectionProps) => {
               style={{backgroundColor: COLORS.runOnly}}
             />
             Run only
+          </span>
+          <span className="flex items-center gap-1">
+            <span
+              className="inline-block h-3 w-3 rounded-sm"
+              style={{backgroundColor: COLORS.planned}}
+            />
+            Planned
           </span>
           <span className="flex items-center gap-1">
             <span
