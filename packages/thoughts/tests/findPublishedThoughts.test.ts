@@ -8,7 +8,6 @@ const pastThought: Thought = {
   title: 'Past',
   slug: 'past',
   content: 'Published in the past',
-  description: null,
   tags: null,
   published_at: '2025-01-01T00:00:00.000Z',
   created_at: '2025-01-01T00:00:00.000Z',

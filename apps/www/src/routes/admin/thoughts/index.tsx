@@ -24,7 +24,6 @@ type Thought = {
   title: string;
   slug: string;
   content: string;
-  description: string | null;
   tags: string[] | null;
   published_at: string | null;
   created_at: string | null;
@@ -53,7 +52,6 @@ function toEditInitialData(thought: Thought) {
     title: thought.title,
     slug: thought.slug,
     content: thought.content,
-    description: thought.description ?? '',
     tags: thought.tags?.join(', ') ?? '',
     published_at: thought.published_at
       ? new Date(thought.published_at).toISOString().slice(0, 16)
@@ -76,7 +74,6 @@ function ThoughtsList() {
       title: string;
       slug: string;
       content: string;
-      description: string | null;
       tags: string[] | null;
       published_at: string | null;
     }) => {
@@ -96,7 +93,6 @@ function ThoughtsList() {
       title: string;
       slug: string;
       content: string;
-      description: string | null;
       tags: string[] | null;
       published_at: string | null;
     }) => {

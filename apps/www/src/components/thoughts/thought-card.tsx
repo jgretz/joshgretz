@@ -5,12 +5,11 @@ import {TagList} from './tag-list';
 type ThoughtCardProps = {
   title: string;
   slug: string;
-  description: string | null;
   tags: string[] | null;
   published_at: string;
 };
 
-export function ThoughtCard({title, slug, description, tags, published_at}: ThoughtCardProps) {
+export function ThoughtCard({title, slug, tags, published_at}: ThoughtCardProps) {
   return (
     <Link
       to="/thoughts/$slug"
@@ -21,7 +20,6 @@ export function ThoughtCard({title, slug, description, tags, published_at}: Thou
       <time className="mt-1 text-sm text-warm-500">
         {format(new Date(published_at), 'MMMM d, yyyy')}
       </time>
-      {description && <p className="mt-2 text-warm-600">{description}</p>}
       {tags && tags.length > 0 && (
         <div className="mt-3">
           <TagList tags={tags} />

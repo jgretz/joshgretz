@@ -24,7 +24,6 @@ const fakeThought: Thought = {
   title: 'Test Thought',
   slug: 'test-thought',
   content: 'Some content',
-  description: null,
   tags: null,
   published_at: null,
   created_at: '2026-01-01T00:00:00.000Z',
@@ -60,7 +59,6 @@ describe('createThought', function () {
 
     const valuesCall = db.insert.mock.results[0]!.value.values;
     const passedValues = valuesCall.mock.calls[0]![0];
-    expect(passedValues.description).toBeNull();
     expect(passedValues.tags).toBeNull();
     expect(passedValues.published_at).toBeNull();
   });

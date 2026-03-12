@@ -9,7 +9,6 @@ type ThoughtFormProps = {
     title: string;
     slug: string;
     content: string;
-    description: string;
     tags: string;
     published_at: string;
   };
@@ -17,7 +16,6 @@ type ThoughtFormProps = {
     title: string;
     slug: string;
     content: string;
-    description: string | null;
     tags: string[] | null;
     published_at: string | null;
   }) => Promise<void>;
@@ -42,7 +40,6 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
   const [title, setTitle] = useState(initialData?.title ?? '');
   const [slug, setSlug] = useState(initialData?.slug ?? '');
   const [content, setContent] = useState(initialData?.content ?? '');
-  const [description, setDescription] = useState(initialData?.description ?? '');
   const [tags, setTags] = useState(initialData?.tags ?? '');
   const [publishedAt, setPublishedAt] = useState(initialData?.published_at ?? '');
   const [preview, setPreview] = useState(false);
@@ -52,7 +49,6 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
   const titleId = `${formId}-title`;
   const slugId = `${formId}-slug`;
   const contentId = `${formId}-content`;
-  const descriptionId = `${formId}-description`;
   const tagsId = `${formId}-tags`;
   const publishedAtId = `${formId}-published-at`;
 
@@ -83,7 +79,6 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
           title,
           slug,
           content,
-          description: description || null,
           tags: parsedTags,
           published_at: publishedAt || null,
         });
@@ -91,7 +86,7 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
         setSubmitting(false);
       }
     },
-    [title, slug, content, description, tags, publishedAt, onSubmit],
+    [title, slug, content, tags, publishedAt, onSubmit],
   );
 
   const inputClass =
@@ -155,18 +150,6 @@ export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormPro
             required
           />
         )}
-      </div>
-
-      <div>
-        <label htmlFor={descriptionId} className={labelClass}>
-          Description
-        </label>
-        <textarea
-          id={descriptionId}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className={`${inputClass} min-h-[80px]`}
-        />
       </div>
 
       <div>

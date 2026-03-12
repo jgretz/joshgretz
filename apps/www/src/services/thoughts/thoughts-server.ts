@@ -5,7 +5,6 @@ export type Thought = {
   title: string;
   slug: string;
   content: string;
-  description: string | null;
   tags: string[] | null;
   published_at: string | null;
   created_at: string | null;
@@ -87,7 +86,6 @@ export const createThought = createServerFn({
       title: string;
       slug: string;
       content: string;
-      description: string | null;
       tags: string[] | null;
       published_at: string | null;
     }) => data,
@@ -118,7 +116,6 @@ export const updateThought = createServerFn({
       title: string;
       slug: string;
       content: string;
-      description: string | null;
       tags: string[] | null;
       published_at: string | null;
     }) => data,

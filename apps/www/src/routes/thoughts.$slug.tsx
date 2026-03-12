@@ -17,9 +17,7 @@ export const Route = createFileRoute('/thoughts/$slug')({
     return {
       meta: [
         {title: title(loaderData.thought.title)},
-        {name: 'description', content: loaderData.thought.description ?? ''},
         {property: 'og:title', content: loaderData.thought.title},
-        {property: 'og:description', content: loaderData.thought.description ?? ''},
         {property: 'og:type', content: 'article'},
       ],
     };

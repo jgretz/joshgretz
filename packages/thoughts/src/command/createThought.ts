@@ -10,7 +10,6 @@ const command = ({database}: ThoughtsContainer) => {
         title: input.title,
         slug: input.slug,
         content: input.content,
-        description: input.description ?? null,
         tags: input.tags ?? null,
         published_at: input.published_at ?? null,
       })

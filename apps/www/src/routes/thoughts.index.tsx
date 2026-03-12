@@ -32,7 +32,6 @@ function ThoughtsPage() {
               key={thought.id}
               title={thought.title}
               slug={thought.slug}
-              description={thought.description}
               tags={thought.tags}
               published_at={thought.published_at!}
             />

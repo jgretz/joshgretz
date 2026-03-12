@@ -1,0 +1,1 @@
+ALTER TABLE "thoughts" DROP COLUMN IF EXISTS "description";
