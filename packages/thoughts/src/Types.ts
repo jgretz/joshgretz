@@ -16,8 +16,8 @@ export type Thought = {
   description: string | null;
   tags: string[] | null;
   published_at: string | null;
-  created_at: Date | null;
-  updated_at: Date | null;
+  created_at: string | null;
+  updated_at: string | null;
 };
 
 export type CreateThoughtInput = {

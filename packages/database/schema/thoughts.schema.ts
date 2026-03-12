@@ -10,8 +10,8 @@ export const thoughts = pgTable(
     description: varchar('description', {length: 500}),
     tags: text('tags').array(),
     published_at: timestamp('published_at', {mode: 'string'}),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
+    created_at: timestamp('created_at', {mode: 'string'}).defaultNow(),
+    updated_at: timestamp('updated_at', {mode: 'string'}).defaultNow(),
   },
   (thoughts) => {
     return {

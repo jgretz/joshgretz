@@ -40,7 +40,8 @@
       "utility": ["./packages/utility/src/index.ts"],
       "users": ["./packages/users/src/index.ts"],
       "workflow": ["./packages/workflow/src/index.ts"],
-      "jobs": ["./packages/jobs/src/index.ts"]
+      "jobs": ["./packages/jobs/src/index.ts"],
+      "thoughts": ["./packages/thoughts/src/index.ts"]
     }
   }
 }
