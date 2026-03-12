@@ -5,7 +5,14 @@ import {InjectIn} from 'injectx';
 
 const command = ({database}: ThoughtsContainer) => {
   return async (id: number) => {
-    await database.delete(Schema.thoughts).where(eq(Schema.thoughts.id, id));
+    const [deleted] = await database
+      .delete(Schema.thoughts)
+      .where(eq(Schema.thoughts.id, id))
+      .returning();
+
+    if (!deleted) {
+      throw new Error(`Thought not found: ${id}`);
+    }
   };
 };
 
