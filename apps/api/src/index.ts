@@ -3,6 +3,7 @@ import {setupUserContainer} from 'users';
 import {setupRunningContainer} from 'running';
 import {setupGeoapifyContainer} from 'geoapify';
 import {setupJobsContainer} from 'jobs';
+import {setupThoughtsContainer} from 'thoughts';
 import health from './routes/health';
 import users from './routes/users';
 import running from './routes/running';
@@ -15,6 +16,7 @@ import streak from './routes/streak';
 import stateStats from './routes/state-stats';
 import dailyStats from './routes/daily-stats';
 import googleSheets from './routes/google-sheets';
+import thoughts from './routes/thoughts';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
@@ -38,6 +40,7 @@ setupUserContainer({databaseUrl: env.DATABASE_URL});
 setupRunningContainer({databaseUrl: env.DATABASE_URL});
 setupGeoapifyContainer({apiKey: env.GEOAPIFY_API_KEY});
 setupJobsContainer({databaseUrl: env.DATABASE_URL});
+setupThoughtsContainer({databaseUrl: env.DATABASE_URL});
 
 // run
 const root = new Elysia()
@@ -71,7 +74,8 @@ const root = new Elysia()
         .use(streak)
         .use(stateStats)
         .use(dailyStats)
-        .use(googleSheets),
+        .use(googleSheets)
+        .use(thoughts),
   )
   .listen(env.PORT);
 

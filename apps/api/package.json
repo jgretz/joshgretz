@@ -19,6 +19,7 @@
     "injectx": "^1.0.4",
     "running": "workspace:*",
     "strava": "workspace:*",
+    "thoughts": "workspace:*",
     "users": "workspace:*",
     "zod": "^3.23.8"
   },
