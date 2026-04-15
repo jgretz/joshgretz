@@ -35,3 +35,32 @@ export const getStateStats = createServerFn({
 
     return response.json();
   });
+
+export const enqueueStateStatsRecalc = createServerFn({
+  method: 'POST',
+})
+  .inputValidator((data: {userId: number}) => data)
+  .handler(async ({data}): Promise<{id: number}> => {
+    const env = getEnv();
+
+    const response = await fetch(`${env.apiUrl}/jobs`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.apiToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'state-stats-update',
+        payload: {user_id: data.userId},
+      }),
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(
+        `Failed to enqueue state stats recalc (${response.status}): ${body}`,
+      );
+    }
+
+    return response.json();
+  });
