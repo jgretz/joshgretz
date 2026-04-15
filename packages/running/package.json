@@ -2,6 +2,10 @@
   "name": "running",
   "module": "src/index.ts",
   "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./states": "./src/constants/us-states.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
