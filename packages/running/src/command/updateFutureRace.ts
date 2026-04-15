@@ -9,7 +9,7 @@ const command = ({database}: RunningContainer) => {
       .update(Schema.futureRaces)
       .set({
         ...input,
-        updated_at: new Date(),
+        updated_at: new Date().toISOString(),
       })
       .where(eq(Schema.futureRaces.id, id))
       .returning();

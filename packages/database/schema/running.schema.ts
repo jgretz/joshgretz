@@ -114,8 +114,8 @@ export const futureRaces = pgTable(
     distance: varchar('distance', {length: 100}),
     url: varchar('url', {length: 500}),
     race_date: timestamp('race_date', {mode: 'string'}),
-    created_at: timestamp('created_at').defaultNow(),
-    updated_at: timestamp('updated_at').defaultNow(),
+    created_at: timestamp('created_at', {mode: 'string'}).defaultNow(),
+    updated_at: timestamp('updated_at', {mode: 'string'}).defaultNow(),
   },
   (race) => {
     return {

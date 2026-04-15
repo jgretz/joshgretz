@@ -58,8 +58,8 @@ export type FutureRace = {
   distance: string | null;
   url: string | null;
   race_date: string | null;
-  created_at: Date | null;
-  updated_at: Date | null;
+  created_at: string | null;
+  updated_at: string | null;
 };
 
 export type CreateFutureRaceInput = {
