@@ -5,7 +5,7 @@ import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {createFutureRace} from '../../../services/future-races/future-races-server';
-import {US_STATES} from '../../../data/us-states';
+import {US_STATES} from 'running/states';
 
 export const Route = createFileRoute('/admin/races/new')({
   component: NewFutureRace,
