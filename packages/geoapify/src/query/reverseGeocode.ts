@@ -3,8 +3,23 @@ import type {GeoapifyContainer, Location} from '../Types';
 import {encodeQueryStringFromJsonObject} from 'utility';
 import {InjectIn} from 'injectx';
 
+type GeoapifyFeature = {
+  properties: {
+    name?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    lat?: number;
+    lon?: number;
+  };
+};
+
+type GeoapifyResponse = {
+  features: GeoapifyFeature[];
+};
+
 function query({apiKey}: GeoapifyContainer) {
-  return async function (lat: number, lon: number) {
+  return async function (lat: number, lon: number): Promise<Location | null> {
     const queryString = encodeQueryStringFromJsonObject({
       lat,
       lon,
@@ -12,13 +27,25 @@ function query({apiKey}: GeoapifyContainer) {
     });
 
     const url = `https://api.geoapify.com/v1/geocode/reverse?${queryString}`;
-    const response = await axios.get<Location[]>(url);
+    const response = await axios.get<GeoapifyResponse>(url);
 
-    if (response.data.length === 0) {
+    const feature = response.data?.features?.[0];
+    if (!feature) {
       return null;
     }
 
-    return response.data[0];
+    const {name, city, state, country, lat: fLat, lon: fLon} = feature.properties;
+    if (!state || !country) {
+      return null;
+    }
+
+    return {
+      name: city ?? name ?? '',
+      state,
+      country,
+      lat: fLat ?? lat,
+      lon: fLon ?? lon,
+    };
   };
 }
 
