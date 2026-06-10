@@ -1,17 +1,12 @@
-import {match} from 'ts-pattern';
-
 export const getApiUrl = (): string => {
   const envApiUrl = import.meta.env.VITE_API_URL as string | undefined;
-  const nodeEnv = import.meta.env.NODE_ENV as string;
-
   if (envApiUrl) {
     return envApiUrl;
   }
 
-  return match(nodeEnv)
-    .with('development', () => 'http://localhost:3001')
-    .with('production', () => 'https://joshgretz-api.fly.dev')
-    .otherwise(() => 'http://localhost:3001');
+  // Use Vite's PROD flag (statically replaced in both client and SSR bundles)
+  // rather than NODE_ENV, which is unreliable in the SSR server runtime.
+  return import.meta.env.PROD ? 'https://joshgretz-api.fly.dev' : 'http://localhost:3001';
 };
 
 export class ApiClient {
