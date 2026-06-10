@@ -45,8 +45,19 @@ function FilesList() {
   const [editing, setEditing] = useState<FileListItem | null>(null);
   const [editSlug, setEditSlug] = useState('');
   const [savingSlug, setSavingSlug] = useState(false);
+  const [copiedId, setCopiedId] = useState<number | null>(null);
 
   const files = loaderFiles.filter((f) => !deletedIds.has(f.id));
+
+  const handleCopy = useCallback(async (file: FileListItem) => {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/files/${file.slug}`);
+      setCopiedId(file.id);
+      setTimeout(() => setCopiedId((current) => (current === file.id ? null : current)), 1500);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to copy URL');
+    }
+  }, []);
 
   const handleCreate = useCallback(
     async (data: {filename: string; slug: string | null; dataBase64: string}) => {
@@ -121,6 +132,9 @@ function FilesList() {
                 </a>
               </div>
               <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={() => handleCopy(file)}>
+                  {copiedId === file.id ? 'Copied!' : 'Copy URL'}
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => openEdit(file)}>
                   Edit slug
                 </Button>
