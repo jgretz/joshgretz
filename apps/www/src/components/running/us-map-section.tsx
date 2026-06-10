@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {STATE_NAMES, US_STATE_PATHS} from '../../data/us-map-paths';
 import type {FutureRace} from 'running';
+import {STATE_NAMES, US_STATE_PATHS} from '../../data/us-map-paths';
 
 type StateStat = {
   id: number;

@@ -1,11 +1,11 @@
 import {Link, createFileRoute, useNavigate, useRouter} from '@tanstack/react-router';
 import {useCallback, useState} from 'react';
+import {US_STATES} from 'running/states';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {getFutureRace, updateFutureRace} from '../../../services/future-races/future-races-server';
-import {US_STATES} from 'running/states';
 
 export const Route = createFileRoute('/admin/races/$id/edit')({
   component: EditFutureRace,

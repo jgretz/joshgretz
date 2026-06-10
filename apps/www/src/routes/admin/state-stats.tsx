@@ -44,8 +44,8 @@ function StateStatsPage() {
     <AdminLayout title="State Stats">
       <div className="rounded-lg border border-warm-200 bg-white p-8">
         <p className="mb-6 text-warm-700">
-          Queue a job to recalculate per-state running stats from all activities.
-          Runs in the background via the task worker.
+          Queue a job to recalculate per-state running stats from all activities. Runs in the
+          background via the task worker.
         </p>
 
         <Button type="button" disabled={loading} onClick={handleRecalc}>

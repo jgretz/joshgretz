@@ -57,9 +57,7 @@ export const enqueueStateStatsRecalc = createServerFn({
 
     if (!response.ok) {
       const body = await response.text();
-      throw new Error(
-        `Failed to enqueue state stats recalc (${response.status}): ${body}`,
-      );
+      throw new Error(`Failed to enqueue state stats recalc (${response.status}): ${body}`);
     }
 
     return response.json();
