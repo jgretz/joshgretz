@@ -101,6 +101,16 @@ export const createJob = async (type: string, payload: unknown): Promise<{id: nu
   return response.json();
 };
 
+export const cleanupOldFiles = async (days: number): Promise<{deleted: number}> => {
+  const response = await fetch(`${config.API_URL}/files/cleanup`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify({days}),
+  });
+  await assertOk(response, `Failed to clean up files older than ${days} days`);
+  return response.json();
+};
+
 export const recalculateStreak = async (userId: number): Promise<void> => {
   const response = await fetch(`${config.API_URL}/streak/recalculate`, {
     method: 'POST',

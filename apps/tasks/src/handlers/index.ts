@@ -5,6 +5,7 @@ import {handleStreakUpdate, type StreakUpdatePayload} from './streak-update';
 import {handleStateStatsUpdate, type StateStatsUpdatePayload} from './state-stats-update';
 import {handleDailyStatsUpdate, type DailyStatsUpdatePayload} from './daily-stats-update';
 import {handleGoogleSheetsSync, type GoogleSheetsSyncPayload} from './google-sheets-sync';
+import {handleFilesCleanup, type FilesCleanupPayload} from './files-cleanup';
 
 export const processJob = async (type: string, payload: unknown): Promise<unknown> =>
   match(type)
@@ -14,6 +15,7 @@ export const processJob = async (type: string, payload: unknown): Promise<unknow
     .with('state-stats-update', () => handleStateStatsUpdate(payload as StateStatsUpdatePayload))
     .with('daily-stats-update', () => handleDailyStatsUpdate(payload as DailyStatsUpdatePayload))
     .with('google-sheets-sync', () => handleGoogleSheetsSync(payload as GoogleSheetsSyncPayload))
+    .with('files-cleanup', () => handleFilesCleanup(payload as FilesCleanupPayload))
     .otherwise(() => {
       throw new Error(`Unknown job type: ${type}`);
     });

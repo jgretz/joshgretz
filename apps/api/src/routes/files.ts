@@ -2,6 +2,7 @@ import {Elysia, t} from 'elysia';
 import {
   createFile,
   deleteFile,
+  deleteFilesOlderThan,
   findAllFiles,
   findFileBySlug,
   kindForMime,
@@ -103,6 +104,14 @@ export default new Elysia({prefix: '/files'})
         dataBase64: t.String(),
       }),
     },
+  )
+  .post(
+    '/cleanup',
+    async ({body}) => {
+      const days = body?.days ?? 30;
+      return await deleteFilesOlderThan(days);
+    },
+    {body: t.Optional(t.Object({days: t.Optional(t.Numeric())}))},
   )
   .put(
     '/:id',
