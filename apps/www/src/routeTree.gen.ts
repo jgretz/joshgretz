@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ThoughtsIndexRouteImport } from './routes/thoughts.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as ThoughtsSlugRouteImport } from './routes/thoughts.$slug'
+import { Route as FilesSlugRouteImport } from './routes/files.$slug'
 import { Route as AdminStreakRouteImport } from './routes/admin/streak'
 import { Route as AdminStateStatsRouteImport } from './routes/admin/state-stats'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
@@ -30,7 +31,9 @@ import { Route as AdminRacesIndexRouteImport } from './routes/admin/races/index'
 import { Route as AdminPrsIndexRouteImport } from './routes/admin/prs/index'
 import { Route as AdminJobsIndexRouteImport } from './routes/admin/jobs/index'
 import { Route as AdminGoogleIndexRouteImport } from './routes/admin/google/index'
+import { Route as AdminFilesIndexRouteImport } from './routes/admin/files/index'
 import { Route as AdminActivitiesIndexRouteImport } from './routes/admin/activities/index'
+import { Route as FilesSlugRawRouteImport } from './routes/files.$slug.raw'
 import { Route as AdminStravaImportRouteImport } from './routes/admin/strava/import'
 import { Route as AdminStravaConnectRouteImport } from './routes/admin/strava/connect'
 import { Route as AdminStravaCallbackRouteImport } from './routes/admin/strava/callback'
@@ -103,6 +106,11 @@ const ThoughtsSlugRoute = ThoughtsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ThoughtsRoute,
 } as any)
+const FilesSlugRoute = FilesSlugRouteImport.update({
+  id: '/files/$slug',
+  path: '/files/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminStreakRoute = AdminStreakRouteImport.update({
   id: '/streak',
   path: '/streak',
@@ -148,10 +156,20 @@ const AdminGoogleIndexRoute = AdminGoogleIndexRouteImport.update({
   path: '/google/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminFilesIndexRoute = AdminFilesIndexRouteImport.update({
+  id: '/files/',
+  path: '/files/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminActivitiesIndexRoute = AdminActivitiesIndexRouteImport.update({
   id: '/activities/',
   path: '/activities/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const FilesSlugRawRoute = FilesSlugRawRouteImport.update({
+  id: '/raw',
+  path: '/raw',
+  getParentRoute: () => FilesSlugRoute,
 } as any)
 const AdminStravaImportRoute = AdminStravaImportRouteImport.update({
   id: '/strava/import',
@@ -222,6 +240,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/state-stats': typeof AdminStateStatsRoute
   '/admin/streak': typeof AdminStreakRoute
+  '/files/$slug': typeof FilesSlugRouteWithChildren
   '/thoughts/$slug': typeof ThoughtsSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/thoughts/': typeof ThoughtsIndexRoute
@@ -234,7 +253,9 @@ export interface FileRoutesByFullPath {
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/files/$slug/raw': typeof FilesSlugRawRoute
   '/admin/activities': typeof AdminActivitiesIndexRoute
+  '/admin/files': typeof AdminFilesIndexRoute
   '/admin/google': typeof AdminGoogleIndexRoute
   '/admin/jobs': typeof AdminJobsIndexRoute
   '/admin/prs': typeof AdminPrsIndexRoute
@@ -255,6 +276,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/state-stats': typeof AdminStateStatsRoute
   '/admin/streak': typeof AdminStreakRoute
+  '/files/$slug': typeof FilesSlugRouteWithChildren
   '/thoughts/$slug': typeof ThoughtsSlugRoute
   '/admin': typeof AdminIndexRoute
   '/thoughts': typeof ThoughtsIndexRoute
@@ -267,7 +289,9 @@ export interface FileRoutesByTo {
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/files/$slug/raw': typeof FilesSlugRawRoute
   '/admin/activities': typeof AdminActivitiesIndexRoute
+  '/admin/files': typeof AdminFilesIndexRoute
   '/admin/google': typeof AdminGoogleIndexRoute
   '/admin/jobs': typeof AdminJobsIndexRoute
   '/admin/prs': typeof AdminPrsIndexRoute
@@ -291,6 +315,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/state-stats': typeof AdminStateStatsRoute
   '/admin/streak': typeof AdminStreakRoute
+  '/files/$slug': typeof FilesSlugRouteWithChildren
   '/thoughts/$slug': typeof ThoughtsSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/thoughts/': typeof ThoughtsIndexRoute
@@ -303,7 +328,9 @@ export interface FileRoutesById {
   '/admin/strava/callback': typeof AdminStravaCallbackRoute
   '/admin/strava/connect': typeof AdminStravaConnectRoute
   '/admin/strava/import': typeof AdminStravaImportRoute
+  '/files/$slug/raw': typeof FilesSlugRawRoute
   '/admin/activities/': typeof AdminActivitiesIndexRoute
+  '/admin/files/': typeof AdminFilesIndexRoute
   '/admin/google/': typeof AdminGoogleIndexRoute
   '/admin/jobs/': typeof AdminJobsIndexRoute
   '/admin/prs/': typeof AdminPrsIndexRoute
@@ -328,6 +355,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/state-stats'
     | '/admin/streak'
+    | '/files/$slug'
     | '/thoughts/$slug'
     | '/admin/'
     | '/thoughts/'
@@ -340,7 +368,9 @@ export interface FileRouteTypes {
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/files/$slug/raw'
     | '/admin/activities'
+    | '/admin/files'
     | '/admin/google'
     | '/admin/jobs'
     | '/admin/prs'
@@ -361,6 +391,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/state-stats'
     | '/admin/streak'
+    | '/files/$slug'
     | '/thoughts/$slug'
     | '/admin'
     | '/thoughts'
@@ -373,7 +404,9 @@ export interface FileRouteTypes {
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/files/$slug/raw'
     | '/admin/activities'
+    | '/admin/files'
     | '/admin/google'
     | '/admin/jobs'
     | '/admin/prs'
@@ -396,6 +429,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/state-stats'
     | '/admin/streak'
+    | '/files/$slug'
     | '/thoughts/$slug'
     | '/admin/'
     | '/thoughts/'
@@ -408,7 +442,9 @@ export interface FileRouteTypes {
     | '/admin/strava/callback'
     | '/admin/strava/connect'
     | '/admin/strava/import'
+    | '/files/$slug/raw'
     | '/admin/activities/'
+    | '/admin/files/'
     | '/admin/google/'
     | '/admin/jobs/'
     | '/admin/prs/'
@@ -429,6 +465,7 @@ export interface RootRouteChildren {
   RunningRoute: typeof RunningRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ThoughtsRoute: typeof ThoughtsRouteWithChildren
+  FilesSlugRoute: typeof FilesSlugRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -517,6 +554,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThoughtsSlugRouteImport
       parentRoute: typeof ThoughtsRoute
     }
+    '/files/$slug': {
+      id: '/files/$slug'
+      path: '/files/$slug'
+      fullPath: '/files/$slug'
+      preLoaderRoute: typeof FilesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/streak': {
       id: '/admin/streak'
       path: '/streak'
@@ -580,12 +624,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGoogleIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/files/': {
+      id: '/admin/files/'
+      path: '/files'
+      fullPath: '/admin/files'
+      preLoaderRoute: typeof AdminFilesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/activities/': {
       id: '/admin/activities/'
       path: '/activities'
       fullPath: '/admin/activities'
       preLoaderRoute: typeof AdminActivitiesIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/files/$slug/raw': {
+      id: '/files/$slug/raw'
+      path: '/raw'
+      fullPath: '/files/$slug/raw'
+      preLoaderRoute: typeof FilesSlugRawRouteImport
+      parentRoute: typeof FilesSlugRoute
     }
     '/admin/strava/import': {
       id: '/admin/strava/import'
@@ -682,6 +740,7 @@ interface AdminRouteRouteChildren {
   AdminStravaConnectRoute: typeof AdminStravaConnectRoute
   AdminStravaImportRoute: typeof AdminStravaImportRoute
   AdminActivitiesIndexRoute: typeof AdminActivitiesIndexRoute
+  AdminFilesIndexRoute: typeof AdminFilesIndexRoute
   AdminGoogleIndexRoute: typeof AdminGoogleIndexRoute
   AdminJobsIndexRoute: typeof AdminJobsIndexRoute
   AdminPrsIndexRoute: typeof AdminPrsIndexRoute
@@ -707,6 +766,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminStravaConnectRoute: AdminStravaConnectRoute,
   AdminStravaImportRoute: AdminStravaImportRoute,
   AdminActivitiesIndexRoute: AdminActivitiesIndexRoute,
+  AdminFilesIndexRoute: AdminFilesIndexRoute,
   AdminGoogleIndexRoute: AdminGoogleIndexRoute,
   AdminJobsIndexRoute: AdminJobsIndexRoute,
   AdminPrsIndexRoute: AdminPrsIndexRoute,
@@ -735,6 +795,18 @@ const ThoughtsRouteWithChildren = ThoughtsRoute._addFileChildren(
   ThoughtsRouteChildren,
 )
 
+interface FilesSlugRouteChildren {
+  FilesSlugRawRoute: typeof FilesSlugRawRoute
+}
+
+const FilesSlugRouteChildren: FilesSlugRouteChildren = {
+  FilesSlugRawRoute: FilesSlugRawRoute,
+}
+
+const FilesSlugRouteWithChildren = FilesSlugRoute._addFileChildren(
+  FilesSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
@@ -745,6 +817,7 @@ const rootRouteChildren: RootRouteChildren = {
   RunningRoute: RunningRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ThoughtsRoute: ThoughtsRouteWithChildren,
+  FilesSlugRoute: FilesSlugRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

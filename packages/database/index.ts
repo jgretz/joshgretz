@@ -3,12 +3,14 @@ import * as RunningSchema from './schema/running.schema';
 import * as UserSchema from './schema/user.schema';
 import * as JobsSchema from './schema/jobs.schema';
 import * as ThoughtsSchema from './schema/thoughts.schema';
+import * as FilesSchema from './schema/files.schema';
 import postgres from 'postgres';
 
 export type DatabaseSchema = typeof RunningSchema &
   typeof UserSchema &
   typeof JobsSchema &
-  typeof ThoughtsSchema;
+  typeof ThoughtsSchema &
+  typeof FilesSchema;
 export type Database = PostgresJsDatabase<DatabaseSchema>;
 
 export const Schema = {
@@ -16,6 +18,7 @@ export const Schema = {
   ...UserSchema,
   ...JobsSchema,
   ...ThoughtsSchema,
+  ...FilesSchema,
 };
 
 export function createDatabase(databaseUrl: string): PostgresJsDatabase<DatabaseSchema> {

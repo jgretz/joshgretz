@@ -14,6 +14,7 @@
     "drizzle-orm": "^0.30.10",
     "elysia": "latest",
     "env": "workspace:*",
+    "files": "workspace:*",
     "geoapify": "workspace:*",
     "google-sheets": "workspace:*",
     "injectx": "^1.0.4",

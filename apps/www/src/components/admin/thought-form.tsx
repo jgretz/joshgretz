@@ -1,5 +1,6 @@
 import {marked} from 'marked';
 import {type FormEvent, useCallback, useId, useRef, useState} from 'react';
+import {toSlug} from '../../lib/slug';
 import {Button} from '../ui/button';
 
 marked.use({async: false});
@@ -24,15 +25,6 @@ type ThoughtFormProps = {
 
 function sanitizeHtml(html: string): string {
   return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-}
-
-function toSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/[\s]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
 }
 
 export function ThoughtForm({initialData, onSubmit, submitLabel}: ThoughtFormProps) {
