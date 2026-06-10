@@ -1,6 +1,7 @@
 import {createFileRoute, notFound} from '@tanstack/react-router';
 import {ThoughtContent} from '../components/thoughts/thought-content';
 import {title} from '../config.shared';
+import {getApiUrl} from '../services/api-client';
 import {type FileDetail, getFileBySlug} from '../services/files/files-server';
 
 type FileLoaderData = {
@@ -29,7 +30,7 @@ function FilePage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-50 p-6">
         <img
-          src={`/files/${file.slug}/raw`}
+          src={`${getApiUrl()}/files/raw/${file.slug}`}
           alt={file.original_filename}
           className="max-h-full max-w-full"
         />

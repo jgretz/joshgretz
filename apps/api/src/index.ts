@@ -19,6 +19,7 @@ import dailyStats from './routes/daily-stats';
 import googleSheets from './routes/google-sheets';
 import thoughts from './routes/thoughts';
 import files from './routes/files';
+import filesPublic from './routes/files-public';
 import bearer from '@elysiajs/bearer';
 import cors from '@elysiajs/cors';
 import z from 'zod';
@@ -56,6 +57,7 @@ const root = new Elysia()
   .use(health)
   .use(cors())
   .use(stravaWebhook)
+  .use(filesPublic)
   .use(bearer())
   .guard(
     {

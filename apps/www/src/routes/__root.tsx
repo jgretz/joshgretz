@@ -43,7 +43,7 @@ function RootComponent() {
 
 function RootDocument({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
-  const hideNav = pathname === '/print-resume';
+  const hideNav = pathname === '/print-resume' || pathname.startsWith('/files/');
 
   return (
     <html lang="en">

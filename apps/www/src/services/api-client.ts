@@ -1,6 +1,6 @@
 import {match} from 'ts-pattern';
 
-const getApiUrl = (): string => {
+export const getApiUrl = (): string => {
   const envApiUrl = import.meta.env.VITE_API_URL as string | undefined;
   const nodeEnv = import.meta.env.NODE_ENV as string;
 
