@@ -1,15 +1,16 @@
 import {Elysia, t} from 'elysia';
 import {findFileBySlug} from 'files';
 
-// Strip bytes that would break a quoted Content-Disposition filename: control
-// chars (incl. CR/LF) and DEL, plus double quotes and backslashes.
-const UNSAFE_FILENAME_CHARS = new RegExp('[\\x00-\\x1f\\x7f"\\\\]', 'g');
+// Anything outside printable ASCII (0x20–0x7e) is invalid in a quoted
+// Content-Disposition `filename`; this also drops double quotes and backslashes
+// that would break the quoting. Non-ASCII names are preserved via `filename*`.
+const NON_ASCII_FILENAME_CHARS = /[^\x20-\x7e]|["\\]/g;
 
 // Build a Content-Disposition: attachment header from an arbitrary filename.
-// Provides a sanitized ASCII `filename="..."` plus an RFC 5987 `filename*`
-// form so non-ASCII names survive intact.
+// Provides an ASCII `filename="..."` fallback plus an RFC 5987 `filename*`
+// form so non-ASCII names survive intact in browsers that support it.
 function attachmentDisposition(filename: string): string {
-  const ascii = filename.replace(UNSAFE_FILENAME_CHARS, '');
+  const ascii = filename.replace(NON_ASCII_FILENAME_CHARS, '');
   const encoded = encodeURIComponent(filename);
   return `attachment; filename="${ascii}"; filename*=UTF-8''${encoded}`;
 }
