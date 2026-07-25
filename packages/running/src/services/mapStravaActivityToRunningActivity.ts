@@ -12,6 +12,13 @@ const shouldUpdateLocation = (
     return true;
   }
 
+  // Strava sometimes reports no coordinates at all (large FIT uploads arrive with an empty
+  // start_latlng). There is nothing to geocode, so keep whatever the activity already has —
+  // which may be a manual override set through the admin.
+  if (!activity.start_latlng?.length) {
+    return false;
+  }
+
   if (
     !existingActivity.location_city ||
     !existingActivity.location_state ||
@@ -36,13 +43,16 @@ export const mapStravaActivityToRunningActivity = async (
   existingActivity: RunningActivity,
 ) => {
   // get locaiton data
+  const existingLocation = {
+    city: existingActivity?.location_city,
+    state: existingActivity?.location_state,
+    country: existingActivity?.location_country,
+  };
+
+  // a failed lookup must not blank out a location the activity already had
   const location = shouldUpdateLocation(activity, existingActivity)
-    ? await lookupLocationForActivity(activity)
-    : {
-        city: existingActivity?.location_city,
-        state: existingActivity?.location_state,
-        country: existingActivity?.location_country,
-      };
+    ? ((await lookupLocationForActivity(activity)) ?? existingLocation)
+    : existingLocation;
 
   // map
   return {
