@@ -35,3 +35,32 @@ export const getDailyStats = createServerFn({
 
     return response.json();
   });
+
+// No dates in the payload means every day is rebuilt from scratch, which is what applying a
+// change to how activities are attributed to days requires.
+export const enqueueDailyStatsRecalc = createServerFn({
+  method: 'POST',
+})
+  .inputValidator((data: {userId: number}) => data)
+  .handler(async ({data}): Promise<{id: number}> => {
+    const env = getEnv();
+
+    const response = await fetch(`${env.apiUrl}/jobs`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.apiToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'daily-stats-update',
+        payload: {user_id: data.userId},
+      }),
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to enqueue daily stats recalc (${response.status}): ${body}`);
+    }
+
+    return response.json();
+  });

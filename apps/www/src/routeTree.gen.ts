@@ -25,6 +25,7 @@ import { Route as FilesSlugRouteImport } from './routes/files.$slug'
 import { Route as AdminStreakRouteImport } from './routes/admin/streak'
 import { Route as AdminStateStatsRouteImport } from './routes/admin/state-stats'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminDailyStatsRouteImport } from './routes/admin/daily-stats'
 import { Route as AdminThoughtsIndexRouteImport } from './routes/admin/thoughts/index'
 import { Route as AdminStravaIndexRouteImport } from './routes/admin/strava/index'
 import { Route as AdminRacesIndexRouteImport } from './routes/admin/races/index'
@@ -123,6 +124,11 @@ const AdminStateStatsRoute = AdminStateStatsRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminDailyStatsRoute = AdminDailyStatsRouteImport.update({
+  id: '/daily-stats',
+  path: '/daily-stats',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminThoughtsIndexRoute = AdminThoughtsIndexRouteImport.update({
@@ -231,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/running': typeof RunningRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRouteWithChildren
+  '/admin/daily-stats': typeof AdminDailyStatsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/state-stats': typeof AdminStateStatsRoute
   '/admin/streak': typeof AdminStreakRoute
@@ -266,6 +273,7 @@ export interface FileRoutesByTo {
   '/resume': typeof ResumeRoute
   '/running': typeof RunningRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/daily-stats': typeof AdminDailyStatsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/state-stats': typeof AdminStateStatsRoute
   '/admin/streak': typeof AdminStreakRoute
@@ -304,6 +312,7 @@ export interface FileRoutesById {
   '/running': typeof RunningRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/thoughts': typeof ThoughtsRouteWithChildren
+  '/admin/daily-stats': typeof AdminDailyStatsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/state-stats': typeof AdminStateStatsRoute
   '/admin/streak': typeof AdminStreakRoute
@@ -343,6 +352,7 @@ export interface FileRouteTypes {
     | '/running'
     | '/sitemap.xml'
     | '/thoughts'
+    | '/admin/daily-stats'
     | '/admin/login'
     | '/admin/state-stats'
     | '/admin/streak'
@@ -378,6 +388,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/running'
     | '/sitemap.xml'
+    | '/admin/daily-stats'
     | '/admin/login'
     | '/admin/state-stats'
     | '/admin/streak'
@@ -415,6 +426,7 @@ export interface FileRouteTypes {
     | '/running'
     | '/sitemap.xml'
     | '/thoughts'
+    | '/admin/daily-stats'
     | '/admin/login'
     | '/admin/state-stats'
     | '/admin/streak'
@@ -570,6 +582,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/daily-stats': {
+      id: '/admin/daily-stats'
+      path: '/daily-stats'
+      fullPath: '/admin/daily-stats'
+      preLoaderRoute: typeof AdminDailyStatsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/thoughts/': {
       id: '/admin/thoughts/'
       path: '/thoughts'
@@ -707,6 +726,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteRouteChildren {
+  AdminDailyStatsRoute: typeof AdminDailyStatsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminStateStatsRoute: typeof AdminStateStatsRoute
   AdminStreakRoute: typeof AdminStreakRoute
@@ -733,6 +753,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminDailyStatsRoute: AdminDailyStatsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminStateStatsRoute: AdminStateStatsRoute,
   AdminStreakRoute: AdminStreakRoute,

@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
   {label: 'Future Races', to: '/admin/races'},
   {label: 'Streak', to: '/admin/streak'},
   {label: 'State Stats', to: '/admin/state-stats'},
+  {label: 'Daily Stats', to: '/admin/daily-stats'},
   {label: 'Activities', to: '/admin/activities'},
   {label: 'Jobs', to: '/admin/jobs'},
   {label: 'Thoughts', to: '/admin/thoughts'},
