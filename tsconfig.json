@@ -41,7 +41,9 @@
       "users": ["./packages/users/src/index.ts"],
       "workflow": ["./packages/workflow/src/index.ts"],
       "jobs": ["./packages/jobs/src/index.ts"],
-      "thoughts": ["./packages/thoughts/src/index.ts"]
+      "thoughts": ["./packages/thoughts/src/index.ts"],
+      "files": ["./packages/files/src/index.ts"],
+      "google-sheets": ["./packages/google-sheets/src/index.ts"]
     }
   }
 }
