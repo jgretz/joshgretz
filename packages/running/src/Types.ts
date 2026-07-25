@@ -141,3 +141,10 @@ export type UpsertDailyStatsInput = {
   total_miles?: string | null;
   run_count?: number | null;
 };
+
+export type UpdateActivityDetailsInput = {
+  location_city?: string | null;
+  location_state?: string | null;
+  location_country?: string | null;
+  featured_marathon?: boolean;
+};

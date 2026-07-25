@@ -1,6 +1,12 @@
 import {Elysia, t} from 'elysia';
 import {Schema} from 'database';
-import {storeStravaActivity, searchActivities, deleteActivityByStravaId, findActivitiesByDateRange} from 'running';
+import {
+  storeStravaActivity,
+  searchActivities,
+  deleteActivityByStravaId,
+  findActivitiesByDateRange,
+  updateActivityDetails,
+} from 'running';
 import {databasePlugin} from '../plugins/database';
 
 const importActivitiesSchema = {
@@ -8,6 +14,18 @@ const importActivitiesSchema = {
     user_id: t.Number(),
     from: t.Date(),
     to: t.Date(),
+  }),
+};
+
+const updateActivitySchema = {
+  params: t.Object({
+    id: t.Numeric(),
+  }),
+  body: t.Object({
+    location_city: t.Optional(t.Nullable(t.String())),
+    location_state: t.Optional(t.Nullable(t.String())),
+    location_country: t.Optional(t.Nullable(t.String())),
+    featured_marathon: t.Optional(t.Boolean()),
   }),
 };
 
@@ -106,6 +124,17 @@ export default new Elysia({prefix: '/running'})
       return {job_id: job.id};
     },
     importActivitiesSchema,
+  )
+  .patch(
+    '/activities/:id',
+    async ({params: {id}, body}) => {
+      const record = await updateActivityDetails(id, body);
+      if (!record) {
+        return new Response('Not found', {status: 404});
+      }
+      return record;
+    },
+    updateActivitySchema,
   )
   .delete(
     '/activities/by-strava-id/:strava_id',

@@ -1,74 +1,78 @@
-export const US_STATES = [
-  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL',
-  'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
-  'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
-  'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
-  'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI',
-  'WY',
-] as const;
+// Canonical source: every other lookup in this file derives from it. Ordering is the
+// order states appear in admin dropdowns.
+export const US_STATE_NAMES: Record<string, string> = {
+  AL: 'Alabama',
+  AK: 'Alaska',
+  AZ: 'Arizona',
+  AR: 'Arkansas',
+  CA: 'California',
+  CO: 'Colorado',
+  CT: 'Connecticut',
+  DC: 'District of Columbia',
+  DE: 'Delaware',
+  FL: 'Florida',
+  GA: 'Georgia',
+  HI: 'Hawaii',
+  ID: 'Idaho',
+  IL: 'Illinois',
+  IN: 'Indiana',
+  IA: 'Iowa',
+  KS: 'Kansas',
+  KY: 'Kentucky',
+  LA: 'Louisiana',
+  ME: 'Maine',
+  MD: 'Maryland',
+  MA: 'Massachusetts',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MS: 'Mississippi',
+  MO: 'Missouri',
+  MT: 'Montana',
+  NE: 'Nebraska',
+  NV: 'Nevada',
+  NH: 'New Hampshire',
+  NJ: 'New Jersey',
+  NM: 'New Mexico',
+  NY: 'New York',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
+  OH: 'Ohio',
+  OK: 'Oklahoma',
+  OR: 'Oregon',
+  PA: 'Pennsylvania',
+  RI: 'Rhode Island',
+  SC: 'South Carolina',
+  SD: 'South Dakota',
+  TN: 'Tennessee',
+  TX: 'Texas',
+  UT: 'Utah',
+  VT: 'Vermont',
+  VA: 'Virginia',
+  WA: 'Washington',
+  WV: 'West Virginia',
+  WI: 'Wisconsin',
+  WY: 'Wyoming',
+};
 
-export const STATE_NAME_TO_ABBR: Record<string, string> = {
-  'alabama': 'AL',
-  'alaska': 'AK',
-  'arizona': 'AZ',
-  'arkansas': 'AR',
-  'california': 'CA',
-  'colorado': 'CO',
-  'connecticut': 'CT',
-  'district of columbia': 'DC',
+// Alternate spellings reverse geocoding may return for a state.
+const STATE_NAME_ALIASES: Record<string, string> = {
   'washington, d.c.': 'DC',
   'washington dc': 'DC',
-  'delaware': 'DE',
-  'florida': 'FL',
-  'georgia': 'GA',
-  'hawaii': 'HI',
-  'idaho': 'ID',
-  'illinois': 'IL',
-  'indiana': 'IN',
-  'iowa': 'IA',
-  'kansas': 'KS',
-  'kentucky': 'KY',
-  'louisiana': 'LA',
-  'maine': 'ME',
-  'maryland': 'MD',
-  'massachusetts': 'MA',
-  'michigan': 'MI',
-  'minnesota': 'MN',
-  'mississippi': 'MS',
-  'missouri': 'MO',
-  'montana': 'MT',
-  'nebraska': 'NE',
-  'nevada': 'NV',
-  'new hampshire': 'NH',
-  'new jersey': 'NJ',
-  'new mexico': 'NM',
-  'new york': 'NY',
-  'north carolina': 'NC',
-  'north dakota': 'ND',
-  'ohio': 'OH',
-  'oklahoma': 'OK',
-  'oregon': 'OR',
-  'pennsylvania': 'PA',
-  'rhode island': 'RI',
-  'south carolina': 'SC',
-  'south dakota': 'SD',
-  'tennessee': 'TN',
-  'texas': 'TX',
-  'utah': 'UT',
-  'vermont': 'VT',
-  'virginia': 'VA',
-  'washington': 'WA',
-  'west virginia': 'WV',
-  'wisconsin': 'WI',
-  'wyoming': 'WY',
 };
+
+export const US_STATES: string[] = Object.keys(US_STATE_NAMES);
+
+export const STATE_NAME_TO_ABBR: Record<string, string> = Object.entries(US_STATE_NAMES).reduce(
+  (lookup, [abbr, name]) => ({...lookup, [name.toLowerCase()]: abbr}),
+  {...STATE_NAME_ALIASES},
+);
 
 export const stateNameToAbbr = (name: string): string | null => {
   const normalized = name.trim().toLowerCase();
   // check if already an abbreviation
   if (normalized.length === 2) {
     const upper = normalized.toUpperCase();
-    return US_STATES.includes(upper as (typeof US_STATES)[number]) ? upper : null;
+    return US_STATES.includes(upper) ? upper : null;
   }
   return STATE_NAME_TO_ABBR[normalized] ?? null;
 };

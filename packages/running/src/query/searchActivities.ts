@@ -29,6 +29,10 @@ const search = ({database}: RunningContainer) => {
         start_date_local: Schema.activities.start_date_local,
         distance: Schema.activities.distance,
         moving_time: Schema.activities.moving_time,
+        location_city: Schema.activities.location_city,
+        location_state: Schema.activities.location_state,
+        location_country: Schema.activities.location_country,
+        featured_marathon: Schema.activities.featured_marathon,
       })
       .from(Schema.activities)
       .where(and(...conditions));

@@ -7,6 +7,17 @@ type Activity = {
   start_date_local: string | null;
   distance: string | null;
   moving_time: string | null;
+  location_city: string | null;
+  location_state: string | null;
+  location_country: string | null;
+  featured_marathon: boolean | null;
+};
+
+type ActivityDetailsUpdate = {
+  location_city?: string | null;
+  location_state?: string | null;
+  location_country?: string | null;
+  featured_marathon?: boolean;
 };
 
 const getEnv = () => ({
@@ -31,6 +42,30 @@ export const searchActivities = createServerFn({
 
     if (!response.ok) {
       throw new Error('Failed to search activities');
+    }
+
+    return response.json();
+  });
+
+export const updateActivityDetails = createServerFn({
+  method: 'POST',
+})
+  .inputValidator((data: {id: number; details: ActivityDetailsUpdate}) => data)
+  .handler(async ({data}): Promise<Activity> => {
+    const env = getEnv();
+
+    const response = await fetch(`${env.apiUrl}/running/activities/${data.id}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${env.apiToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data.details),
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to update activity (${response.status}): ${body}`);
     }
 
     return response.json();

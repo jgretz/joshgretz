@@ -13,6 +13,7 @@ export {createPersonalRecord} from './command/createPersonalRecord';
 export {updatePersonalRecord} from './command/updatePersonalRecord';
 export {deletePersonalRecord} from './command/deletePersonalRecord';
 export {deleteActivityByStravaId} from './command/deleteActivityByStravaId';
+export {updateActivityDetails} from './command/updateActivityDetails';
 export {searchActivities} from './query/searchActivities';
 export {findFutureRacesByUserId} from './query/findFutureRacesByUserId';
 export {findFutureRaceById} from './query/findFutureRaceById';
@@ -28,7 +29,12 @@ export {upsertStateStats} from './command/upsertStateStats';
 export {aggregateStatsByState} from './query/aggregateStatsByState';
 export {recalculateStateStats} from './services/recalculateStateStats';
 export {findFirstMarathonsByState} from './query/findFirstMarathonsByState';
-export {US_STATES, STATE_NAME_TO_ABBR, stateNameToAbbr} from './constants/us-states';
+export {
+  US_STATES,
+  US_STATE_NAMES,
+  STATE_NAME_TO_ABBR,
+  stateNameToAbbr,
+} from './constants/us-states';
 export {findDailyStatsByUserIdAndYear} from './query/findDailyStatsByUserIdAndYear';
 export {upsertDailyStats} from './command/upsertDailyStats';
 export {aggregateDailyStats} from './query/aggregateDailyStats';
