@@ -39,7 +39,10 @@ function ActivityLookup() {
   const [duplicatesLoading, setDuplicatesLoading] = useState(false);
   const [duplicatesLoaded, setDuplicatesLoaded] = useState(false);
   const [duplicatesError, setDuplicatesError] = useState<string | null>(null);
-  const [deletingStravaId, setDeletingStravaId] = useState<string | null>(null);
+  // A set, not the single most recent id: a delete started on a second pair must not clear the
+  // first pair's in-flight flag, or both of its buttons come back to life mid-request and the
+  // other copy of that run can be deleted too.
+  const [deletingStravaIds, setDeletingStravaIds] = useState<ReadonlySet<string>>(new Set());
   const [deleteJobIds, setDeleteJobIds] = useState<number[] | null>(null);
 
   const handleSearch = useCallback(
@@ -113,9 +116,8 @@ function ActivityLookup() {
     async (stravaId: string) => {
       if (!user) return;
 
-      setDeletingStravaId(stravaId);
+      setDeletingStravaIds((current) => new Set(current).add(stravaId));
       setDuplicatesError(null);
-      setDeleteJobIds(null);
 
       try {
         const {jobIds} = await deleteActivityAndRecalculate({data: {userId: user.id, stravaId}});
@@ -123,11 +125,17 @@ function ActivityLookup() {
         setDuplicates((current) =>
           current.filter((pair) => pair.a.strava_id !== stravaId && pair.b.strava_id !== stravaId),
         );
-        setDeleteJobIds(jobIds);
+        // Appended rather than replaced, so a second delete does not erase the job ids the
+        // operator still has to check for the first.
+        setDeleteJobIds((current) => [...(current ?? []), ...jobIds]);
       } catch (err) {
         setDuplicatesError(err instanceof Error ? err.message : 'Failed to delete activity');
       } finally {
-        setDeletingStravaId(null);
+        setDeletingStravaIds((current) => {
+          const next = new Set(current);
+          next.delete(stravaId);
+          return next;
+        });
       }
     },
     [user],
@@ -228,12 +236,11 @@ function ActivityLookup() {
 
         {deleteJobIds !== null && (
           <p className="mt-4 text-green-600">
-            Deleted. Recalc queued as job{deleteJobIds.length === 1 ? '' : 's'} #
-            {deleteJobIds.join(', #')} — check{' '}
+            Deleted. Recalcs queued as jobs #{deleteJobIds.join(', #')} — check{' '}
             <a className="underline" href="/admin/jobs">
               /admin/jobs
             </a>{' '}
-            for status.
+            for status. The copy still has to be deleted on strava.com.
           </p>
         )}
 
@@ -247,8 +254,8 @@ function ActivityLookup() {
               <DuplicatePair
                 key={`${pair.a.id}-${pair.b.id}`}
                 pair={pair}
-                deletingA={deletingStravaId === pair.a.strava_id}
-                deletingB={deletingStravaId === pair.b.strava_id}
+                deletingA={deletingStravaIds.has(pair.a.strava_id)}
+                deletingB={deletingStravaIds.has(pair.b.strava_id)}
                 onDelete={handleDeleteDuplicate}
               />
             ))}
