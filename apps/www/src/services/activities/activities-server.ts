@@ -1,4 +1,5 @@
 import {createServerFn} from '@tanstack/react-start';
+import {deleteActivityWithRecalcs} from './delete-activity-with-recalcs';
 
 type Activity = {
   id: number;
@@ -18,6 +19,40 @@ type ActivityDetailsUpdate = {
   location_state?: string | null;
   location_country?: string | null;
   featured_marathon?: boolean;
+};
+
+export type DuplicateActivitySide = {
+  id: number;
+  strava_id: string;
+  name: string | null;
+  type: string | null;
+  start_date: string | null;
+  start_date_local: string | null;
+  distance: string | null;
+  moving_time: string | null;
+  elapsed_time: string | null;
+  total_elevation_gain: string | null;
+  average_heartrate: string | null;
+  gear_id: string | null;
+  start_lat: string | null;
+  start_lng: string | null;
+  location_city: string | null;
+  location_state: string | null;
+  location_country: string | null;
+  featured_marathon: boolean | null;
+};
+
+export type DuplicateActivityCandidate = {
+  a: DuplicateActivitySide;
+  b: DuplicateActivitySide;
+  start_delta_seconds: number;
+  distance_delta_meters: string;
+};
+
+type DuplicateTolerances = {
+  windowSeconds?: number;
+  distanceTolerancePct?: number;
+  distanceToleranceMeters?: number;
 };
 
 const getEnv = () => ({
@@ -69,4 +104,40 @@ export const updateActivityDetails = createServerFn({
     }
 
     return response.json();
+  });
+
+export const getDuplicateActivities = createServerFn({
+  method: 'GET',
+})
+  .inputValidator((data: {userId: number} & DuplicateTolerances) => data)
+  .handler(async ({data}): Promise<DuplicateActivityCandidate[]> => {
+    const env = getEnv();
+
+    const params = new URLSearchParams({user_id: String(data.userId)});
+    if (data.windowSeconds !== undefined) params.set('window_seconds', String(data.windowSeconds));
+    if (data.distanceTolerancePct !== undefined) {
+      params.set('distance_tolerance_pct', String(data.distanceTolerancePct));
+    }
+    if (data.distanceToleranceMeters !== undefined) {
+      params.set('distance_tolerance_meters', String(data.distanceToleranceMeters));
+    }
+
+    const response = await fetch(`${env.apiUrl}/running/activities/duplicates?${params}`, {
+      headers: {Authorization: `Bearer ${env.apiToken}`},
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to fetch duplicate activities (${response.status}): ${body}`);
+    }
+
+    return response.json();
+  });
+
+export const deleteActivityAndRecalculate = createServerFn({
+  method: 'POST',
+})
+  .inputValidator((data: {userId: number; stravaId: string}) => data)
+  .handler(async ({data}): Promise<{start_date: string; jobIds: number[]}> => {
+    return await deleteActivityWithRecalcs(getEnv(), data.userId, data.stravaId);
   });
