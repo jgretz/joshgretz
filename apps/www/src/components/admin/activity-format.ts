@@ -19,9 +19,14 @@ const MONTHS = [
 
 const TIMESTAMP = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}):(\d{2}))?/;
 
+// The same divisor the aggregates use, so a mileage read off this page matches the streak and
+// daily-stats numbers rather than drifting from them.
+const METERS_PER_MILE = 1609.344;
+const FEET_PER_METER = 3.28084;
+
 export const formatDistance = (meters: string | null): string => {
   if (!meters) return '-';
-  return `${(parseFloat(meters) / 1609.34).toFixed(2)} mi`;
+  return `${(parseFloat(meters) / METERS_PER_MILE).toFixed(2)} mi`;
 };
 
 export const formatTime = (seconds: string | null): string => {
@@ -47,7 +52,7 @@ export const formatDate = (date: string | null): string => {
 
 export const formatElevation = (meters: string | null): string => {
   if (!meters) return '-';
-  return `${Math.round(parseFloat(meters) * 3.28084)} ft`;
+  return `${Math.round(parseFloat(meters) * FEET_PER_METER)} ft`;
 };
 
 // Telling two recordings of the same run apart needs seconds. Formatted from the string parts
@@ -74,6 +79,6 @@ export const formatDateTime = (timestamp: string | null): string => {
 };
 
 export const formatDelta = (startDeltaSeconds: number, distanceDeltaMeters: string): string => {
-  const miles = (parseFloat(distanceDeltaMeters) / 1609.34).toFixed(2);
+  const miles = (parseFloat(distanceDeltaMeters) / METERS_PER_MILE).toFixed(2);
   return `started ${startDeltaSeconds}s apart · ${miles} mi apart`;
 };
