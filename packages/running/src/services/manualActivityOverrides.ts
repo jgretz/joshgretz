@@ -5,8 +5,10 @@ import type {
   ManualOverrideSource,
 } from '../Types';
 
-// Pure and database-free on purpose: no InjectIn, so the rules that decide what survives a
-// delete can be unit-tested without a container.
+// The policy for what happens to hand-set values when a duplicate activity is deleted: which
+// values a re-import cannot rebuild, how to name them, and which copy inherits them. Pure and
+// database-free on purpose — no InjectIn, so the rules can be unit-tested without a container
+// and the caller keeps the decision about whether the expensive matcher runs at all.
 
 export const hasGps = (row: ManualOverrideSource): boolean =>
   Boolean(row.start_lat) && Boolean(row.start_lng);
