@@ -41,6 +41,10 @@ export {zeroDailyStats} from './command/zeroDailyStats';
 export {aggregateDailyStats} from './query/aggregateDailyStats';
 export {recalculateDailyStats} from './services/recalculateDailyStats';
 export {findActivitiesByDateRange} from './query/findActivitiesByDateRange';
+export {
+  findDuplicateActivityCandidates,
+  DUPLICATE_MATCH_DEFAULTS,
+} from './query/findDuplicateActivityCandidates';
 
 export const setupRunningContainer = ({databaseUrl}: RunningConfig) => {
   GetContainer().Bind(createDatabase(databaseUrl), {name: 'database'});
