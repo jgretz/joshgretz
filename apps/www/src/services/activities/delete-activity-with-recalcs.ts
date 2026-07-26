@@ -8,9 +8,15 @@ type Env = {
   apiToken: string;
 };
 
+// Every recalc job takes the user; only the daily one is scoped to specific dates.
+type RecalcJobPayload = {
+  user_id: number;
+  dates?: string[];
+};
+
 type PostDeleteJob = {
   type: string;
-  buildPayload: (userId: number, date: string) => unknown;
+  buildPayload: (userId: number, date: string) => RecalcJobPayload;
 };
 
 // The same three jobs apps/tasks/src/services/post-import-jobs.ts schedules after an import or
@@ -25,7 +31,10 @@ const POST_DELETE_JOBS: PostDeleteJob[] = [
 // separated; daily-stats-update wants a bare YYYY-MM-DD.
 const toDateOnly = (value: string): string => value.trim().split(/[T ]/)[0];
 
-const createJob = async (env: Env, type: string, payload: unknown): Promise<number> => {
+const errorMessage = (reason: unknown): string =>
+  reason instanceof Error ? reason.message : String(reason);
+
+const createJob = async (env: Env, type: string, payload: RecalcJobPayload): Promise<number> => {
   const response = await fetch(`${env.apiUrl}/jobs`, {
     method: 'POST',
     headers: {
@@ -57,6 +66,14 @@ export const deleteActivityWithRecalcs = async (
     },
   );
 
+  // A 404 has to read as a failure, never as a quiet success — nothing was queued, so anything
+  // that *was* removed would leave the aggregates stale with no trace.
+  if (response.status === 404) {
+    throw new Error(
+      `Activity ${stravaId} was not deleted: the API found no such activity. No recalc jobs were queued.`,
+    );
+  }
+
   if (!response.ok) {
     const body = await response.text();
     throw new Error(
@@ -67,25 +84,29 @@ export const deleteActivityWithRecalcs = async (
   const {start_date} = (await response.json()) as {start_date: string};
   const date = toDateOnly(start_date);
 
-  const jobIds: number[] = [];
-  const failures: string[] = [];
+  // allSettled, not all: the row is already gone, so one refused enqueue must not hide which of
+  // the other two made it into the queue.
+  const outcomes = await Promise.allSettled(
+    POST_DELETE_JOBS.map((job) => createJob(env, job.type, job.buildPayload(userId, date))),
+  );
 
-  for (const job of POST_DELETE_JOBS) {
-    try {
-      jobIds.push(await createJob(env, job.type, job.buildPayload(userId, date)));
-    } catch (err) {
-      failures.push(`${job.type}: ${err instanceof Error ? err.message : String(err)}`);
-    }
-  }
+  const failures = outcomes.flatMap((outcome, index) =>
+    outcome.status === 'rejected'
+      ? [`${POST_DELETE_JOBS[index].type}: ${errorMessage(outcome.reason)}`]
+      : [],
+  );
 
-  // The row is already gone, so a failed enqueue is not recoverable by retrying the delete —
-  // say so plainly instead of reporting success over stale aggregates.
+  // Retrying the delete cannot fix this — the row is gone. Say so plainly instead of reporting
+  // success over stale aggregates.
   if (failures.length > 0) {
     const detail = failures.join('; ');
     throw new Error(
-      `Activity ${stravaId} was deleted but its recalc jobs could not all be queued, so the aggregates are still stale — requeue them from /admin. Failed: ${detail}`,
+      `Activity ${stravaId} was deleted but its recalc jobs could not all be queued, so the aggregates are still stale — requeue them from /admin/jobs. Failed: ${detail}`,
     );
   }
 
-  return {start_date, jobIds};
+  return {
+    start_date,
+    jobIds: outcomes.flatMap((outcome) => (outcome.status === 'fulfilled' ? [outcome.value] : [])),
+  };
 };
