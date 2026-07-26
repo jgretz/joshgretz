@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'bun:test';
 import {
+  formatDate,
   formatDateTime,
   formatDelta,
   formatDistance,
@@ -44,6 +45,29 @@ describe('formatElevation', () => {
 
   it('should render a dash when the gain is missing', () => {
     expect(formatElevation(null)).toBe('-');
+  });
+});
+
+describe('formatDate', () => {
+  it('should drop the time from a space-separated Postgres timestamp', () => {
+    expect(formatDate('2026-07-26 08:32:03')).toBe('Jul 26, 2026');
+  });
+
+  it('should keep a bare date on its own day rather than shifting it west of UTC', () => {
+    // `new Date('2026-07-26')` is UTC midnight and renders as the 25th in every US timezone.
+    expect(formatDate('2026-07-26')).toBe('Jul 26, 2026');
+  });
+
+  it('should read a late-evening wall clock as its own day', () => {
+    expect(formatDate('2026-07-26 23:30:00')).toBe('Jul 26, 2026');
+  });
+
+  it('should render a dash when the date is missing', () => {
+    expect(formatDate(null)).toBe('-');
+  });
+
+  it('should return the raw value when it is not a timestamp at all', () => {
+    expect(formatDate('not a date')).toBe('not a date');
   });
 });
 

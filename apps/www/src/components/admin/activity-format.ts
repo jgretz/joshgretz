@@ -41,41 +41,46 @@ export const formatTime = (seconds: string | null): string => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
-export const formatDate = (date: string | null): string => {
-  if (!date) return '-';
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-};
-
 export const formatElevation = (meters: string | null): string => {
   if (!meters) return '-';
   return `${Math.round(parseFloat(meters) * FEET_PER_METER)} ft`;
 };
 
-// Telling two recordings of the same run apart needs seconds. Formatted from the string parts
-// rather than through Date, because start_date_local is already the runner's wall clock and
-// must not be shifted into the viewer's timezone.
-export const formatDateTime = (timestamp: string | null): string => {
-  if (!timestamp) return '-';
-
+// Read from the string parts rather than through `Date`, because these columns already hold the
+// runner's wall clock and must not be shifted into the viewer's timezone: `new Date('2026-07-26')`
+// is UTC midnight, which renders as the 25th anywhere west of Greenwich.
+const parseTimestamp = (timestamp: string): {date: string; time: string | null} | null => {
   const match = TIMESTAMP.exec(timestamp.trim());
-  if (!match) return timestamp;
+  if (!match) return null;
 
   const [, year, month, day, hours, minutes, seconds] = match;
   // A malformed month ("00", "13") still has to render something rather than "undefined".
   const monthName = MONTHS[parseInt(month, 10) - 1] ?? month;
-  const datePart = `${monthName} ${parseInt(day, 10)}, ${year}`;
+  const date = `${monthName} ${parseInt(day, 10)}, ${year}`;
 
-  if (!hours) return datePart;
+  if (!hours) return {date, time: null};
 
   const hour24 = parseInt(hours, 10);
   const suffix = hour24 >= 12 ? 'PM' : 'AM';
   const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
 
-  return `${datePart}, ${hour12}:${minutes}:${seconds} ${suffix}`;
+  return {date, time: `${hour12}:${minutes}:${seconds} ${suffix}`};
+};
+
+export const formatDate = (timestamp: string | null): string => {
+  if (!timestamp) return '-';
+  return parseTimestamp(timestamp)?.date ?? timestamp;
+};
+
+// Telling two recordings of the same run apart needs seconds, so the duplicates view wants the
+// time alongside the date.
+export const formatDateTime = (timestamp: string | null): string => {
+  if (!timestamp) return '-';
+
+  const parsed = parseTimestamp(timestamp);
+  if (!parsed) return timestamp;
+
+  return parsed.time ? `${parsed.date}, ${parsed.time}` : parsed.date;
 };
 
 export const formatDelta = (startDeltaSeconds: number, distanceDeltaMeters: string): string => {
