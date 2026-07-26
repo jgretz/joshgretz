@@ -14,7 +14,10 @@ import {
 
 type DuplicatePairProps = {
   pair: DuplicateActivityCandidate;
-  deletingStravaId: string | null;
+  // Per-copy booleans rather than the list-wide in-flight strava id: a delete on another pair
+  // leaves both unchanged, so the memo below actually skips the re-render.
+  deletingA: boolean;
+  deletingB: boolean;
   onDelete: (stravaId: string) => void;
 };
 
@@ -137,7 +140,8 @@ const Copy = ({side, deleting, onDelete}: CopyProps) => {
 
 export const DuplicatePair = memo(function DuplicatePair({
   pair,
-  deletingStravaId,
+  deletingA,
+  deletingB,
   onDelete,
 }: DuplicatePairProps) {
   return (
@@ -148,8 +152,8 @@ export const DuplicatePair = memo(function DuplicatePair({
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Copy side={pair.a} deleting={deletingStravaId === pair.a.strava_id} onDelete={onDelete} />
-        <Copy side={pair.b} deleting={deletingStravaId === pair.b.strava_id} onDelete={onDelete} />
+        <Copy side={pair.a} deleting={deletingA} onDelete={onDelete} />
+        <Copy side={pair.b} deleting={deletingB} onDelete={onDelete} />
       </div>
 
       <p className="mt-3 text-xs text-warm-600">

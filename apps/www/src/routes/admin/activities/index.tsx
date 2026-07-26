@@ -247,7 +247,8 @@ function ActivityLookup() {
               <DuplicatePair
                 key={`${pair.a.id}-${pair.b.id}`}
                 pair={pair}
-                deletingStravaId={deletingStravaId}
+                deletingA={deletingStravaId === pair.a.strava_id}
+                deletingB={deletingStravaId === pair.b.strava_id}
                 onDelete={handleDeleteDuplicate}
               />
             ))}
