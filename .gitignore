@@ -180,15 +180,5 @@ CLAUDE-WORKING.md
 .claude/hooks/
 .claude/settings.local.json
 .mcp.json
-.worksite/
-.worksite-*
-.claude/rules/worksite-worker.md
-.claude/rules/worksite-verification.md
-.claude/rules/worksite-debugging.md
-.claude/rules/worksite-deduplication.md
-.claude/rules/worksite-planning.md
-.claude/rules/worksite-docs.md
 .claude/commands/commit.md
 .claude/reviews/
-.claude/rules/worksite-reviewer.md
-.claude/rules/worksite-planner.md
