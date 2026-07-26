@@ -59,7 +59,8 @@ export const formatDateTime = (timestamp: string | null): string => {
   const match = TIMESTAMP.exec(timestamp.trim());
   if (!match) return timestamp;
 
-  const [, year = '', month = '', day = '', hours, minutes, seconds] = match;
+  const [, year, month, day, hours, minutes, seconds] = match;
+  // A malformed month ("00", "13") still has to render something rather than "undefined".
   const monthName = MONTHS[parseInt(month, 10) - 1] ?? month;
   const datePart = `${monthName} ${parseInt(day, 10)}, ${year}`;
 
