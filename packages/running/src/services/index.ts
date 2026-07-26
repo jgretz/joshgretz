@@ -5,3 +5,9 @@ export {lookupLocationForActivity} from './lookupLocationForActivity';
 export {recalculateStreak} from './recalculateStreak';
 export {recalculateStateStats} from './recalculateStateStats';
 export {recalculateDailyStats} from './recalculateDailyStats';
+export {
+  hasGps,
+  manualOverridesFor,
+  describeManualOverrides,
+  chooseSurvivor,
+} from './manualActivityOverrides';

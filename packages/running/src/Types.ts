@@ -178,3 +178,24 @@ export type UpdateActivityDetailsInput = {
   location_country?: string | null;
   featured_marathon?: boolean;
 };
+
+// What an operator typed in by hand and no Strava re-import can rebuild. Only the members
+// actually carried are present — an absent key means "the deleted copy had nothing here",
+// never "blank this on the survivor".
+export type ManualActivityOverrides = {
+  location_city?: string | null;
+  location_state?: string | null;
+  location_country?: string | null;
+  featured_marathon?: boolean;
+};
+
+// Only the columns the override predicates read, so both a full activity row and a
+// DuplicateActivitySide satisfy it without either having to know about the other.
+export type ManualOverrideSource = {
+  start_lat: string | null;
+  start_lng: string | null;
+  location_city: string | null;
+  location_state: string | null;
+  location_country: string | null;
+  featured_marathon: boolean | null;
+};
