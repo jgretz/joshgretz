@@ -25,7 +25,7 @@ cd packages/database
 bun run generate --name <descriptive-name>  # drizzle-kit generate (always use --name)
 bun run migrate                             # drizzle-kit migrate
 
-# Deploy to Fly.io
+# Deploy to Fly.io (these three apps only - tasks is not on Fly, see Apps)
 bun run deploy:api
 bun run deploy:www
 bun run deploy:301
@@ -42,6 +42,13 @@ bun run deploy:301
 - **api** - Elysia REST API with bearer auth. Routes in `src/routes/`. Uses `injectx` for DI.
 - **www** - TanStack Start + Vite, Tailwind. Admin routes at `/admin/*` require Google OAuth.
 - **301** - Redirect service for alternate domains (joshgretz.io, .bio, .dev, .us).
+- **tasks** - Background job worker. Polls the API for pending `jobs` rows and runs the
+  handlers in `src/handlers/`; pg-boss is used only as a cron trigger. **Runs on a personal
+  Mac mini, not Fly.io** - it has no fly.toml, no deploy script and no CI, so `bun run
+  deploy:*` never updates it. Any change under `apps/tasks` or in a package it imports
+  (`running`, `strava`, `google-sheets`) needs a manual redeploy on that machine, separate
+  from the api deploy. A job failing on code you just shipped usually means the worker is
+  still on the old build.
 
 ## Packages
 
