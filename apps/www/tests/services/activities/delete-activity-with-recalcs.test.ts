@@ -121,7 +121,7 @@ describe('deleteActivityWithRecalcs', () => {
     stubFetch({deleteStatus: 404});
 
     await expect(deleteActivityWithRecalcs(ENV, USER_ID, STRAVA_ID)).rejects.toThrow(
-      /found no such activity/,
+      /returned 404 from the delete/,
     );
   });
 

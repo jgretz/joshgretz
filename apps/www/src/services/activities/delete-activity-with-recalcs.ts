@@ -67,10 +67,12 @@ export const deleteActivityWithRecalcs = async (
   );
 
   // A 404 has to read as a failure, never as a quiet success — nothing was queued, so anything
-  // that *was* removed would leave the aggregates stale with no trace.
+  // that *was* removed would leave the aggregates stale with no trace. The route also answers
+  // 404 for a row it deleted but whose `start_date_local` was NULL, so the message must not
+  // promise the activity is still there.
   if (response.status === 404) {
     throw new Error(
-      `Activity ${stravaId} was not deleted: the API found no such activity. No recalc jobs were queued.`,
+      `Activity ${stravaId} returned 404 from the delete: either no such activity, or one that was removed without a start date to recalculate from. No recalc jobs were queued — re-check the activity before assuming nothing changed.`,
     );
   }
 
