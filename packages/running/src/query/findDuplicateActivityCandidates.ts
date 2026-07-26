@@ -1,5 +1,5 @@
 import {Schema} from 'database';
-import {and, eq, lt, isNotNull, or, sql} from 'drizzle-orm';
+import {and, eq, lt, isNotNull, sql} from 'drizzle-orm';
 import {alias, type BuildAliasTable} from 'drizzle-orm/pg-core';
 import {InjectIn} from 'injectx';
 import type {DuplicateActivityCandidate, RunningContainer} from '../Types';
@@ -24,15 +24,6 @@ type Input = {
 // The self-join means every helper below is handed an aliased copy of `activities`, whose
 // table-name literal differs from the real table's.
 type ActivityTable = BuildAliasTable<typeof Schema.activities, string>;
-
-// Not every import carries a local time, so the comparison falls back to UTC. Every Strava
-// import sets both, so in practice the two sides are always compared on the same clock; a row
-// that somehow had only `start_date` would be off by its UTC offset and simply not match.
-const startedAt = (table: ActivityTable) =>
-  sql`COALESCE(${table.start_date_local}, ${table.start_date})`;
-
-const hasStartTime = (table: ActivityTable) =>
-  or(isNotNull(table.start_date_local), isNotNull(table.start_date));
 
 const side = (table: ActivityTable) => ({
   id: table.id,
@@ -65,7 +56,7 @@ const query = ({database}: RunningContainer) => {
     const a = alias(Schema.activities, 'a');
     const b = alias(Schema.activities, 'b');
 
-    const startDelta = sql<number>`ABS(EXTRACT(EPOCH FROM (${startedAt(a)} - ${startedAt(b)})))::int`;
+    const startDelta = sql<number>`ABS(EXTRACT(EPOCH FROM (${a.start_date_local} - ${b.start_date_local})))::int`;
     const distanceDelta = sql<string>`ABS(${a.distance}::numeric - ${b.distance}::numeric)`;
 
     return await database
@@ -84,15 +75,21 @@ const query = ({database}: RunningContainer) => {
           eq(b.user_id, userId),
           // NULL = NULL is not true, so this also requires both types to be set.
           eq(a.type, b.type),
-          hasStartTime(a),
-          hasStartTime(b),
+          // Local time only, never a fallback to `start_date`. Mixing the two clocks would
+          // compare times an offset apart, and — the binding reason — the sanctioned delete
+          // route reports back `start_date_local`, reading a NULL as "no such activity" and
+          // 404ing *after* it has removed the row. A row without one would therefore get a
+          // delete button that destroys the activity, skips the recalcs and reports failure:
+          // exactly the silent aggregate drift this view exists to prevent.
+          isNotNull(a.start_date_local),
+          isNotNull(b.start_date_local),
           isNotNull(a.distance),
           isNotNull(b.distance),
           sql`${startDelta} <= ${startWindowSeconds}`,
           sql`${distanceDelta} <= GREATEST(${distanceToleranceMeters}::numeric, ${distanceTolerancePct}::numeric / 100 * GREATEST(${a.distance}::numeric, ${b.distance}::numeric))`,
         ),
       )
-      .orderBy(sql`LEAST(${startedAt(a)}, ${startedAt(b)}) DESC`);
+      .orderBy(sql`LEAST(${a.start_date_local}, ${b.start_date_local}) DESC`);
   };
 };
 
