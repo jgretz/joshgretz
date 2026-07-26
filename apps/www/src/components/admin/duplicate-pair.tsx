@@ -67,10 +67,14 @@ const Field = ({label, value}: FieldProps) => (
 type CopyProps = {
   side: DuplicateActivitySide;
   deleting: boolean;
+  // True while *either* copy is being deleted. Both copies stay clickable otherwise, and
+  // confirming the second one mid-flight removes the whole run from every aggregate — a worse
+  // outcome than the duplicate this view exists to clean up.
+  pairBusy: boolean;
   onDelete: (stravaId: string) => void;
 };
 
-const Copy = ({side, deleting, onDelete}: CopyProps) => {
+const Copy = ({side, deleting, pairBusy, onDelete}: CopyProps) => {
   const [confirming, setConfirming] = useState(false);
   const edits = manualEdits(side);
 
@@ -118,7 +122,13 @@ const Copy = ({side, deleting, onDelete}: CopyProps) => {
       <div className="mt-4">
         {confirming ? (
           <div className="flex items-center gap-3">
-            <Button type="button" variant="destructive" size="sm" onClick={handleDelete}>
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              disabled={pairBusy}
+              onClick={handleDelete}
+            >
               Confirm delete
             </Button>
             <button
@@ -134,7 +144,7 @@ const Copy = ({side, deleting, onDelete}: CopyProps) => {
             type="button"
             variant="outline"
             size="sm"
-            disabled={deleting}
+            disabled={pairBusy}
             onClick={handleConfirm}
           >
             {deleting ? 'Deleting...' : 'Delete this copy'}
@@ -151,6 +161,10 @@ export const DuplicatePair = memo(function DuplicatePair({
   deletingB,
   onDelete,
 }: DuplicatePairProps) {
+  // Derived here rather than taken as a third prop: the two per-copy booleans are what the memo
+  // above compares, and a separately passed pair flag could disagree with them.
+  const pairBusy = deletingA || deletingB;
+
   return (
     <div className="rounded-lg border border-warm-300 bg-warm-50 p-4">
       <p className="mb-3 text-sm font-medium text-warm-700">
@@ -159,8 +173,8 @@ export const DuplicatePair = memo(function DuplicatePair({
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Copy side={pair.a} deleting={deletingA} onDelete={onDelete} />
-        <Copy side={pair.b} deleting={deletingB} onDelete={onDelete} />
+        <Copy side={pair.a} deleting={deletingA} pairBusy={pairBusy} onDelete={onDelete} />
+        <Copy side={pair.b} deleting={deletingB} pairBusy={pairBusy} onDelete={onDelete} />
       </div>
 
       <p className="mt-3 text-xs text-warm-600">
