@@ -21,19 +21,26 @@ type DuplicatePairProps = {
   onDelete: (stravaId: string) => void;
 };
 
-// Manual edits live on one copy only and no re-import brings them back, so deleting the copy
-// that carries them silently loses work. See CLAUDE-WORKING.md.
+const hasGps = (side: DuplicateActivitySide): boolean =>
+  Boolean(side.start_lat) && Boolean(side.start_lng);
+
+// Only what a re-import genuinely cannot rebuild. `featured_marathon` is never written by
+// mapStravaActivityToRunningActivity, so it is always hand-set. `location_state` usually is
+// not: the mapper reverse-geocodes city/state/country from `start_latlng`, so a copy with GPS
+// gets its place back on the next import — it is unrecoverable only when there are no
+// coordinates to geocode from. Warning on every geocoded copy would flag both sides of nearly
+// every pair and teach the operator to ignore the flag.
 const manualEdits = (side: DuplicateActivitySide): string[] => {
   const edits: string[] = [];
-  if (side.location_state) edits.push(`state "${side.location_state}"`);
   if (side.featured_marathon) edits.push('featured race');
+  if (side.location_state && !hasGps(side)) edits.push(`state "${side.location_state}"`);
   return edits;
 };
 
-const formatCoordinates = (side: DuplicateActivitySide): string => {
-  if (!side.start_lat || !side.start_lng) return 'no GPS';
-  return `${parseFloat(side.start_lat).toFixed(5)}, ${parseFloat(side.start_lng).toFixed(5)}`;
-};
+const formatCoordinates = ({start_lat, start_lng}: DuplicateActivitySide): string =>
+  start_lat && start_lng
+    ? `${parseFloat(start_lat).toFixed(5)}, ${parseFloat(start_lng).toFixed(5)}`
+    : 'no GPS';
 
 const formatPlace = (side: DuplicateActivitySide): string => {
   const parts = [side.location_city, side.location_state].filter(Boolean);
