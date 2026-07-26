@@ -19,6 +19,13 @@ export const hasGps = (row: ManualOverrideSource): boolean =>
 // not: the mapper reverse-geocodes city/state/country from `start_latlng`, so a copy with GPS
 // gets its place back on the next import. It is unrecoverable only when there were no
 // coordinates to geocode from.
+//
+// Accepted edge: carrying a state to a survivor that *does* have GPS only holds until that
+// survivor's next import, because shouldUpdateLocation re-geocodes once any location field is
+// empty or the stored coordinates move. That is not the loss this exists to prevent — a copy
+// with GPS can rebuild its own place. The unrecoverable case is both copies lacking GPS, where
+// shouldUpdateLocation short-circuits on `!activity.start_latlng?.length` and the carried
+// values stand.
 export const manualOverridesFor = (row: ManualOverrideSource): ManualActivityOverrides | null => {
   const overrides: ManualActivityOverrides = {};
 
