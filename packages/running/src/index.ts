@@ -37,6 +37,7 @@ export {
 } from './constants/us-states';
 export {findDailyStatsByUserIdAndYear} from './query/findDailyStatsByUserIdAndYear';
 export {upsertDailyStats} from './command/upsertDailyStats';
+export {zeroDailyStats} from './command/zeroDailyStats';
 export {aggregateDailyStats} from './query/aggregateDailyStats';
 export {recalculateDailyStats} from './services/recalculateDailyStats';
 export {findActivitiesByDateRange} from './query/findActivitiesByDateRange';

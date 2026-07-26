@@ -1,5 +1,6 @@
 import {aggregateDailyStats} from '../query/aggregateDailyStats';
 import {upsertDailyStats} from '../command/upsertDailyStats';
+import {zeroDailyStats} from '../command/zeroDailyStats';
 
 // Callers pass a plain date, but a value read straight off a timestamp column arrives as
 // "2026-07-26 08:32:03" — space separated, so splitting on "T" alone leaves it intact.
@@ -36,19 +37,11 @@ export const recalculateDailyStats = async (userId: number, dates?: string[]) =>
     results.push(result);
   }
 
-  // a targeted day left with no activity (deleted or re-dated) must be zeroed, otherwise
-  // its stale row survives the recalculation
+  // a targeted day left with no activity (deleted or re-dated) must be zeroed, otherwise its
+  // stale row survives the recalculation
   const aggregated = new Set(stats.map((row) => row.date));
   const emptied = targetDates?.filter((date) => !aggregated.has(date)) ?? [];
-  for (const date of emptied) {
-    const result = await upsertDailyStats({
-      user_id: userId,
-      date,
-      total_miles: '0',
-      run_count: 0,
-    });
-    results.push(result);
-  }
+  const zeroed = await zeroDailyStats(userId, emptied);
 
-  return results;
+  return [...results, ...zeroed];
 };
