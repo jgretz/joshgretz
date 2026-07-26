@@ -25,7 +25,9 @@ type Input = {
 // table-name literal differs from the real table's.
 type ActivityTable = BuildAliasTable<typeof Schema.activities, string>;
 
-// Not every import carries a local time, so the comparison falls back to UTC.
+// Not every import carries a local time, so the comparison falls back to UTC. Every Strava
+// import sets both, so in practice the two sides are always compared on the same clock; a row
+// that somehow had only `start_date` would be off by its UTC offset and simply not match.
 const startedAt = (table: ActivityTable) =>
   sql`COALESCE(${table.start_date_local}, ${table.start_date})`;
 
