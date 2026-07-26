@@ -2,6 +2,7 @@ import {type FormEvent, memo, useCallback, useId, useState} from 'react';
 import {US_STATES, US_STATE_NAMES, stateNameToAbbr} from 'running/states';
 import {updateActivityDetails} from '../../services/activities/activities-server';
 import {Button} from '../ui/button';
+import {formatDate, formatDistance, formatTime} from './activity-format';
 
 export type AdminActivity = {
   id: number;
@@ -18,32 +19,6 @@ export type AdminActivity = {
 
 // Only activities at or beyond marathon distance are eligible to represent a state.
 const MARATHON_METERS = 42195;
-
-const formatDistance = (meters: string | null): string => {
-  if (!meters) return '-';
-  return `${(parseFloat(meters) / 1609.34).toFixed(2)} mi`;
-};
-
-const formatTime = (seconds: string | null): string => {
-  if (!seconds) return '-';
-  const total = Math.round(parseFloat(seconds));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  if (h > 0) {
-    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  }
-  return `${m}:${s.toString().padStart(2, '0')}`;
-};
-
-const formatDate = (date: string | null): string => {
-  if (!date) return '-';
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-};
 
 // Geocoding stores full state names but may use an alternate spelling; resolve whatever is
 // on the record back to a value the dropdown actually offers.

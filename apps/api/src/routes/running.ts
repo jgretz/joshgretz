@@ -5,6 +5,7 @@ import {
   searchActivities,
   deleteActivityByStravaId,
   findActivitiesByDateRange,
+  findDuplicateActivityCandidates,
   updateActivityDetails,
 } from 'running';
 import {databasePlugin} from '../plugins/database';
@@ -108,6 +109,27 @@ export default new Elysia({prefix: '/running'})
         user_id: t.Numeric(),
         from: t.Optional(t.String()),
         to: t.Optional(t.String()),
+      }),
+    },
+  )
+  .get(
+    '/activities/duplicates',
+    async ({
+      query: {user_id, window_seconds, distance_tolerance_pct, distance_tolerance_meters},
+    }) => {
+      return await findDuplicateActivityCandidates({
+        userId: user_id,
+        startWindowSeconds: window_seconds,
+        distanceTolerancePct: distance_tolerance_pct,
+        distanceToleranceMeters: distance_tolerance_meters,
+      });
+    },
+    {
+      query: t.Object({
+        user_id: t.Numeric(),
+        window_seconds: t.Optional(t.Numeric()),
+        distance_tolerance_pct: t.Optional(t.Numeric()),
+        distance_tolerance_meters: t.Optional(t.Numeric()),
       }),
     },
   )

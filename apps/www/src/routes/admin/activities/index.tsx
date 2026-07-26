@@ -1,10 +1,16 @@
 import {createFileRoute} from '@tanstack/react-router';
 import {type FormEvent, useCallback, useState} from 'react';
 import {ActivityRow, type AdminActivity} from '../../../components/admin/activity-row';
+import {DuplicatePair} from '../../../components/admin/duplicate-pair';
 import {AdminLayout} from '../../../components/layout/admin-layout';
 import {Button} from '../../../components/ui/button';
 import {title} from '../../../config.shared';
-import {searchActivities} from '../../../services/activities/activities-server';
+import {
+  type DuplicateActivityCandidate,
+  deleteActivityAndRecalculate,
+  getDuplicateActivities,
+  searchActivities,
+} from '../../../services/activities/activities-server';
 import {requireAuth} from '../../../services/auth/requireAuth';
 import {enqueueStateStatsRecalc} from '../../../services/state-stats/state-stats-server';
 
@@ -28,6 +34,16 @@ function ActivityLookup() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [recalcJobId, setRecalcJobId] = useState<number | null>(null);
+
+  const [duplicates, setDuplicates] = useState<DuplicateActivityCandidate[]>([]);
+  const [duplicatesLoading, setDuplicatesLoading] = useState(false);
+  const [duplicatesLoaded, setDuplicatesLoaded] = useState(false);
+  const [duplicatesError, setDuplicatesError] = useState<string | null>(null);
+  // A set, not the single most recent id: a delete started on a second pair must not clear the
+  // first pair's in-flight flag, or both of its buttons come back to life mid-request and the
+  // other copy of that run can be deleted too.
+  const [deletingStravaIds, setDeletingStravaIds] = useState<ReadonlySet<string>>(new Set());
+  const [deleteJobIds, setDeleteJobIds] = useState<number[] | null>(null);
 
   const handleSearch = useCallback(
     async (e: FormEvent) => {
@@ -69,6 +85,57 @@ function ActivityLookup() {
         setRecalcJobId(id);
       } catch (err) {
         console.error('Failed to enqueue state stats recalc', err);
+      }
+    },
+    [user],
+  );
+
+  const handleLoadDuplicates = useCallback(async () => {
+    if (!user) return;
+
+    setDuplicatesLoading(true);
+    setDuplicatesError(null);
+    setDeleteJobIds(null);
+
+    try {
+      const pairs = await getDuplicateActivities({data: {userId: user.id}});
+      setDuplicates(pairs);
+      setDuplicatesLoaded(true);
+    } catch (err) {
+      setDuplicates([]);
+      setDuplicatesLoaded(false);
+      setDuplicatesError(err instanceof Error ? err.message : 'Failed to load duplicates');
+    } finally {
+      setDuplicatesLoading(false);
+    }
+  }, [user]);
+
+  // The delete removes the row; the queued jobs are what pull the deleted copy back out of the
+  // streak, state and daily aggregates.
+  const handleDeleteDuplicate = useCallback(
+    async (stravaId: string) => {
+      if (!user) return;
+
+      setDeletingStravaIds((current) => new Set(current).add(stravaId));
+      setDuplicatesError(null);
+
+      try {
+        const {jobIds} = await deleteActivityAndRecalculate({data: {userId: user.id, stravaId}});
+        // A third copy would put the deleted activity in more than one pair.
+        setDuplicates((current) =>
+          current.filter((pair) => pair.a.strava_id !== stravaId && pair.b.strava_id !== stravaId),
+        );
+        // Appended rather than replaced, so a second delete does not erase the job ids the
+        // operator still has to check for the first.
+        setDeleteJobIds((current) => [...(current ?? []), ...jobIds]);
+      } catch (err) {
+        setDuplicatesError(err instanceof Error ? err.message : 'Failed to delete activity');
+      } finally {
+        setDeletingStravaIds((current) => {
+          const next = new Set(current);
+          next.delete(stravaId);
+          return next;
+        });
       }
     },
     [user],
@@ -151,6 +218,50 @@ function ActivityLookup() {
           </table>
         </div>
       )}
+
+      <section className="mt-12 border-t border-warm-200 pt-8">
+        <h2 className="mb-2 text-lg font-medium text-warm-900">Possible duplicates</h2>
+        <p className="mb-6 max-w-2xl text-sm text-warm-600">
+          Activities of the same type that started within 10 minutes of each other and cover within
+          5% (or 250 m) of the same distance — the signature of one run recorded by two watches. GPS
+          is shown to help tell the copies apart but is never used to match, because large uploads
+          often arrive without it.
+        </p>
+
+        <Button type="button" disabled={duplicatesLoading} onClick={handleLoadDuplicates}>
+          {duplicatesLoading ? 'Checking...' : 'Check for duplicates'}
+        </Button>
+
+        {duplicatesError && <p className="mt-4 text-red-600">{duplicatesError}</p>}
+
+        {deleteJobIds !== null && (
+          <p className="mt-4 text-green-600">
+            Deleted. Recalcs queued as jobs #{deleteJobIds.join(', #')} — check{' '}
+            <a className="underline" href="/admin/jobs">
+              /admin/jobs
+            </a>{' '}
+            for status. The copy still has to be deleted on strava.com.
+          </p>
+        )}
+
+        {duplicatesLoaded && !duplicatesLoading && duplicates.length === 0 && (
+          <p className="mt-4 text-warm-600">No duplicate candidates found.</p>
+        )}
+
+        {duplicates.length > 0 && (
+          <div className="mt-6 space-y-6">
+            {duplicates.map((pair) => (
+              <DuplicatePair
+                key={`${pair.a.id}-${pair.b.id}`}
+                pair={pair}
+                deletingA={deletingStravaIds.has(pair.a.strava_id)}
+                deletingB={deletingStravaIds.has(pair.b.strava_id)}
+                onDelete={handleDeleteDuplicate}
+              />
+            ))}
+          </div>
+        )}
+      </section>
     </AdminLayout>
   );
 }

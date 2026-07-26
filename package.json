@@ -24,6 +24,8 @@
     "build:www": "cd apps/www && bun run build",
     "typecheck": "concurrently bun:typecheck:*",
     "typecheck:www": "cd apps/www && bun run typecheck",
+    "test": "bun test",
+    "test:www": "bun run --cwd apps/www test",
     "start": "concurrently bun:start:*",
     "start:api": "cd apps/api && bun run start",
     "start:www": "cd apps/www && bun run start",

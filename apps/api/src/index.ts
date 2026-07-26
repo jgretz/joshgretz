@@ -62,7 +62,10 @@ const root = new Elysia()
   .guard(
     {
       beforeHandle({set, bearer}) {
-        if (bearer !== env.HELMET && bearer !== env.TASK_API_KEY) {
+        // TASK_API_KEY is optional, so an unset key is `undefined` — and so is a missing
+        // Authorization header. Without the presence check the two match and every guarded
+        // route opens to anonymous requests.
+        if (!bearer || (bearer !== env.HELMET && bearer !== env.TASK_API_KEY)) {
           set.status = 401;
           return 'Unauthorized';
         }
