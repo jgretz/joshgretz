@@ -48,15 +48,6 @@ const command = ({database}: RunningContainer) => {
     // `overrides` is.
     const carry = overrides && survivor ? {overrides, survivor} : null;
 
-    // Warn and proceed. Refusing the delete would be a product decision, not this command's.
-    if (overrides && !survivor) {
-      console.warn(
-        `Deleting activity "${activity.name}" (#${activity.id}, strava ${activity.strava_id}) ` +
-          'destroys manual edits no re-import can restore, and no duplicate is in range to carry ' +
-          `them to: ${describeManualOverrides(overrides)}`,
-      );
-    }
-
     await database.transaction(async (tx) => {
       // Carrying and deleting must be atomic in both directions: a failed delete must not leave a
       // mutated survivor, and a failed carry must not let the delete through. This is why the
@@ -86,11 +77,19 @@ const command = ({database}: RunningContainer) => {
       await tx.delete(Schema.activities).where(eq(Schema.activities.strava_id, stravaId));
     });
 
-    // Logged after the commit, so the line never claims a carry that rolled back.
+    // Both lines are the only durable record that hand-set values moved or were destroyed, and
+    // both are written after the commit so neither can report an outcome that rolled back.
     if (carry) {
       console.log(
         `Carried manual edits from activity #${activity.id} to #${carry.survivor.id}: ` +
           describeManualOverrides(carry.overrides),
+      );
+    } else if (overrides) {
+      // Warn and proceed. Refusing the delete would be a product decision, not this command's.
+      console.warn(
+        `Deleting activity "${activity.name}" (#${activity.id}, strava ${activity.strava_id}) ` +
+          'destroys manual edits no re-import can restore, and no duplicate is in range to carry ' +
+          `them to: ${describeManualOverrides(overrides)}`,
       );
     }
 
