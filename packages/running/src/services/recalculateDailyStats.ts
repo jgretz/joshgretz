@@ -1,8 +1,16 @@
 import {aggregateDailyStats} from '../query/aggregateDailyStats';
 import {upsertDailyStats} from '../command/upsertDailyStats';
 
+// Callers pass a plain date, but a value read straight off a timestamp column arrives as
+// "2026-07-26 08:32:03" — space separated, so splitting on "T" alone leaves it intact.
+const toDateOnly = (value: string): string => value.trim().split(/[T ]/)[0];
+
 const nextDay = (date: string): string => {
-  const next = new Date(`${date}T00:00:00Z`);
+  const next = new Date(`${toDateOnly(date)}T00:00:00Z`);
+  if (Number.isNaN(next.getTime())) {
+    throw new Error(`Cannot recalculate daily stats: unparseable date "${date}"`);
+  }
+
   next.setUTCDate(next.getUTCDate() + 1);
   return next.toISOString().slice(0, 10);
 };
@@ -10,7 +18,7 @@ const nextDay = (date: string): string => {
 // An overnight activity contributes miles to the day after it starts, so recalculating a
 // day is only correct if its successor is recalculated alongside it.
 const withFollowingDays = (dates: string[]): string[] => [
-  ...new Set(dates.flatMap((date) => [date, nextDay(date)])),
+  ...new Set(dates.flatMap((date) => [toDateOnly(date), nextDay(date)])),
 ];
 
 export const recalculateDailyStats = async (userId: number, dates?: string[]) => {

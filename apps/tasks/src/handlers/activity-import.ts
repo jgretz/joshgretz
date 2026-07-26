@@ -9,6 +9,10 @@ export interface ActivityImportPayload {
   aspect_type: string;
 }
 
+// Strava returns an ISO timestamp, but the delete path reads the stored value back off a
+// timestamp column, which Postgres renders space separated ("2026-07-26 08:32:03").
+const toDateOnly = (value: string): string => value.trim().split(/[T ]/)[0];
+
 export const handleActivityImport = async (payload: ActivityImportPayload): Promise<{success: boolean}> => {
   const {user_id, activity_id, aspect_type} = payload;
 
@@ -16,7 +20,7 @@ export const handleActivityImport = async (payload: ActivityImportPayload): Prom
     console.log(`Deleting activity ${activity_id} for user ${user_id}`);
     const result = await deleteActivity(activity_id);
     if (result?.start_date) {
-      const date = result.start_date.split('T')[0];
+      const date = toDateOnly(result.start_date);
       console.log(`Deleted activity ${activity_id}, recalculating stats for ${date}`);
       await schedulePostImportJobs(user_id, [date]);
     } else {
@@ -40,7 +44,7 @@ export const handleActivityImport = async (payload: ActivityImportPayload): Prom
   const activity = await getActivity(activity_id);
   await storeActivity(user_id, activity);
 
-  const date = activity.start_date_local.split('T')[0];
+  const date = toDateOnly(activity.start_date_local);
   console.log(`Successfully imported activity ${activity_id}`);
 
   await schedulePostImportJobs(user_id, [date]);
