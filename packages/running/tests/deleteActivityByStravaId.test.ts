@@ -25,6 +25,19 @@ type RecordedUpdate = {payload: UpdatePayload; where: SQL};
 // Conditions are opaque objects until compiled; render them so assertions read as SQL.
 const renderCondition = (condition: SQL) => new PgDialect().sqlToQuery(condition);
 
+// The carry and the warning are the only record that hand-set values moved or were destroyed,
+// so both are asserted rather than left to spray through the test output.
+function captureConsole(method: 'log' | 'warn') {
+  const original = console[method];
+  const lines: string[] = [];
+
+  console[method] = (message: string) => {
+    lines.push(message);
+  };
+
+  return {lines, restore: () => (console[method] = original)};
+}
+
 // `findDuplicateActivityCandidates` is reached through the container rather than mock.module:
 // bun runs test files alphabetically, so a registration here would contaminate the real static
 // import in findDuplicateActivityCandidates.test.ts.
@@ -152,67 +165,102 @@ describe('deleteActivityByStravaId', function () {
     expect(deletes).toHaveLength(1);
   });
 
-  it('should carry a featured race flag to the surviving copy inside the transaction', async function () {
-    const {database, updates} = makeMockDatabase(
-      {
-        id: 42,
-        user_id: 1,
-        name: 'Vermont 100',
-        strava_id: '123',
-        start_date_local: '2026-07-18T04:00:05',
-        start_lat: '43.6',
-        start_lng: '-72.6',
-        featured_marathon: true,
-      },
-      [makePair(42, 77)],
-    );
-    GetContainer().Bind(database, {name: 'database'});
-
-    await deleteActivityByStravaId('123');
-
-    const {sql, params} = renderCondition(updates[0]!.where);
-    expect(sql).toBe('"activities"."id" = $1');
-    expect(params).toEqual([77]);
-    expect(updates[0]!.payload).toEqual({featured_marathon: true});
-  });
-
-  it('should carry a hand-set location without blanking fields the deleted copy left empty', async function () {
-    const {database, updates} = makeMockDatabase(
-      {
-        id: 42,
-        user_id: 1,
-        name: 'Vermont 100',
-        strava_id: '123',
-        start_date_local: '2026-07-18T04:00:05',
-        location_state: 'Vermont',
-      },
-      [makePair(77, 42)],
-    );
-    GetContainer().Bind(database, {name: 'database'});
-
-    await deleteActivityByStravaId('123');
-
-    expect(renderCondition(updates[0]!.where).params).toEqual([77]);
-    expect(updates[0]!.payload).toEqual({location_state: 'Vermont'});
-  });
-
-  describe('when no duplicate can take the overrides', function () {
-    const original = console.warn;
-    let warnings: string[] = [];
+  describe('when a duplicate can take the overrides', function () {
+    let logs: ReturnType<typeof captureConsole>;
 
     beforeEach(function () {
-      warnings = [];
-      console.warn = (message: string) => {
-        warnings.push(message);
-      };
+      logs = captureConsole('log');
     });
 
     afterEach(function () {
-      console.warn = original;
+      logs.restore();
+    });
+
+    it('should carry a featured race flag to the surviving copy inside the transaction', async function () {
+      const {database, updates, deletes} = makeMockDatabase(
+        {
+          id: 42,
+          user_id: 1,
+          name: 'Vermont 100',
+          strava_id: '123',
+          start_date_local: '2026-07-18T04:00:05',
+          start_lat: '43.6',
+          start_lng: '-72.6',
+          featured_marathon: true,
+        },
+        [makePair(42, 77)],
+      );
+      GetContainer().Bind(database, {name: 'database'});
+
+      await deleteActivityByStravaId('123');
+
+      // First write of the transaction, so the carry lands before the row is unlinked and gone.
+      const {sql, params} = renderCondition(updates[0]!.where);
+      expect(sql).toBe('"activities"."id" = $1');
+      expect(params).toEqual([77]);
+      expect(updates[0]!.payload).toEqual({featured_marathon: true});
+      // The carry is additive: the personal-record unlink and the delete still happen.
+      expect(updates).toHaveLength(2);
+      expect(deletes).toHaveLength(1);
+    });
+
+    it('should carry a hand-set location without blanking fields the deleted copy left empty', async function () {
+      const {database, updates} = makeMockDatabase(
+        {
+          id: 42,
+          user_id: 1,
+          name: 'Vermont 100',
+          strava_id: '123',
+          start_date_local: '2026-07-18T04:00:05',
+          location_state: 'Vermont',
+        },
+        [makePair(77, 42)],
+      );
+      GetContainer().Bind(database, {name: 'database'});
+
+      await deleteActivityByStravaId('123');
+
+      expect(renderCondition(updates[0]!.where).params).toEqual([77]);
+      expect(updates[0]!.payload).toEqual({location_state: 'Vermont'});
+    });
+
+    it('should record where the values went', async function () {
+      const {database} = makeMockDatabase(
+        {
+          id: 42,
+          user_id: 1,
+          name: 'Vermont 100',
+          strava_id: '123',
+          start_date_local: '2026-07-18T04:00:05',
+          location_state: 'Vermont',
+          featured_marathon: true,
+        },
+        [makePair(42, 77)],
+      );
+      GetContainer().Bind(database, {name: 'database'});
+
+      await deleteActivityByStravaId('123');
+
+      expect(logs.lines).toHaveLength(1);
+      expect(logs.lines[0]).toContain('#42 to #77');
+      expect(logs.lines[0]).toContain('featured race');
+      expect(logs.lines[0]).toContain('state "Vermont"');
+    });
+  });
+
+  describe('when no duplicate can take the overrides', function () {
+    let warnings: ReturnType<typeof captureConsole>;
+
+    beforeEach(function () {
+      warnings = captureConsole('warn');
+    });
+
+    afterEach(function () {
+      warnings.restore();
     });
 
     it('should name the activity and every value it is destroying', async function () {
-      const {database, updates} = makeMockDatabase({
+      const {database, updates, deletes} = makeMockDatabase({
         id: 42,
         user_id: 1,
         name: 'Vermont 100',
@@ -225,14 +273,15 @@ describe('deleteActivityByStravaId', function () {
 
       const result = await deleteActivityByStravaId('123');
 
-      expect(warnings).toHaveLength(1);
-      expect(warnings[0]).toContain('Vermont 100');
-      expect(warnings[0]).toContain('#42');
-      expect(warnings[0]).toContain('featured race');
-      expect(warnings[0]).toContain('state "Vermont"');
+      expect(warnings.lines).toHaveLength(1);
+      expect(warnings.lines[0]).toContain('Vermont 100');
+      expect(warnings.lines[0]).toContain('#42');
+      expect(warnings.lines[0]).toContain('featured race');
+      expect(warnings.lines[0]).toContain('state "Vermont"');
       // The delete still goes through — warning and proceeding, not refusing.
       expect(result).toBe('2026-07-18T04:00:05');
       expect(updates).toHaveLength(1);
+      expect(deletes).toHaveLength(1);
     });
   });
 });
