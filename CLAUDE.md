@@ -24,6 +24,7 @@ cd apps/www && bun run typecheck
 cd packages/database
 bun run generate --name <descriptive-name>  # drizzle-kit generate (always use --name)
 bun run migrate                             # drizzle-kit migrate
+# Throwaway DB to verify a schema change: docs/scratch-database.md
 
 # Deploy to Fly.io (these three apps only - tasks is not on Fly, see Apps)
 bun run deploy:api
