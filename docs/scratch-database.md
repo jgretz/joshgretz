@@ -27,20 +27,18 @@ drifted from `packages/database/schema/` — the SQL file is wrong, not the snap
 
 ## 3. Seed a user
 
-Drop a throwaway script at the repo root (the `database` path alias only resolves
-inside the workspace):
-
-```ts
-// seed-scratch.ts
-import {createDatabase, Schema} from './packages/database';
-
-const db = createDatabase('postgres://postgres:scratch@localhost:55432/scratch');
-console.log(await db.insert(Schema.users).values({email: 'test@example.com', admin: true}).returning());
-process.exit(0);
-```
+Insert through drizzle, not raw SQL — a raw `INSERT` would hide exactly the kind of
+schema defect (a column mapped twice) that seeding is meant to catch. Run from the
+repo root so the relative import resolves; `bun -e` leaves nothing behind:
 
 ```bash
-bun run seed-scratch.ts && rm seed-scratch.ts
+bun -e '
+import {createDatabase, Schema} from "./packages/database";
+
+const db = createDatabase("postgres://postgres:scratch@localhost:55432/scratch");
+console.log(await db.insert(Schema.users).values({email: "test@example.com", admin: true}).returning());
+process.exit(0);
+'
 ```
 
 ## 4. Tear down
