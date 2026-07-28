@@ -18,7 +18,7 @@ function AdminDashboard() {
     <AdminLayout title="Admin Dashboard">
       {user && (
         <p className="text-warm-600">
-          Welcome, <span className="font-medium">{user.name || user.email}</span>
+          Welcome, <span className="font-medium">{user.email}</span>
         </p>
       )}
     </AdminLayout>
