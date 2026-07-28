@@ -1,3 +1,21 @@
+-- HAND-EDITED, unlike every other file in this directory.
+--
+-- When drizzle-kit generated this migration it emitted only the strava_activities ->
+-- activities rename and silently dropped the accompanying column, type and index DDL.
+-- meta/0002_snapshot.json was always correct, so `generate` sees no schema change and
+-- has nothing to re-emit: only the SQL was recoverable, and only by hand. It had to be
+-- restored here rather than in a new migration because 0019 references
+-- activities.strava_id and dies before any later repair could run.
+--
+-- Editing an applied migration is safe here: drizzle's pg migrator compares only the
+-- journal `when` against the newest applied row (the stored hash is written, never
+-- checked), and production is applied through 0019, so 0002 never re-runs there.
+--
+-- The restored block therefore only ever executes against a from-scratch database, where
+-- `activities` is empty. That is what makes `ADD COLUMN "strava_id" ... NOT NULL` and its
+-- unique index safe with no backfill -- they would fail on a populated table. The
+-- IF EXISTS / IF NOT EXISTS guards make the block a no-op against an already-modern
+-- database; the one unguarded statement, the "start_date" retype, is idempotent.
 CREATE TABLE IF NOT EXISTS "gear" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
@@ -26,13 +44,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS "users_email_idx" ON "users" ("email");--> sta
 ALTER TABLE "users" DROP COLUMN IF EXISTS "strava_id";--> statement-breakpoint
 ALTER TABLE "users" DROP COLUMN IF EXISTS "strava_access_token";--> statement-breakpoint
 ALTER TABLE "users" DROP COLUMN IF EXISTS "strava_code";--> statement-breakpoint
--- Everything below was lost when this migration was originally generated: the file kept
--- only the strava_activities -> activities rename and dropped the accompanying column,
--- type and index DDL, so meta/0002_snapshot.json (correct) and this SQL disagreed and a
--- from-scratch `db:migrate` died in 0019 on a missing activities.strava_id. Restored in
--- place rather than as a new migration because 0019 fails before any later repair could
--- run. Production applied through 0019 and drizzle compares only the journal `when`, so
--- 0002 is skipped there; every statement is guarded regardless.
+-- Generated output ended above. Everything below is the restored DDL -- see the header.
 ALTER TABLE "activities" DROP CONSTRAINT IF EXISTS "strava_activities_user_id_users_id_fk";--> statement-breakpoint
 ALTER TABLE "activities" DROP COLUMN IF EXISTS "elevation_gain";--> statement-breakpoint
 ALTER TABLE "activities" DROP COLUMN IF EXISTS "latitude";--> statement-breakpoint
