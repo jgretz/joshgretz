@@ -1,14 +1,13 @@
 import {Elysia, t} from 'elysia';
-import {
-  generateAuthUrl,
-  requestAuthToken,
-} from 'google-sheets';
+import {generateAuthUrl, requestAuthToken} from 'google-sheets';
 import {setThirdPartyAccessForUser, type User} from 'users';
 import {databasePlugin} from '../plugins/database';
-import {Schema} from 'database';
+import {pendingJobsPlugin} from '../plugins/pending-jobs';
+import {enqueueJob} from '../jobs/enqueue-job';
 
 export default new Elysia({prefix: '/google-sheets'})
   .use(databasePlugin)
+  .use(pendingJobsPlugin)
   .get(
     '/oauth/url',
     ({query: {redirect_uri}}) => {
@@ -28,9 +27,7 @@ export default new Elysia({prefix: '/google-sheets'})
       await setThirdPartyAccessForUser({id: user_id} as User, {
         google_access_token: tokenResponse.access_token,
         google_refresh_token: tokenResponse.refresh_token,
-        google_token_expires_at: new Date(
-          Date.now() + tokenResponse.expires_in * 1000,
-        ),
+        google_token_expires_at: new Date(Date.now() + tokenResponse.expires_in * 1000),
       });
 
       return {success: true};
@@ -60,14 +57,11 @@ export default new Elysia({prefix: '/google-sheets'})
   )
   .post(
     '/sync',
-    async ({database, body: {user_id, from, to, full_sync}}) => {
-      const [job] = await database
-        .insert(Schema.jobs)
-        .values({
-          type: 'google-sheets-sync',
-          payload: {user_id, from, to, full_sync},
-        })
-        .returning({id: Schema.jobs.id});
+    async ({database, pendingJobs, body: {user_id, from, to, full_sync}}) => {
+      const job = await enqueueJob(database, pendingJobs, {
+        type: 'google-sheets-sync',
+        payload: {user_id, from, to, full_sync},
+      });
       return {job_id: job.id};
     },
     {

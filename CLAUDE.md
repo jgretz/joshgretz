@@ -41,6 +41,7 @@ bun run deploy:301
 ## Apps
 
 - **api** - Elysia REST API with bearer auth. Routes in `src/routes/`. Uses `injectx` for DI.
+  Create jobs only via `enqueueJob`: see `docs/job-polling.md`.
 - **www** - TanStack Start + Vite, Tailwind. Admin routes at `/admin/*` require Google OAuth.
 - **301** - Redirect service for alternate domains (joshgretz.io, .bio, .dev, .us).
 - **tasks** - Background job worker. Polls the API for pending `jobs` rows and runs the
