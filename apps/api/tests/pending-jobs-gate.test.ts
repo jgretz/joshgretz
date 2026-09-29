@@ -82,6 +82,20 @@ describe('pendingJobsGate', function () {
     expect(query).toHaveBeenCalledTimes(1);
   });
 
+  it('should wait the default 120-minute interval before rechecking', async function () {
+    const defaultGate = createPendingJobsGate({now: () => t});
+    await defaultGate.fetchPending(async () => []);
+    const query = mock(async () => []);
+
+    t = 120 * 60 * 1000 - 1;
+    await defaultGate.fetchPending(query);
+    expect(query).not.toHaveBeenCalled();
+
+    t = 120 * 60 * 1000;
+    await defaultGate.fetchPending(query);
+    expect(query).toHaveBeenCalledTimes(1);
+  });
+
   it('should stay open when marked while a query is in flight', async function () {
     const inFlight = deferred<never[]>();
     const pending = gate.fetchPending(() => inFlight.promise);

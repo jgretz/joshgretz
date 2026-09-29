@@ -1,6 +1,12 @@
 // Neon suspends only after 5 minutes without queries, so the runner's 5 s poll of
 // /jobs/pending must not reach the database while nothing can be pending.
-export const PENDING_JOBS_RECHECK_MS = 30 * 60 * 1000;
+//
+// The recheck only catches jobs this process never marked (manual SQL, or a job enqueued
+// on another Fly API machine); restarts are covered by starting open. Each recheck keeps
+// Neon awake for at least 5 billed minutes (~75 CU-seconds at 0.25 CU), so a 30-minute
+// interval costs ~150 CU-seconds/hour around the clock. Do not shorten it; route new job
+// creation through enqueueJob instead.
+export const PENDING_JOBS_RECHECK_MS = 120 * 60 * 1000;
 
 export interface PendingJobsGate {
   markMaybePending(): void;
