@@ -13,10 +13,13 @@ endpoint in-process: `apps/api/src/jobs/pending-jobs-gate.ts`.
 - **Cleared** when a `/pending` query returns no rows. A mark that lands while that
   query is in flight keeps the flag set.
 - **While clear**, `/pending` returns `[]` without touching the database.
-- **Safety net:** the gate re-queries every 30 minutes (`PENDING_JOBS_RECHECK_MS`) even
-  when clear, so a job inserted outside the API (manual SQL) waits at most that long.
+- **Safety net:** the gate re-queries every 120 minutes (`PENDING_JOBS_RECHECK_MS`)
+  even when clear, so a job inserted outside the API (manual SQL) waits at most that
+  long. The interval is long because each recheck bills at least 5 minutes of Neon
+  compute (~75 CU-seconds).
 
-Idle load is one query per 30 minutes per API machine: about 2 an hour, down from 720.
+Idle load is one query per 120 minutes per API machine: about one every two hours,
+down from 720 an hour.
 
 ## Create jobs only through `enqueueJob`
 
@@ -29,6 +32,7 @@ if one appears in `apps/api/src` or `packages/*/src`.
 
 The flag is per process. With more than one Fly API machine, a job created on machine
 B is picked up by the next poll that lands on B. If B auto-stops before any poll
-reaches it, the job waits for another machine's safety net: at most 30 minutes.
-Restarts and deploys start with the flag set, so no job is lost across them. Running
-one API machine removes the caveat.
+reaches it, the job waits for another machine's safety net: at most 120 minutes.
+Restarts and deploys start with the flag set, so no job is lost across them. The app
+currently has a stopped standby machine in ord that Fly starts under load or when
+ewr is unavailable; running one API machine removes the caveat.
