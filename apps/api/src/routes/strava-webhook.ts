@@ -2,6 +2,8 @@ import {Elysia, t} from 'elysia';
 import {Schema} from 'database';
 import {eq} from 'drizzle-orm';
 import {databasePlugin} from '../plugins/database';
+import {pendingJobsPlugin} from '../plugins/pending-jobs';
+import {enqueueJob} from '../jobs/enqueue-job';
 
 const verifySchema = {
   query: t.Object({
@@ -24,6 +26,7 @@ const eventSchema = {
 
 export default new Elysia({prefix: '/strava/webhook'})
   .use(databasePlugin)
+  .use(pendingJobsPlugin)
   .get(
     '/',
     ({query, set}) => {
@@ -40,9 +43,11 @@ export default new Elysia({prefix: '/strava/webhook'})
   )
   .post(
     '/',
-    async ({database, body}) => {
+    async ({database, pendingJobs, body}) => {
       const {object_type, object_id, aspect_type, owner_id} = body;
-      console.log(`Strava webhook event: ${object_type} ${object_id} ${aspect_type} owner=${owner_id}`);
+      console.log(
+        `Strava webhook event: ${object_type} ${object_id} ${aspect_type} owner=${owner_id}`,
+      );
 
       // Only handle activity events
       if (object_type !== 'activity') {
@@ -60,7 +65,7 @@ export default new Elysia({prefix: '/strava/webhook'})
       }
 
       // Create job for activity import
-      await database.insert(Schema.jobs).values({
+      await enqueueJob(database, pendingJobs, {
         type: 'activity-import',
         payload: {
           user_id: access.user_id,

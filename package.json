@@ -24,6 +24,7 @@
     "build:www": "cd apps/www && bun run build",
     "typecheck": "concurrently bun:typecheck:*",
     "typecheck:www": "cd apps/www && bun run typecheck",
+    "typecheck:api": "tsc --noEmit -p apps/api/tsconfig.json",
     "test": "bun test",
     "test:www": "bun run --cwd apps/www test",
     "start": "concurrently bun:start:*",

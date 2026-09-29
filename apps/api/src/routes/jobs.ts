@@ -2,6 +2,8 @@ import {Elysia, t} from 'elysia';
 import {Schema} from 'database';
 import {eq} from 'drizzle-orm';
 import {databasePlugin} from '../plugins/database';
+import {pendingJobsPlugin} from '../plugins/pending-jobs';
+import {enqueueJob} from '../jobs/enqueue-job';
 import {listJobs, retryJob} from 'jobs';
 
 const createJobSchema = {
@@ -37,6 +39,7 @@ const failJobSchema = {
 
 export default new Elysia({prefix: '/jobs'})
   .use(databasePlugin)
+  .use(pendingJobsPlugin)
   .get(
     '/',
     async ({query: {page, page_size}}) => {
@@ -51,30 +54,29 @@ export default new Elysia({prefix: '/jobs'})
   )
   .post(
     '/:id/retry',
-    async ({params: {id}}) => {
+    async ({pendingJobs, params: {id}}) => {
       await retryJob(id);
+      pendingJobs.markMaybePending();
       return {success: true};
     },
     jobIdSchema,
   )
   .post(
     '/',
-    async ({database, body: {type, payload}}) => {
-      const [job] = await database
-        .insert(Schema.jobs)
-        .values({type, payload})
-        .returning({id: Schema.jobs.id});
+    async ({database, pendingJobs, body: {type, payload}}) => {
+      const job = await enqueueJob(database, pendingJobs, {type, payload});
       return {id: job.id};
     },
     createJobSchema,
   )
-  .get('/pending', async ({database}) => {
-    const pendingJobs = await database
-      .select()
-      .from(Schema.jobs)
-      .where(eq(Schema.jobs.status, 'pending'))
-      .orderBy(Schema.jobs.created_at);
-    return pendingJobs;
+  .get('/pending', async ({database, pendingJobs}) => {
+    return await pendingJobs.fetchPending(() =>
+      database
+        .select()
+        .from(Schema.jobs)
+        .where(eq(Schema.jobs.status, 'pending'))
+        .orderBy(Schema.jobs.created_at),
+    );
   })
   .post(
     '/:id/start',

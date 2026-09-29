@@ -1,5 +1,4 @@
 import {Elysia, t} from 'elysia';
-import {Schema} from 'database';
 import {
   storeStravaActivity,
   searchActivities,
@@ -9,6 +8,8 @@ import {
   updateActivityDetails,
 } from 'running';
 import {databasePlugin} from '../plugins/database';
+import {pendingJobsPlugin} from '../plugins/pending-jobs';
+import {enqueueJob} from '../jobs/enqueue-job';
 
 const importActivitiesSchema = {
   body: t.Object({
@@ -86,6 +87,7 @@ const storeActivitySchema = {
 
 export default new Elysia({prefix: '/running'})
   .use(databasePlugin)
+  .use(pendingJobsPlugin)
   .get(
     '/activities/search',
     async ({query: {user_id, q, strava_id}}) => {
@@ -135,14 +137,11 @@ export default new Elysia({prefix: '/running'})
   )
   .post(
     '/activities/import-activities',
-    async ({database, body: {user_id, from, to}}) => {
-      const [job] = await database
-        .insert(Schema.jobs)
-        .values({
-          type: 'mass-import',
-          payload: {user_id, from: from.toISOString(), to: to.toISOString()},
-        })
-        .returning({id: Schema.jobs.id});
+    async ({database, pendingJobs, body: {user_id, from, to}}) => {
+      const job = await enqueueJob(database, pendingJobs, {
+        type: 'mass-import',
+        payload: {user_id, from: from.toISOString(), to: to.toISOString()},
+      });
       return {job_id: job.id};
     },
     importActivitiesSchema,
