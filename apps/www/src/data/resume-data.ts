@@ -34,8 +34,9 @@ export const experience: Experience[] = [
       'We help organizations build and scale highly functioning software teams — with a focus on People, Process, and Product. We ignite potential, empower teams, and step back when they can run without us.',
     highlights: [
       {
-        category: 'Fractional CTO Engagements',
+        category: 'Fractional Engagements',
         items: [
+          'Public Safety SaaS Company (Fractional Architect): Designed, built, and rolled out an AI-assisted pull request triage system for a 12-developer onshore/offshore team across backend, web, and cross-platform mobile apps. AI handled the first pass, I made the calls. Cut PR approval time from days to hours while raising PR quality. Built a flow dashboard to surface bottlenecks, delivered security and performance reviews of the codebase, and gave leadership objective and subjective assessments of developer performance.',
           'Healthcare IoT Startup: Established the software organization from zero for a connected medical device company. Hired architect and developers. Helped lay the architecture track (Node, React, React Native, BLE integration) and took stories alongside the team. Shipped V1 then executed a structured phase-out.',
           'Merchant Services Company: Partnered with leadership to build a 10+ person cross functional team. Established architecture (Node, React, TypeScript), SDLC, and tooling in a PCI-compliant environment. Team shipped V1 with new market capabilities including API integration and AI-enabled intake.',
           'Software Consultancy Transition: Designed a timed transition plan to exit the organization I helped build over 20 years. Trained successor and established a cross-practice leadership structure.',
@@ -45,6 +46,15 @@ export const experience: Experience[] = [
         category: 'Technical Due Diligence',
         items: [
           'Fintech VC Portfolio Evaluation: Engaged by a VC firm to assess a portfolio company. Conducted thorough code review, team evaluation, and infrastructure audit. Delivered candid findings that gave the board clarity.',
+        ],
+      },
+      {
+        category: 'Product: toryo (toryo.ai)',
+        items: [
+          "Orchestration platform for AI coding agents: durable job queues, versioned workflows with human approval gates, and a persistent knowledge layer that amplify a developer's judgment rather than automate it. Runs locally on the developer's own credentials; works with Claude, Codex, GitHub Copilot, and Cursor.",
+          'Built it for my own work, when agent output had outgrown my ability to direct it. Other engineering leaders wanted it too, so I turned it into a product.',
+          'Designed, built, and launched solo: cross-platform desktop app (macOS, Linux, Windows) on a stable, versioned CLI contract teams can script against from CI or internal tools.',
+          'Launched commercially with Personal, Team, and Enterprise tiers; has paying customers.',
         ],
       },
     ],
