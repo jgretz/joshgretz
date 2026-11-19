@@ -1,4 +1,23 @@
-import {pgTable, serial, varchar, boolean, uniqueIndex, integer, timestamp} from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  varchar,
+  boolean,
+  uniqueIndex,
+  integer,
+  timestamp,
+  customType,
+} from 'drizzle-orm/pg-core';
+
+// Strava athlete ids may exceed 2^53 (and int4) after June 2027. A bigint column held as a
+// string stays exact in JS and JSON. drizzle-orm 0.30 has no bigint 'string' mode, and its
+// 'bigint' mode yields a BigInt that JSON.stringify rejects. postgres.js already returns
+// int8 as a string, so no mapping is needed.
+const bigintString = customType<{data: string; driverData: string}>({
+  dataType() {
+    return 'bigint';
+  },
+});
 
 export const users = pgTable(
   'users',
@@ -20,7 +39,7 @@ export const thirdPartyAccess = pgTable(
     id: serial('id').primaryKey(),
     user_id: integer('user_id').notNull(),
 
-    strava_id: integer('strava_id'),
+    strava_id: bigintString('strava_id'),
     strava_access_token: varchar('strava_access_token', {length: 100}),
     strava_code: varchar('strava_code', {length: 50}),
     strava_refresh_token: varchar('strava_refresh_token', {length: 100}),

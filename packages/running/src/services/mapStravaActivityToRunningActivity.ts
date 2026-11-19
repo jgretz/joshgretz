@@ -58,7 +58,7 @@ export const mapStravaActivityToRunningActivity = async (
   return {
     id: existingActivity?.id || undefined,
     user_id,
-    strava_id: activity.id.toString(),
+    strava_id: activity.id_str,
     name: activity.name,
     type: activity.type,
     distance: activity.distance.toString(),
