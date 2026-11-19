@@ -6,6 +6,7 @@ export interface StravaTokenResponse {
   expires_at: number;
   athlete: {
     id: number;
+    id_str: string;
   };
 }
 

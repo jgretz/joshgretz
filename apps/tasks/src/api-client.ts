@@ -14,7 +14,7 @@ export interface Job {
 }
 
 export interface ThirdPartyAccess {
-  strava_id?: number | null;
+  strava_id?: string | null;
   strava_access_token?: string | null;
   strava_code?: string | null;
   strava_refresh_token?: string | null;
@@ -70,7 +70,9 @@ export const markJobFailed = async (jobId: number, errorMessage: string): Promis
   await assertOk(response, `Failed to mark job ${jobId} as failed`);
 };
 
-export const getThirdPartyAccess = async (userId: number): Promise<ThirdPartyAccess | undefined> => {
+export const getThirdPartyAccess = async (
+  userId: number,
+): Promise<ThirdPartyAccess | undefined> => {
   const response = await fetch(`${config.API_URL}/users/third-party-access?user_id=${userId}`, {
     headers: headers(),
   });
@@ -139,7 +141,7 @@ export const recalculateDailyStats = async (userId: number, dates?: string[]): P
 };
 
 export const deleteActivity = async (
-  stravaId: number,
+  stravaId: string,
 ): Promise<{success: boolean; start_date: string} | null> => {
   const response = await fetch(`${config.API_URL}/running/activities/by-strava-id/${stravaId}`, {
     method: 'DELETE',
@@ -172,5 +174,8 @@ export const storeActivity = async (userId: number, activity: StravaActivity): P
     headers: headers(),
     body: JSON.stringify({user_id: userId, activity}),
   });
-  await assertOk(response, `Failed to store activity strava_id=${activity.id} type=${activity.type}`);
+  await assertOk(
+    response,
+    `Failed to store activity strava_id=${activity.id_str} type=${activity.type}`,
+  );
 };

@@ -25,9 +25,11 @@ export const handleMassImport = async (payload: MassImportPayload) => {
   const runs = activities.filter((a) => a.type === 'Run');
   const skipped = activities.length - runs.length;
 
-  console.log(`Found ${activities.length} activities, ${runs.length} runs (skipping ${skipped} non-runs)`);
+  console.log(
+    `Found ${activities.length} activities, ${runs.length} runs (skipping ${skipped} non-runs)`,
+  );
 
-  const errors: {strava_id: number; type: string; error: string}[] = [];
+  const errors: {strava_id: string; type: string; error: string}[] = [];
   let imported = 0;
 
   for (const activity of runs) {
@@ -36,9 +38,12 @@ export const handleMassImport = async (payload: MassImportPayload) => {
       imported++;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error';
-      console.error(`Failed to store activity strava_id=${activity.id} type=${activity.type}:`, message);
+      console.error(
+        `Failed to store activity strava_id=${activity.id_str} type=${activity.type}:`,
+        message,
+      );
       console.error('Activity payload:', JSON.stringify(activity, null, 2));
-      errors.push({strava_id: activity.id, type: activity.type, error: message});
+      errors.push({strava_id: activity.id_str, type: activity.type, error: message});
     }
   }
 

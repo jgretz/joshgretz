@@ -1,0 +1,1 @@
+ALTER TABLE "third_party_access" ALTER COLUMN "strava_id" SET DATA TYPE bigint;

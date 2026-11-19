@@ -37,6 +37,7 @@ const storeActivitySchema = {
     activity: t.Object({
       athlete: t.Object({
         id: t.Number(),
+        id_str: t.Optional(t.String({pattern: '^[0-9]+$'})),
         shoes: t.Optional(
           t.Array(
             t.Object({
@@ -61,6 +62,7 @@ const storeActivitySchema = {
       sport_type: t.String(),
       workout_type: t.Optional(t.Nullable(t.Union([t.String(), t.Number()]))),
       id: t.Number(),
+      id_str: t.String({pattern: '^[0-9]+$'}),
       start_date: t.String(),
       start_date_local: t.String(),
       timezone: t.String(),

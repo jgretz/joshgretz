@@ -5,7 +5,9 @@ import {getValidAccessToken} from '../services/strava-token';
 
 export interface ActivityImportPayload {
   user_id: number;
-  activity_id: number;
+  // A string since the webhook started reading Strava ids losslessly. Jobs queued before
+  // that carry a number, so the handler normalizes with String().
+  activity_id: string | number;
   aspect_type: string;
 }
 
@@ -13,8 +15,11 @@ export interface ActivityImportPayload {
 // timestamp column, which Postgres renders space separated ("2026-07-26 08:32:03").
 const toDateOnly = (value: string): string => value.trim().split(/[T ]/)[0];
 
-export const handleActivityImport = async (payload: ActivityImportPayload): Promise<{success: boolean}> => {
-  const {user_id, activity_id, aspect_type} = payload;
+export const handleActivityImport = async (
+  payload: ActivityImportPayload,
+): Promise<{success: boolean}> => {
+  const {user_id, aspect_type} = payload;
+  const activity_id = String(payload.activity_id);
 
   if (aspect_type === 'delete') {
     console.log(`Deleting activity ${activity_id} for user ${user_id}`);

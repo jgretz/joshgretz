@@ -4,23 +4,13 @@ import {eq} from 'drizzle-orm';
 import {databasePlugin} from '../plugins/database';
 import {pendingJobsPlugin} from '../plugins/pending-jobs';
 import {enqueueJob} from '../jobs/enqueue-job';
+import {stravaWebhookEventHook} from '../strava/webhook-event';
 
 const verifySchema = {
   query: t.Object({
     'hub.mode': t.String(),
     'hub.verify_token': t.String(),
     'hub.challenge': t.String(),
-  }),
-};
-
-const eventSchema = {
-  body: t.Object({
-    object_type: t.String(),
-    object_id: t.Number(),
-    aspect_type: t.String(),
-    owner_id: t.Number(),
-    subscription_id: t.Number(),
-    event_time: t.Number(),
   }),
 };
 
@@ -76,5 +66,5 @@ export default new Elysia({prefix: '/strava/webhook'})
 
       return {received: true};
     },
-    eventSchema,
+    stravaWebhookEventHook,
   );

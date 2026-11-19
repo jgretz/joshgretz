@@ -8,7 +8,7 @@ import {findActivityByStravaId} from '../query/findActivityByStravaId';
 
 const service = ({database}: RunningContainer) => {
   return async (stravaActivity: StravaActivity, user_id: number) => {
-    const existing = await findActivityByStravaId(stravaActivity.id.toString());
+    const existing = await findActivityByStravaId(stravaActivity.id_str);
     const activity = await mapStravaActivityToRunningActivity(user_id, stravaActivity, existing);
 
     // update or insert

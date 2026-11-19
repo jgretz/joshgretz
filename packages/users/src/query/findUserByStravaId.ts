@@ -4,7 +4,7 @@ import {Schema} from 'database';
 import {InjectIn} from 'injectx';
 
 const query = ({database}: UsersContainer) => {
-  return async (stravaId: number) => {
+  return async (stravaId: string) => {
     const access = await database.query.thirdPartyAccess.findFirst({
       where: eq(Schema.thirdPartyAccess.strava_id, stravaId),
     });

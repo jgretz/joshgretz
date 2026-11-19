@@ -1,7 +1,11 @@
 export type Location = number[];
 
+// Strava ids may be 64-bit after June 2027, beyond what a JS number holds exactly.
+// `id` can be rounded by JSON.parse; `id_str` is the exact value and the one to persist.
 export interface Athlete {
   id: number;
+  // Optional: nothing reads it, and the API's store route does not require it.
+  id_str?: string;
   shoes?: Gear[];
 }
 
@@ -27,6 +31,7 @@ export interface Activity {
   sport_type: string;
   workout_type?: string | number | null;
   id: number;
+  id_str: string;
   start_date: string;
   start_date_local: string;
   timezone: string;

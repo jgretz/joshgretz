@@ -143,7 +143,7 @@ export const setThirdPartyAccess = createServerFn({
   .inputValidator(
     (data: {
       userId: number;
-      stravaId: number;
+      stravaId: string;
       stravaAccessToken: string;
       stravaCode: string;
     }) => data,

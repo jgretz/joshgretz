@@ -29,7 +29,7 @@ export default new Elysia({prefix: '/strava'})
       const tokenResponse = await requestAuthToken(code);
 
       await setThirdPartyAccessForUser({id: user_id} as User, {
-        strava_id: tokenResponse.athlete.id,
+        strava_id: tokenResponse.athlete.id_str,
         strava_access_token: tokenResponse.access_token,
         strava_refresh_token: tokenResponse.refresh_token,
         strava_token_expires_at: new Date(tokenResponse.expires_at * 1000),
